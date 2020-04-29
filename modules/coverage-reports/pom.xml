@@ -36,7 +36,7 @@
         <!-- Copy and update this section for each service added to the project. -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>example-service</artifactId>
+            <artifactId>ibm-analytics-engine-api</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

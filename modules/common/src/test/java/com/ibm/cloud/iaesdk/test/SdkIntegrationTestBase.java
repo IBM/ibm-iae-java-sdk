@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ibm.cloud.my_services.test;
+package com.ibm.cloud.iaesdk.test;
 
 import java.io.File;
 

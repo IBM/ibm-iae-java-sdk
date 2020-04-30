@@ -20,8 +20,8 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
  */
 public class AnalyticsEngineCreateCustomizationResponse extends GenericModel {
 
-  @SerializedName("request_id")
-  protected Double requestId;
+  @SerializedName("id")
+  protected Double id;
 
   /**
    * Gets the requestId.
@@ -30,8 +30,8 @@ public class AnalyticsEngineCreateCustomizationResponse extends GenericModel {
    *
    * @return the requestId
    */
-  public Double getRequestId() {
-    return requestId;
+  public Double getId() {
+    return id;
   }
 }
 

@@ -35,6 +35,6 @@ public class AnalyticsEngineCreateCustomizationResponseTest {
   @Test
   public void testAnalyticsEngineCreateCustomizationResponse() throws Throwable {
     AnalyticsEngineCreateCustomizationResponse analyticsEngineCreateCustomizationResponseModel = new AnalyticsEngineCreateCustomizationResponse();
-    assertNull(analyticsEngineCreateCustomizationResponseModel.getRequestId());
+    assertNull(analyticsEngineCreateCustomizationResponseModel.getId());
   }
 }

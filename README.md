@@ -32,7 +32,7 @@ Java client library to interact with various [IBM Analytics Engine APIs](https:/
 
 ## Overview
 
-The IBM Cloud My Services Java SDK allows developers to programmatically interact with the following IBM Cloud services:
+The IBM Cloud Analytics Engine Services Java SDK allows developers to programmatically interact with the following IBM Cloud services:
 
 Service Name | Artifact Id 
 --- | --- 

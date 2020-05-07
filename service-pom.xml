@@ -11,10 +11,10 @@
     </parent>
 
     <!-- >>> Replace this with the service module's artifactId (e.g. "example-service") -->
-    <artifactId>ibm-analytics-engine-api</artifactId>
+    <artifactId>iaesdk</artifactId>
 
     <!-- >>> Replace this with a text description of this module (e.g. "Example Service") -->
-    <name>IBM Analytics Engine Service API</name>
+    <name>IBM Analytics Engine Service</name>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -28,7 +28,7 @@
             <groupId>${project.groupId}</groupId>
         </dependency>
         <dependency>
-            <artifactId>iaesdk-common</artifactId>
+            <artifactId>COMMON-ARTIFACTID</artifactId>
             <groupId>${project.groupId}</groupId>
             <type>test-jar</type>
             <classifier>tests</classifier>
@@ -55,4 +55,13 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <developers>
+        <developer>
+            <name>IBM Cloud DevX SDK Development</name>
+            <email>devxsdk@us.ibm.com</email>
+            <url>https://www.ibm.com/</url>
+        </developer>
+    </developers>
+
 </project>

@@ -16,7 +16,7 @@
 
     <!-- >>> Replace "My Services" with the service category (e.g. Platform 
         Services Common Library) -->
-    <name>IBM Analytics Engine Service API Common Library</name>
+    <name>IBM Analytics Engine Services Common Library</name>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -64,4 +64,13 @@
             </plugin>
         </plugins>
     </build>
+
+    <developers>
+        <developer>
+            <name>IBM Cloud DevX SDK Development</name>
+            <email>devxsdk@us.ibm.com</email>
+            <url>https://www.ibm.com/</url>
+        </developer>
+    </developers>
+
 </project>

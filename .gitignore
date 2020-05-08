@@ -38,3 +38,5 @@ hs_err_pid*
 *.env
 
 package-lock.json
+
+.DS_Store

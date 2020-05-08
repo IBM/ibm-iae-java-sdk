@@ -1,3 +1,10 @@
+## [0.0.3](https://github.com/IBM/ibm-iae-java-sdk/compare/0.0.2...0.0.3) (2020-05-08)
+
+
+### Bug Fixes
+
+* **build:** fix publish gh-pages script ([7924192](https://github.com/IBM/ibm-iae-java-sdk/commit/7924192d6f73519b76e3ebbd7271616f92e92e63))
+
 ## [0.0.2](https://github.com/IBM/ibm-iae-java-sdk/compare/0.0.1...0.0.2) (2020-05-08)
 
 

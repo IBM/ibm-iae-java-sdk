@@ -24,7 +24,7 @@
             of the SDK generator used to generate your SDK code.
             See this link for details: https://github.ibm.com/CloudEngineering/openapi-sdkgen/wiki/Compatibility-Chart
         -->
-        <sdk-core-version>8.1.4</sdk-core-version>
+        <sdk-core-version>8.1.5</sdk-core-version>
 
         <!-- >>> Replace this with the name of your SDK's github repository -->
         <git-repository-name>ibm-iae-java-sdk</git-repository-name>
@@ -49,9 +49,7 @@
 
         <!-- Deployment-related properties -->
         <bintray.org>ibm-cloud-sdks</bintray.org>
-        <!-- >>> Replace this with the name of your project's bintray repository -->
         <bintray.repo>ibm-iae-java-sdk</bintray.repo>
-        <!-- >>> Replace this with your github repository's URL -->
         <bintray.package.url>https://github.com/IBM/ibm-iae-java-sdk</bintray.package.url>
     </properties>
 
@@ -97,22 +95,11 @@
     </ciManagement>
 
     <repositories>
-        <!-- these definitions are useful only for internal SDK projects -->
-        <repository>
-            <id>na-artifactory-ibmcloud-sdks</id>
-            <url>https://na.artifactory.swg-devops.com:443/artifactory/wcp-ibmcloud-sdks-team-maven-local/</url>
-        </repository>
-
         <repository>
             <id>jcenter</id>
             <url>https://jcenter.bintray.com/</url>
         </repository>
     </repositories>
-
-    <!-- This section is commented out because we use an alternate deploy plugin. 
-    <distributionManagement>
-    </distributionManagement> 
-    -->
 
     <dependencyManagement>
         <dependencies>
@@ -420,6 +407,18 @@
                 <artifactId>maven-jar-plugin</artifactId>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
             </plugin>
@@ -446,8 +445,8 @@
 
     <developers>
         <developer>
-            <name>IBM Cloud DevX SDK Development</name>
-            <email>devxsdk@us.ibm.com</email>
+            <name>IBM Cloud Analytics Engine SDK Development</name>
+            <email>surya.penumatcha@ibm.com</email>
             <url>https://www.ibm.com/</url>
         </developer>
     </developers>

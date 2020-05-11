@@ -76,7 +76,7 @@ To define a dependency on a single service, use a dependency that contains the a
 ```xml
 <dependency>
     <groupId>com.ibm.cloud</groupId>
-    <artifactId>ibm-analytics-engine</artifactId>
+    <artifactId>ibm-analytics-engine-api</artifactId>
     <version>0.0.4</version>
 </dependency>
 ```

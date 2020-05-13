@@ -18,6 +18,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineClu
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCreateCustomizationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomAction;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomActionScript;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomizationRequestCollectionItem;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomizationRunDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomizationRunDetailsRunDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineLoggingConfigDetails;
@@ -320,7 +321,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   @Test
   public void testGetAllCustomizationRequestsWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "[{\"request_id\": 9}]";
+    String mockResponseBody = "[{\"id\": \"id\"}]";
     String getAllCustomizationRequestsPath = "/v2/analytics_engines/testString/customization_requests";
 
     server.enqueue(new MockResponse()
@@ -336,9 +337,9 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<List<AnalyticsEngineCreateCustomizationResponse>> response = testService.getAllCustomizationRequests(getAllCustomizationRequestsOptionsModel).execute();
+    Response<List<AnalyticsEngineCustomizationRequestCollectionItem>> response = testService.getAllCustomizationRequests(getAllCustomizationRequestsOptionsModel).execute();
     assertNotNull(response);
-    List<AnalyticsEngineCreateCustomizationResponse> responseObj = response.getResult();
+    List<AnalyticsEngineCustomizationRequestCollectionItem> responseObj = response.getResult();
     assertNotNull(responseObj);
 
     // Verify the contents of the request

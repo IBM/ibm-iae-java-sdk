@@ -13,6 +13,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineClu
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCreateCustomizationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomAction;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomActionScript;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomizationRequestCollectionItem;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomizationRunDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomizationRunDetailsRunDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineLoggingConfigDetails;
@@ -194,6 +195,10 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     //     assertEquals(response.getStatusCode(), 200);
     //     AnalyticsEngineCreateCustomizationResponse responseObj = response.getResult();
     //     assertNotNull(responseObj);
+
+    //     System.out.println(Integer.toString(response.getStatusCode()));
+    //     System.out.println(response.getStatusMessage());
+    //     System.out.println(String.valueOf(response.getResult()));
     // }
 
     // @Test
@@ -206,10 +211,10 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     //     .build();
 
     //     // Invoke operation with valid options model (positive test)
-    //     Response<List<AnalyticsEngineCreateCustomizationResponse>> response = service.getAllCustomizationRequests(getAllCustomizationRequestsOptionsModel).execute();
+    //     Response<List<AnalyticsEngineCustomizationRequestCollectionItem>> response = service.getAllCustomizationRequests(getAllCustomizationRequestsOptionsModel).execute();
     //     assertNotNull(response);
     //     assertEquals(response.getStatusCode(), 200);
-    //     List<AnalyticsEngineCreateCustomizationResponse> responseObj = response.getResult();
+    //     List<AnalyticsEngineCustomizationRequestCollectionItem> responseObj = response.getResult();
     //     assertNotNull(responseObj);
     // }
 
@@ -223,10 +228,11 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     //     .build();
 
     //     // Invoke operation with valid options model (positive test)
-    //     Response<List<AnalyticsEngineCreateCustomizationResponse>> responseId = service.getAllCustomizationRequests(getAllCustomizationRequestsOptionsModel).execute();
-    //     List<AnalyticsEngineCreateCustomizationResponse> responseObjId = responseId.getResult();
+    //     Response<List<AnalyticsEngineCustomizationRequestCollectionItem>> responseId = service.getAllCustomizationRequests(getAllCustomizationRequestsOptionsModel).execute();
+    //     List<AnalyticsEngineCustomizationRequestCollectionItem> responseObjId = responseId.getResult();
     //     assertNotNull(responseObjId);
-    //     String requestId = Integer.toString(responseObjId.get(0).getId().intValue());
+    //     String requestId = responseObjId.get(0).getId();
+    //     System.out.println(requestId);
 
     //     // Construct an instance of the GetCustomizationRequestByIdOptions model
     //     GetCustomizationRequestByIdOptions getCustomizationRequestByIdOptionsModel = new GetCustomizationRequestByIdOptions.Builder()

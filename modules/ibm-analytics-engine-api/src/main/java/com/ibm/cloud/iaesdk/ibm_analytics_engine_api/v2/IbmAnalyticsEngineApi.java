@@ -16,6 +16,7 @@ import com.google.gson.JsonObject;
 import com.ibm.cloud.iaesdk.common.SdkCommon;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngine;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCreateCustomizationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomizationRequestCollectionItem;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomizationRunDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineLoggingConfigDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineResetClusterPasswordResponse;
@@ -225,7 +226,7 @@ public class IbmAnalyticsEngineApi extends BaseService {
    * @param getAllCustomizationRequestsOptions the {@link GetAllCustomizationRequestsOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link List}
    */
-  public ServiceCall<List<AnalyticsEngineCreateCustomizationResponse>> getAllCustomizationRequests(GetAllCustomizationRequestsOptions getAllCustomizationRequestsOptions) {
+  public ServiceCall<List<AnalyticsEngineCustomizationRequestCollectionItem>> getAllCustomizationRequests(GetAllCustomizationRequestsOptions getAllCustomizationRequestsOptions) {
     com.ibm.cloud.sdk.core.util.Validator.notNull(getAllCustomizationRequestsOptions,
       "getAllCustomizationRequestsOptions cannot be null");
     String[] pathSegments = { "v2/analytics_engines", "customization_requests" };
@@ -237,8 +238,8 @@ public class IbmAnalyticsEngineApi extends BaseService {
     }
     builder.header("Accept", "application/json");
 
-    ResponseConverter<List<AnalyticsEngineCreateCustomizationResponse>> responseConverter =
-      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<List<AnalyticsEngineCreateCustomizationResponse>>() { }.getType());
+    ResponseConverter<List<AnalyticsEngineCustomizationRequestCollectionItem>> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<List<AnalyticsEngineCustomizationRequestCollectionItem>>() { }.getType());
     return createServiceCall(builder.build(), responseConverter);
   }
 

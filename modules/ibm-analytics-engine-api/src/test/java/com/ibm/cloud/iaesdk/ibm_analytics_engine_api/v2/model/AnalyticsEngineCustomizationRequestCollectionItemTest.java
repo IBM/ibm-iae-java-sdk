@@ -13,7 +13,7 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCreateCustomizationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomizationRequestCollectionItem;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.utils.TestUtilities;
 
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
@@ -26,15 +26,15 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the AnalyticsEngineCreateCustomizationResponse model.
+ * Unit test class for the AnalyticsEngineCustomizationRequestCollectionItem model.
  */
-public class AnalyticsEngineCreateCustomizationResponseTest {
+public class AnalyticsEngineCustomizationRequestCollectionItemTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testAnalyticsEngineCreateCustomizationResponse() throws Throwable {
-    AnalyticsEngineCreateCustomizationResponse analyticsEngineCreateCustomizationResponseModel = new AnalyticsEngineCreateCustomizationResponse();
-    assertNull(analyticsEngineCreateCustomizationResponseModel.getRequestId());
+  public void testAnalyticsEngineCustomizationRequestCollectionItem() throws Throwable {
+    AnalyticsEngineCustomizationRequestCollectionItem analyticsEngineCustomizationRequestCollectionItemModel = new AnalyticsEngineCustomizationRequestCollectionItem();
+    assertNull(analyticsEngineCustomizationRequestCollectionItemModel.getId());
   }
 }

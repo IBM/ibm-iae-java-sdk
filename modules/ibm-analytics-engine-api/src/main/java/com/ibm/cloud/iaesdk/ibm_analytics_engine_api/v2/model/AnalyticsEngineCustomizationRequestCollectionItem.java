@@ -12,26 +12,24 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model;
 
-import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * Create customization request response.
+ * AnalyticsEngineCustomizationRequestCollectionItem.
  */
-public class AnalyticsEngineCreateCustomizationResponse extends GenericModel {
+public class AnalyticsEngineCustomizationRequestCollectionItem extends GenericModel {
 
-  @SerializedName("request_id")
-  protected Double requestId;
+  protected String id;
 
   /**
-   * Gets the requestId.
+   * Gets the id.
    *
    * Customization request ID.
    *
-   * @return the requestId
+   * @return the id
    */
-  public Double getRequestId() {
-    return requestId;
+  public String getId() {
+    return id;
   }
 }
 

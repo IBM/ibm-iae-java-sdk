@@ -54,5 +54,6 @@ public class AnalyticsEngineTest {
     assertNull(analyticsEngineModel.getUserCredentials());
     assertNull(analyticsEngineModel.getServiceEndpoints());
     assertNull(analyticsEngineModel.getServiceEndpointsIp());
+    assertNull(analyticsEngineModel.getPrivateEndpointWhitelist());
   }
 }

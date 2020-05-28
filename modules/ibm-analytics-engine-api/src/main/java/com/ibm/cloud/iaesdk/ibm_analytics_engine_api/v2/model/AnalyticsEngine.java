@@ -50,6 +50,8 @@ public class AnalyticsEngine extends GenericModel {
   protected ServiceEndpoints serviceEndpoints;
   @SerializedName("service_endpoints_ip")
   protected ServiceEndpoints serviceEndpointsIp;
+  @SerializedName("private_endpoint_whitelist")
+  protected List<String> privateEndpointWhitelist;
 
   /**
    * Gets the id.
@@ -225,6 +227,17 @@ public class AnalyticsEngine extends GenericModel {
    */
   public ServiceEndpoints getServiceEndpointsIp() {
     return serviceEndpointsIp;
+  }
+
+  /**
+   * Gets the privateEndpointWhitelist.
+   *
+   * Whitelisted IP Ranges for Analytics Engine Service with private endpoints.
+   *
+   * @return the privateEndpointWhitelist
+   */
+  public List<String> getPrivateEndpointWhitelist() {
+    return privateEndpointWhitelist;
   }
 }
 

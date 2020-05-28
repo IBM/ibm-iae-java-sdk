@@ -31,6 +31,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineRes
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineResizeClusterResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineState;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineUserCredentials;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineWhitelistResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ConfigureLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.CreateCustomizationRequestOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.DeleteLoggingConfigOptions;
@@ -43,6 +44,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.GetLoggingConfigOp
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResetClusterPasswordOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResizeClusterOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ServiceEndpoints;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.UpdatePrivateEndpointWhitelistOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.security.Authenticator;
@@ -154,7 +156,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   @Test
   public void testGetAnalyticsEngineByIdWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"id\": \"id\", \"name\": \"name\", \"service_plan\": \"servicePlan\", \"hardware_size\": \"hardwareSize\", \"software_package\": \"softwarePackage\", \"domain\": \"domain\", \"creation_time\": \"2019-01-01T12:00:00\", \"commision_time\": \"2019-01-01T12:00:00\", \"decommision_time\": \"2019-01-01T12:00:00\", \"deletion_time\": \"2019-01-01T12:00:00\", \"state_change_time\": \"2019-01-01T12:00:00\", \"state\": \"state\", \"nodes\": [{\"id\": 2, \"fqdn\": \"fqdn\", \"type\": \"type\", \"state\": \"state\", \"public_ip\": \"publicIp\", \"private_ip\": \"privateIp\", \"state_change_time\": \"2019-01-01T12:00:00\", \"commission_time\": \"2019-01-01T12:00:00\"}], \"user_credentials\": {\"user\": \"user\"}, \"service_endpoints\": {\"phoenix_jdbc\": \"phoenixJdbc\", \"ambari_console\": \"ambariConsole\", \"livy\": \"livy\", \"spark_history_server\": \"sparkHistoryServer\", \"oozie_rest\": \"oozieRest\", \"hive_jdbc\": \"hiveJdbc\", \"notebook_gateway_websocket\": \"notebookGatewayWebsocket\", \"notebook_gateway\": \"notebookGateway\", \"webhdfs\": \"webhdfs\", \"ssh\": \"ssh\", \"spark_sql\": \"sparkSql\"}, \"service_endpoints_ip\": {\"phoenix_jdbc\": \"phoenixJdbc\", \"ambari_console\": \"ambariConsole\", \"livy\": \"livy\", \"spark_history_server\": \"sparkHistoryServer\", \"oozie_rest\": \"oozieRest\", \"hive_jdbc\": \"hiveJdbc\", \"notebook_gateway_websocket\": \"notebookGatewayWebsocket\", \"notebook_gateway\": \"notebookGateway\", \"webhdfs\": \"webhdfs\", \"ssh\": \"ssh\", \"spark_sql\": \"sparkSql\"}}";
+    String mockResponseBody = "{\"id\": \"id\", \"name\": \"name\", \"service_plan\": \"servicePlan\", \"hardware_size\": \"hardwareSize\", \"software_package\": \"softwarePackage\", \"domain\": \"domain\", \"creation_time\": \"2019-01-01T12:00:00\", \"commision_time\": \"2019-01-01T12:00:00\", \"decommision_time\": \"2019-01-01T12:00:00\", \"deletion_time\": \"2019-01-01T12:00:00\", \"state_change_time\": \"2019-01-01T12:00:00\", \"state\": \"state\", \"nodes\": [{\"id\": 2, \"fqdn\": \"fqdn\", \"type\": \"type\", \"state\": \"state\", \"public_ip\": \"publicIp\", \"private_ip\": \"privateIp\", \"state_change_time\": \"2019-01-01T12:00:00\", \"commission_time\": \"2019-01-01T12:00:00\"}], \"user_credentials\": {\"user\": \"user\"}, \"service_endpoints\": {\"phoenix_jdbc\": \"phoenixJdbc\", \"ambari_console\": \"ambariConsole\", \"livy\": \"livy\", \"spark_history_server\": \"sparkHistoryServer\", \"oozie_rest\": \"oozieRest\", \"hive_jdbc\": \"hiveJdbc\", \"notebook_gateway_websocket\": \"notebookGatewayWebsocket\", \"notebook_gateway\": \"notebookGateway\", \"webhdfs\": \"webhdfs\", \"ssh\": \"ssh\", \"spark_sql\": \"sparkSql\"}, \"service_endpoints_ip\": {\"phoenix_jdbc\": \"phoenixJdbc\", \"ambari_console\": \"ambariConsole\", \"livy\": \"livy\", \"spark_history_server\": \"sparkHistoryServer\", \"oozie_rest\": \"oozieRest\", \"hive_jdbc\": \"hiveJdbc\", \"notebook_gateway_websocket\": \"notebookGatewayWebsocket\", \"notebook_gateway\": \"notebookGateway\", \"webhdfs\": \"webhdfs\", \"ssh\": \"ssh\", \"spark_sql\": \"sparkSql\"}, \"private_endpoint_whitelist\": [\"privateEndpointWhitelist\"]}";
     String getAnalyticsEngineByIdPath = "/v2/analytics_engines/testString";
 
     server.enqueue(new MockResponse()
@@ -685,6 +687,58 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
     // Invoke operation with null options model (negative test)
     testService.deleteLoggingConfig(null).execute();
+  }
+
+  @Test
+  public void testUpdatePrivateEndpointWhitelistWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"private_endpoint_whitelist\": [\"privateEndpointWhitelist\"]}";
+    String updatePrivateEndpointWhitelistPath = "/v2/analytics_engines/testString/private_endpoint_whitelist";
+
+    server.enqueue(new MockResponse()
+    .setHeader("Content-type", "application/json")
+    .setResponseCode(200)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the UpdatePrivateEndpointWhitelistOptions model
+    UpdatePrivateEndpointWhitelistOptions updatePrivateEndpointWhitelistOptionsModel = new UpdatePrivateEndpointWhitelistOptions.Builder()
+    .instanceGuid("testString")
+    .ipRanges(new ArrayList<String>(Arrays.asList("testString")))
+    .action("add")
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<AnalyticsEngineWhitelistResponse> response = testService.updatePrivateEndpointWhitelist(updatePrivateEndpointWhitelistOptionsModel).execute();
+    assertNotNull(response);
+    AnalyticsEngineWhitelistResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "PATCH");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, updatePrivateEndpointWhitelistPath);
+  }
+
+  // Test the updatePrivateEndpointWhitelist operation with null options model parameter
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testUpdatePrivateEndpointWhitelistNoOptions() throws Throwable {
+    // construct the service
+    constructClientService();
+
+    server.enqueue(new MockResponse());
+
+    // Invoke operation with null options model (negative test)
+    testService.updatePrivateEndpointWhitelist(null).execute();
   }
 
   /** Initialize the server */

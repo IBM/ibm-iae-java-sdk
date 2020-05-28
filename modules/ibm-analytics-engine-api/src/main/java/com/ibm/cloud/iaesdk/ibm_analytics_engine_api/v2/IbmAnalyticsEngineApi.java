@@ -22,6 +22,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineLog
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineResetClusterPasswordResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineResizeClusterResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineState;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineWhitelistResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ConfigureLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.CreateCustomizationRequestOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.DeleteLoggingConfigOptions;
@@ -33,6 +34,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.GetCustomizationRe
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.GetLoggingConfigOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResetClusterPasswordOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResizeClusterOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.UpdatePrivateEndpointWhitelistOptions;
 import com.ibm.cloud.sdk.core.http.RequestBuilder;
 import com.ibm.cloud.sdk.core.http.ResponseConverter;
 import com.ibm.cloud.sdk.core.http.ServiceCall;
@@ -403,6 +405,35 @@ public class IbmAnalyticsEngineApi extends BaseService {
     }
 
     ResponseConverter<Void> responseConverter = ResponseConverterUtils.getVoid();
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Update private endpoint whitelist.
+   *
+   * Updates the list of whitelisted private endpoints. This operation either adds ip ranges to the whitelist or deletes
+   * them.
+   *
+   * @param updatePrivateEndpointWhitelistOptions the {@link UpdatePrivateEndpointWhitelistOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link AnalyticsEngineWhitelistResponse}
+   */
+  public ServiceCall<AnalyticsEngineWhitelistResponse> updatePrivateEndpointWhitelist(UpdatePrivateEndpointWhitelistOptions updatePrivateEndpointWhitelistOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(updatePrivateEndpointWhitelistOptions,
+      "updatePrivateEndpointWhitelistOptions cannot be null");
+    String[] pathSegments = { "v2/analytics_engines", "private_endpoint_whitelist" };
+    String[] pathParameters = { updatePrivateEndpointWhitelistOptions.instanceGuid() };
+    RequestBuilder builder = RequestBuilder.patch(RequestBuilder.constructHttpUrl(getServiceUrl(), pathSegments, pathParameters));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v2", "updatePrivateEndpointWhitelist");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    final JsonObject contentJson = new JsonObject();
+    contentJson.add("ip_ranges", com.ibm.cloud.sdk.core.util.GsonSingleton.getGson().toJsonTree(updatePrivateEndpointWhitelistOptions.ipRanges()));
+    contentJson.addProperty("action", updatePrivateEndpointWhitelistOptions.action());
+    builder.bodyJson(contentJson);
+    ResponseConverter<AnalyticsEngineWhitelistResponse> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<AnalyticsEngineWhitelistResponse>() { }.getType());
     return createServiceCall(builder.build(), responseConverter);
   }
 

@@ -1,3 +1,11 @@
+# [0.1.0](https://github.com/IBM/ibm-iae-java-sdk/compare/0.0.5...0.1.0) (2020-05-28)
+
+
+### Features
+
+* **whitelist api:** Adding whitelisting apis ([4016cbf](https://github.com/IBM/ibm-iae-java-sdk/commit/4016cbf0c9e039eade628bf2835fa9729330c167))
+* **whitelist api:** Adding whitelisting apis and updating build to not sign ([4c79416](https://github.com/IBM/ibm-iae-java-sdk/commit/4c79416df48754fb66c84f70341f50f78e002a39))
+
 ## [0.0.5](https://github.com/IBM/ibm-iae-java-sdk/compare/0.0.4...0.0.5) (2020-05-13)
 
 

@@ -13,6 +13,7 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
 
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.IbmAnalyticsEngineApi;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollection;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
@@ -45,6 +46,9 @@ import java.util.Map;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import static org.testng.Assert.*;
 
 /**
@@ -55,12 +59,17 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public static Map<String, String> config = null;
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
+  public String instanceGuid = null;
+  public String applicationId = null;
+  
+  
+  
   /**
    * This method provides our config filename to the base class.
    */
 
   public String getConfigFilename() {
-    return "../../ibm_analytics_engine_api_v3.env";
+    return "../../ibmanalyticsengine-service.env";
   }
 
   @BeforeClass
@@ -79,19 +88,26 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     assertNotNull(config);
     assertFalse(config.isEmpty());
     assertEquals(service.getServiceUrl(), config.get("URL"));
-
+    instanceGuid = System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_GUID");
+    
     System.out.println("Setup complete.");
+    
   }
 
   @Test
   public void testGetInstanceById() throws Exception {
     try {
       GetInstanceByIdOptions getInstanceByIdOptions = new GetInstanceByIdOptions.Builder()
-      .instanceId("testString")
+      //.instanceId(instanceGuid)
+      .instanceId(instanceGuid)
       .build();
 
       // Invoke operation
       Response<InstanceDetails> response = service.getInstanceById(getInstanceByIdOptions).execute();
+      
+      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
+      System.out.println("Response String "+String.valueOf(response.getResult()));
+      
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
@@ -109,27 +125,34 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testCreateApplication() throws Exception {
     try {
       ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
-      .application("testString")
-      .xClass("testString")
-      .applicationArguments(new java.util.ArrayList<String>(java.util.Arrays.asList("testString")))
-      .conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-      .env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      .application("/opt/ibm/spark/examples/src/main/python/wordcount.py")
+      //.xClass("testString")
+      .applicationArguments(new java.util.ArrayList<String>(java.util.Arrays.asList("/opt/ibm/spark/examples/src/main/resources/people.txt")))
+      //.conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      //.env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       .build();
 
       CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
-      .instanceId("testString")
+      .instanceId(instanceGuid)
       .applicationDetails(applicationRequestApplicationDetailsModel)
       .build();
-
       // Invoke operation
       Response<ApplicationResponse> response = service.createApplication(createApplicationOptions).execute();
+      //response.
       // Validate response
+      
+      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
+      System.out.println("Response String "+String.valueOf(response.getResult()));
+     
       assertNotNull(response);
-      assertEquals(response.getStatusCode(), 201);
-
+      assertEquals(response.getStatusCode(), 202);
       ApplicationResponse applicationResponseResult = response.getResult();
+      assertNotNull(applicationResponseResult);      
+      
+      String jsonString = String.valueOf(response.getResult());
+      JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonString);
+      applicationId = jsonObject.get("application_id").toString();
 
-      assertNotNull(applicationResponseResult);
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s\nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
@@ -140,11 +163,15 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetApplications() throws Exception {
     try {
       GetApplicationsOptions getApplicationsOptions = new GetApplicationsOptions.Builder()
-      .instanceId("testString")
+      .instanceId(instanceGuid)
       .build();
 
       // Invoke operation
       Response<ApplicationCollection> response = service.getApplications(getApplicationsOptions).execute();
+      
+      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
+      System.out.println("Response String "+String.valueOf(response.getResult()));
+      
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
@@ -162,12 +189,15 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetApplicationById() throws Exception {
     try {
       GetApplicationByIdOptions getApplicationByIdOptions = new GetApplicationByIdOptions.Builder()
-      .instanceId("testString")
-      .applicationId("testString")
+      .instanceId(instanceGuid)
+      .applicationId(applicationId)
       .build();
 
       // Invoke operation
       Response<ApplicationGetResponse> response = service.getApplicationById(getApplicationByIdOptions).execute();
+      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
+      System.out.println("Response String "+String.valueOf(response.getResult()));
+      
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
@@ -185,12 +215,15 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetApplicationState() throws Exception {
     try {
       GetApplicationStateOptions getApplicationStateOptions = new GetApplicationStateOptions.Builder()
-      .instanceId("testString")
-      .applicationId("testString")
+      .instanceId(instanceGuid)
+      .applicationId(applicationId)
       .build();
 
       // Invoke operation
       Response<ApplicationGetStateResponse> response = service.getApplicationState(getApplicationStateOptions).execute();
+      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
+      System.out.println("Response String "+String.valueOf(response.getResult()));
+      
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
@@ -208,12 +241,16 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testDeleteApplicationById() throws Exception {
     try {
       DeleteApplicationByIdOptions deleteApplicationByIdOptions = new DeleteApplicationByIdOptions.Builder()
-      .instanceId("testString")
-      .applicationId("testString")
+      .instanceId(instanceGuid)
+      .applicationId(applicationId)
       .build();
 
       // Invoke operation
       Response<Void> response = service.deleteApplicationById(deleteApplicationByIdOptions).execute();
+      
+      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
+      System.out.println("Response String "+String.valueOf(response.getResult()));
+      
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 204);

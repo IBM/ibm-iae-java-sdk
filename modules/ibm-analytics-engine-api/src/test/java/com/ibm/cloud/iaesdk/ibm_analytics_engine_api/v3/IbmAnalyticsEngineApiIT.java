@@ -102,6 +102,9 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       .instanceId(instanceGuid)
       .build();
 
+      
+      System.out.println("instanceGuid passed "+instanceGuid);
+      
       // Invoke operation
       Response<InstanceDetails> response = service.getInstanceById(getInstanceByIdOptions).execute();
       

@@ -130,7 +130,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
      * does not exist.
      */
 
-    @Test
+    //@Test
     public void testGetAnalyticsEngineByIdWOptions() throws Throwable {
         assertNotNull(service);
 
@@ -151,7 +151,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
         // System.out.println(String.valueOf(response.getResult()));
     }
 
-    @Test
+    //@Test
     public void testGetAnalyticsEngineStateByIdWOptions() throws Throwable {
         assertNotNull(service);
 
@@ -167,7 +167,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
         assertNotNull(responseObj);
     }
 
-    @Test
+    //@Test
     public void testCreateCustomizationRequestWOptions() throws Throwable {
         assertNotNull(service);
 
@@ -205,7 +205,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
         System.out.println(String.valueOf(response.getResult()));
     }
 
-    @Test
+    //@Test
     public void testGetAllCustomizationRequestsWOptions() throws Throwable {
         assertNotNull(service);
 
@@ -222,7 +222,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
         assertNotNull(responseObj);
     }
 
-    @Test
+    //@Test
     public void testGetCustomizationRequestByIdWOptions() throws Throwable {
         assertNotNull(service);
 
@@ -252,7 +252,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
         assertNotNull(responseObj);
     }
 
-    @Test
+    //@Test
     public void testResizeClusterWOptions() throws Throwable {
         assertNotNull(service);
 
@@ -270,7 +270,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
         assertNotNull(responseObj);
     }
 
-    @Test
+    //@Test
     public void testResetClusterPasswordWOptions() throws Throwable {
         assertNotNull(service);
 
@@ -287,7 +287,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
         assertNotNull(responseObj);
     }
 
-    @Test
+    //@Test
     public void testConfigureLoggingWOptions() throws Throwable {
         assertNotNull(service);
 
@@ -322,7 +322,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
         assertNull(responseObj);
     }
 
-    @Test
+    //@Test
     public void testGetLoggingConfigWOptions() throws Throwable {
         assertNotNull(service);
 
@@ -339,7 +339,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
         assertNotNull(responseObj);
     }
 
-    @Test
+    //@Test
     public void testDeleteLoggingConfigWOptions() throws Throwable {
         assertNotNull(service);
 
@@ -357,7 +357,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
         assertNull(responseObj);
     }
 
-    @Test
+    //@Test
     public void testUpdatePrivateEndpointWhitelistWOptions() throws Throwable {
 
         // Construct an instance of the UpdatePrivateEndpointWhitelistOptions model

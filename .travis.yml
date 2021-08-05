@@ -19,6 +19,7 @@ cache:
 env:
   global:
     - MVN_ARGS="--settings build/.travis.settings.xml"
+    - GH_TOKEN=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
 
 stages:
   - name: Build-Test

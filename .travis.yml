@@ -23,7 +23,6 @@ env:
 
 stages:
   - name: Build-Test
-# Uncomment these stages when you're ready to use them.
   - name: Semantic-Release
     if: branch = master AND type = push AND fork = false
 #  - name: Publish-Release
@@ -45,7 +44,6 @@ jobs:
       after_success:
         - build/publishCodeCoverage.sh
 
-# Uncomment these stages when you're ready to use them.
     - stage: Semantic-Release
       install:
         - sudo apt-get install python

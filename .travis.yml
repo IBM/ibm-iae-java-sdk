@@ -23,8 +23,8 @@ env:
 stages:
   - name: Build-Test
 # Uncomment these stages when you're ready to use them.
-#  - name: Semantic-Release
-#    if: branch = master AND type = push AND fork = false
+  - name: Semantic-Release
+    if: branch = master AND type = push AND fork = false
 #  - name: Publish-Release
 #    if: tag IS present
 
@@ -45,20 +45,20 @@ jobs:
         - build/publishCodeCoverage.sh
 
 # Uncomment these stages when you're ready to use them.
-#    - stage: Semantic-Release
-#      install:
-#        - sudo apt-get install python
-#        - nvm install 12
-#        - npm install -g npm@6.x
-#        - pip install --user bump2version
-#        - npm install @semantic-release/changelog
-#        - npm install @semantic-release/exec
-#        - npm install @semantic-release/git
-#        - npm install @semantic-release/github
-#      script:
-#        - npx semantic-release
-#      after_success:
-#        - echo "Semantic release has successfully created a new tagged-release"
+    - stage: Semantic-Release
+      install:
+        - sudo apt-get install python
+        - nvm install 12
+        - npm install -g npm@6.x
+        - pip install --user bump2version
+        - npm install @semantic-release/changelog
+        - npm install @semantic-release/exec
+        - npm install @semantic-release/git
+        - npm install @semantic-release/github
+      script:
+        - npx semantic-release
+      after_success:
+        - echo "Semantic release has successfully created a new tagged-release"
 
 #    - stage: Publish-Release
 #      jdk: openjdk8

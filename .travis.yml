@@ -24,7 +24,7 @@ stages:
   - name: Build-Test
 # Uncomment these stages when you're ready to use them.
 #  - name: Semantic-Release
-#    if: branch = main AND type = push AND fork = false
+#    if: branch = master AND type = push AND fork = false
 #  - name: Publish-Release
 #    if: tag IS present
 
@@ -59,7 +59,7 @@ jobs:
 #        - npx semantic-release
 #      after_success:
 #        - echo "Semantic release has successfully created a new tagged-release"
-#
+
 #    - stage: Publish-Release
 #      jdk: openjdk8
 #      name: Publish-Javadoc
@@ -70,7 +70,7 @@ jobs:
 #        - build/publishJavadoc.sh
 #      after_success:
 #        - echo "Javadocs successfully published to gh-pages!"
-#
+
 #    - jdk: openjdk8
 #      name: Publish-To-Maven-Central
 #      install: true
@@ -78,5 +78,5 @@ jobs:
 #        - build/setupSigning.sh
 #        - build/setMavenVersion.sh
 #        - mvn deploy $MVN_ARGS -DskipTests -P central
-#      after_success:
+#     after_success:
 #        - echo "Maven artifacts successfully published to Maven Central!"

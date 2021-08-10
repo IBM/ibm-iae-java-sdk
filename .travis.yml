@@ -57,7 +57,6 @@ jobs:
         - npx semantic-release
       after_success:
         - echo "Semantic release has successfully created a new tagged-release"
-
 #    - stage: Publish-Release
 #      jdk: openjdk8
 #      name: Publish-Javadoc

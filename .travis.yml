@@ -22,10 +22,10 @@ env:
 
 stages:
   - name: Build-Test
-#  - name: Semantic-Release 
-#    if: branch = master AND type = push AND fork = false
-#  - name: Publish-Release
-#    if: tag IS present
+  - name: Semantic-Release 
+    if: branch = master AND type = push AND fork = false
+  - name: Publish-Release
+    if: tag IS present
 
 before_install:
   - sudo apt-get update
@@ -69,12 +69,12 @@ jobs:
 #      after_success:
 #        - echo "Javadocs successfully published to gh-pages!"
 
-#    - jdk: openjdk8
-#      name: Publish-To-Maven-Central
-#      install: true
-#      script:
-#        - build/setupSigning.sh
-#        - build/setMavenVersion.sh
-#        - mvn deploy $MVN_ARGS -DskipTests -P central
-#     after_success:
-#        - echo "Maven artifacts successfully published to Maven Central!"
+    - jdk: openjdk8
+      name: Publish-To-Maven-Central
+      install: true
+      script:
+        - build/setupSigning.sh
+        - build/setMavenVersion.sh
+        - mvn deploy $MVN_ARGS -DskipTests -P central
+      after_success:
+        - echo "Maven artifacts successfully published to Maven Central!"

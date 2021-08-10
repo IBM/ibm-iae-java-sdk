@@ -51,7 +51,29 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Integration test class for the IbmAnalyticsEngineApi service.
+ * This class contains integration tests for IbmAnalyticsEngineV3Api service.
+ *
+ * Notes:
+ * 1. By providing the name of our config file (ibmanalyticsengine-service.env.hide") via the
+ *    getConfigFilename() method below, the base class (SdkIntegrationTestBase) will be able to
+ *    mock up the getenv() method to cause the Java core's CredentialUtils class to "see" the
+ *    config file via the mocked value of the IBM_CREDENTIALS_FILE env var.
+ *
+ * 2. The base class will automatically set the "skipTests" flag to true if it can't find the config file.
+ *
+ * 3. The base class contains a "before method" function that will automatically skip each test method if
+ *    the "skipTests" flag is true.   This means that this subclass doesn't need to concern
+ *    itself with skipping tests in the event that the config file is not available.
+ *
+ * 4. This example testcase uses the "dependsOnMethods" attribute of the @Test annotation to ensure that the test
+ *    methods are executed in the the order they appear in this file.  Without this, there's no guaranteed ordering
+ *    imposed by TestNG.
+ *
+ * 5. Be sure to following the instructions here:
+ *    https://github.ibm.com/CloudEngineering/java-sdk-template/blob/master/README_FIRST.md#integration-tests
+ *    to start up an instance of the IbmAnalyticsEngineV2Api Service prior to running the integraton test.
+ *
+ * 6. Before running this test, rename example-service.env.hide to example-service.env.
  */
 public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public IbmAnalyticsEngineApi service = null;
@@ -65,7 +87,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
    */
 
   public String getConfigFilename() {
-    return "../../ibm_analytics_engine_api_v3.env";
+    return "../../ibmanalyticsengine-service.env";
   }
 
   @BeforeClass

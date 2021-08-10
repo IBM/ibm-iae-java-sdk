@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -31,6 +31,8 @@ public class AnalyticsEngineLoggingNodeSpec extends GenericModel {
     String MANAGEMENT = "management";
     /** data. */
     String DATA = "data";
+    /** task. */
+    String TASK = "task";
   }
 
   /**
@@ -45,12 +47,18 @@ public class AnalyticsEngineLoggingNodeSpec extends GenericModel {
     String HADOOP_YARN = "hadoop-yarn";
     /** hbase. */
     String HBASE = "hbase";
+    /** hdfs. */
+    String HDFS = "hdfs";
+    /** hdfs-audit. */
+    String HDFS_AUDIT = "hdfs-audit";
     /** hive. */
     String HIVE = "hive";
     /** jnbg. */
     String JNBG = "jnbg";
     /** knox. */
     String KNOX = "knox";
+    /** knox-audit. */
+    String KNOX_AUDIT = "knox-audit";
     /** livy2. */
     String LIVY2 = "livy2";
     /** spark2. */

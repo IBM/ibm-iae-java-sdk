@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -20,18 +20,18 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
 public class ResizeClusterOptions extends GenericModel {
 
   protected String instanceGuid;
-  protected Long computeNodesCount;
+  protected ResizeClusterRequest body;
 
   /**
    * Builder.
    */
   public static class Builder {
     private String instanceGuid;
-    private Long computeNodesCount;
+    private ResizeClusterRequest body;
 
     private Builder(ResizeClusterOptions resizeClusterOptions) {
       this.instanceGuid = resizeClusterOptions.instanceGuid;
-      this.computeNodesCount = resizeClusterOptions.computeNodesCount;
+      this.body = resizeClusterOptions.body;
     }
 
     /**
@@ -44,9 +44,11 @@ public class ResizeClusterOptions extends GenericModel {
      * Instantiates a new builder with required properties.
      *
      * @param instanceGuid the instanceGuid
+     * @param body the body
      */
-    public Builder(String instanceGuid) {
+    public Builder(String instanceGuid, ResizeClusterRequest body) {
       this.instanceGuid = instanceGuid;
+      this.body = body;
     }
 
     /**
@@ -70,13 +72,13 @@ public class ResizeClusterOptions extends GenericModel {
     }
 
     /**
-     * Set the computeNodesCount.
+     * Set the body.
      *
-     * @param computeNodesCount the computeNodesCount
+     * @param body the body
      * @return the ResizeClusterOptions builder
      */
-    public Builder computeNodesCount(long computeNodesCount) {
-      this.computeNodesCount = computeNodesCount;
+    public Builder body(ResizeClusterRequest body) {
+      this.body = body;
       return this;
     }
   }
@@ -84,8 +86,10 @@ public class ResizeClusterOptions extends GenericModel {
   protected ResizeClusterOptions(Builder builder) {
     com.ibm.cloud.sdk.core.util.Validator.notEmpty(builder.instanceGuid,
       "instanceGuid cannot be empty");
+    com.ibm.cloud.sdk.core.util.Validator.notNull(builder.body,
+      "body cannot be null");
     instanceGuid = builder.instanceGuid;
-    computeNodesCount = builder.computeNodesCount;
+    body = builder.body;
   }
 
   /**
@@ -109,14 +113,15 @@ public class ResizeClusterOptions extends GenericModel {
   }
 
   /**
-   * Gets the computeNodesCount.
+   * Gets the body.
    *
-   * Expected number of nodes in the cluster after the resize operation.
+   * Expected size of the cluster after the resize operation. If the number of nodes in the cluster is 5 and you want to
+   * add 2 nodes, specify 7.
    *
-   * @return the computeNodesCount
+   * @return the body
    */
-  public Long computeNodesCount() {
-    return computeNodesCount;
+  public ResizeClusterRequest body() {
+    return body;
   }
 }
 

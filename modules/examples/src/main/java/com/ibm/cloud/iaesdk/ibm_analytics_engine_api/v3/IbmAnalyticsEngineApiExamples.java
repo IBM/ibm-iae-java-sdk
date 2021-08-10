@@ -50,90 +50,95 @@ public class IbmAnalyticsEngineApiExamples {
 
   @SuppressWarnings("checkstyle:methodlength")
   public static void main(String[] args) throws Exception {
-    IbmAnalyticsEngineApi service = IbmAnalyticsEngineApi.newInstance();
+    IbmAnalyticsEngineApi ibmAnalyticsEngineApiService = IbmAnalyticsEngineApi.newInstance();
 
     // Load up our test-specific config properties.
     Map<String, String> config = CredentialUtils.getServiceProperties(IbmAnalyticsEngineApi.DEFAULT_SERVICE_NAME);
 
     try {
+      System.out.println("getInstanceById() result:");
       // begin-get_instance_by_id
       GetInstanceByIdOptions getInstanceByIdOptions = new GetInstanceByIdOptions.Builder()
         .instanceId("testString")
         .build();
 
-      Response<InstanceDetails> response = service.getInstanceById(getInstanceByIdOptions).execute();
+      Response<InstanceDetails> response = ibmAnalyticsEngineApiService.getInstanceById(getInstanceByIdOptions).execute();
       InstanceDetails instanceDetails = response.getResult();
 
       System.out.println(instanceDetails);
       // end-get_instance_by_id
     } catch (ServiceResponseException e) {
-        logger.error(String.format("Service returned status code %s: %s\nError details: %s",
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
     }
 
     try {
+      System.out.println("createApplication() result:");
       // begin-create_application
       CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
         .instanceId("testString")
         .build();
 
-      Response<ApplicationResponse> response = service.createApplication(createApplicationOptions).execute();
+      Response<ApplicationResponse> response = ibmAnalyticsEngineApiService.createApplication(createApplicationOptions).execute();
       ApplicationResponse applicationResponse = response.getResult();
 
       System.out.println(applicationResponse);
       // end-create_application
     } catch (ServiceResponseException e) {
-        logger.error(String.format("Service returned status code %s: %s\nError details: %s",
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
     }
 
     try {
+      System.out.println("getApplications() result:");
       // begin-get_applications
       GetApplicationsOptions getApplicationsOptions = new GetApplicationsOptions.Builder()
         .instanceId("testString")
         .build();
 
-      Response<ApplicationCollection> response = service.getApplications(getApplicationsOptions).execute();
+      Response<ApplicationCollection> response = ibmAnalyticsEngineApiService.getApplications(getApplicationsOptions).execute();
       ApplicationCollection applicationCollection = response.getResult();
 
       System.out.println(applicationCollection);
       // end-get_applications
     } catch (ServiceResponseException e) {
-        logger.error(String.format("Service returned status code %s: %s\nError details: %s",
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
     }
 
     try {
+      System.out.println("getApplicationById() result:");
       // begin-get_application_by_id
       GetApplicationByIdOptions getApplicationByIdOptions = new GetApplicationByIdOptions.Builder()
         .instanceId("testString")
         .applicationId("testString")
         .build();
 
-      Response<ApplicationGetResponse> response = service.getApplicationById(getApplicationByIdOptions).execute();
+      Response<ApplicationGetResponse> response = ibmAnalyticsEngineApiService.getApplicationById(getApplicationByIdOptions).execute();
       ApplicationGetResponse applicationGetResponse = response.getResult();
 
       System.out.println(applicationGetResponse);
       // end-get_application_by_id
     } catch (ServiceResponseException e) {
-        logger.error(String.format("Service returned status code %s: %s\nError details: %s",
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
     }
 
     try {
+      System.out.println("getApplicationState() result:");
       // begin-get_application_state
       GetApplicationStateOptions getApplicationStateOptions = new GetApplicationStateOptions.Builder()
         .instanceId("testString")
         .applicationId("testString")
         .build();
 
-      Response<ApplicationGetStateResponse> response = service.getApplicationState(getApplicationStateOptions).execute();
+      Response<ApplicationGetStateResponse> response = ibmAnalyticsEngineApiService.getApplicationState(getApplicationStateOptions).execute();
       ApplicationGetStateResponse applicationGetStateResponse = response.getResult();
 
       System.out.println(applicationGetStateResponse);
       // end-get_application_state
     } catch (ServiceResponseException e) {
-        logger.error(String.format("Service returned status code %s: %s\nError details: %s",
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
     }
 
@@ -144,10 +149,11 @@ public class IbmAnalyticsEngineApiExamples {
         .applicationId("testString")
         .build();
 
-      service.deleteApplicationById(deleteApplicationByIdOptions).execute();
+      Response<Void> response = ibmAnalyticsEngineApiService.deleteApplicationById(deleteApplicationByIdOptions).execute();
       // end-delete_application_by_id
+      System.out.printf("deleteApplicationById() response status code: %d%n", response.getStatusCode());
     } catch (ServiceResponseException e) {
-        logger.error(String.format("Service returned status code %s: %s\nError details: %s",
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
     }
 

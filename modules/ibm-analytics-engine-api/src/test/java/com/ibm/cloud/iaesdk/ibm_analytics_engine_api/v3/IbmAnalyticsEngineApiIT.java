@@ -42,6 +42,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -55,6 +58,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public static Map<String, String> config = null;
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
+  public String instanceGuid = null;
+  public String applicationId = null;
   /**
    * This method provides our config filename to the base class.
    */
@@ -79,7 +84,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     assertNotNull(config);
     assertFalse(config.isEmpty());
     assertEquals(service.getServiceUrl(), config.get("URL"));
-
+    instanceGuid = System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_GUID");
     System.out.println("Setup complete.");
   }
 
@@ -87,20 +92,23 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetInstanceById() throws Exception {
     try {
       GetInstanceByIdOptions getInstanceByIdOptions = new GetInstanceByIdOptions.Builder()
-      .instanceId("testString")
+      .instanceId(instanceGuid)
       .build();
 
       // Invoke operation
       Response<InstanceDetails> response = service.getInstanceById(getInstanceByIdOptions).execute();
       // Validate response
       assertNotNull(response);
+      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
+      System.out.println("Response String "+String.valueOf(response.getResult()));
       assertEquals(response.getStatusCode(), 200);
 
       InstanceDetails instanceDetailsResult = response.getResult();
 
       assertNotNull(instanceDetailsResult);
+      
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s\nError details: %s",
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
@@ -109,15 +117,15 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testCreateApplication() throws Exception {
     try {
       ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
-      .application("testString")
-      .xClass("testString")
-      .applicationArguments(new java.util.ArrayList<String>(java.util.Arrays.asList("testString")))
-      .conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-      .env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      .application("/opt/ibm/spark/examples/src/main/python/wordcount.py")
+      //.xClass("testString")
+      .applicationArguments(new java.util.ArrayList<String>(java.util.Arrays.asList("/opt/ibm/spark/examples/src/main/resources/people.txt")))
+      //.conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      //.env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       .build();
 
       CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
-      .instanceId("testString")
+      .instanceId(instanceGuid)
       .applicationDetails(applicationRequestApplicationDetailsModel)
       .build();
 
@@ -125,13 +133,18 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       Response<ApplicationResponse> response = service.createApplication(createApplicationOptions).execute();
       // Validate response
       assertNotNull(response);
-      assertEquals(response.getStatusCode(), 201);
+      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
+      System.out.println("Response String "+String.valueOf(response.getResult()));
+      assertEquals(response.getStatusCode(), 202);
 
       ApplicationResponse applicationResponseResult = response.getResult();
 
       assertNotNull(applicationResponseResult);
+      String jsonString = String.valueOf(response.getResult());
+      JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonString);
+      applicationId = jsonObject.get("application_id").toString();
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s\nError details: %s",
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
@@ -140,7 +153,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetApplications() throws Exception {
     try {
       GetApplicationsOptions getApplicationsOptions = new GetApplicationsOptions.Builder()
-      .instanceId("testString")
+      .instanceId(instanceGuid)
       .build();
 
       // Invoke operation
@@ -153,7 +166,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
 
       assertNotNull(applicationCollectionResult);
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s\nError details: %s",
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
@@ -162,8 +175,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetApplicationById() throws Exception {
     try {
       GetApplicationByIdOptions getApplicationByIdOptions = new GetApplicationByIdOptions.Builder()
-      .instanceId("testString")
-      .applicationId("testString")
+      .instanceId(instanceGuid)
+      .applicationId(applicationId)
       .build();
 
       // Invoke operation
@@ -176,7 +189,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
 
       assertNotNull(applicationGetResponseResult);
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s\nError details: %s",
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
@@ -185,8 +198,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetApplicationState() throws Exception {
     try {
       GetApplicationStateOptions getApplicationStateOptions = new GetApplicationStateOptions.Builder()
-      .instanceId("testString")
-      .applicationId("testString")
+      .instanceId(instanceGuid)
+      .applicationId(applicationId)
       .build();
 
       // Invoke operation
@@ -199,7 +212,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
 
       assertNotNull(applicationGetStateResponseResult);
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s\nError details: %s",
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
@@ -208,8 +221,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testDeleteApplicationById() throws Exception {
     try {
       DeleteApplicationByIdOptions deleteApplicationByIdOptions = new DeleteApplicationByIdOptions.Builder()
-      .instanceId("testString")
-      .applicationId("testString")
+      .instanceId(instanceGuid)
+      .applicationId(applicationId)
       .build();
 
       // Invoke operation
@@ -218,7 +231,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 204);
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s\nError details: %s",
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }

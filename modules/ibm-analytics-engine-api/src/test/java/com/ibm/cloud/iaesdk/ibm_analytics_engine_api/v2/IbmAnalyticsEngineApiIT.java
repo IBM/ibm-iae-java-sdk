@@ -1,13 +1,18 @@
+/*
+ * (C) Copyright IBM Corp. 2021.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.fail;
-import static org.testng.AssertJUnit.assertNotNull;
-
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.IbmAnalyticsEngineApi;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngine;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineClusterNode;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCreateCustomizationResponse;
@@ -38,33 +43,34 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.GetCustomizationRe
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.GetLoggingConfigOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResetClusterPasswordOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResizeClusterOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResizeClusterRequest;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResizeClusterRequestAnalyticsEngineResizeClusterByComputeNodesRequest;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResizeClusterRequestAnalyticsEngineResizeClusterByTaskNodesRequest;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ServiceEndpoints;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.UpdatePrivateEndpointWhitelistOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.utils.TestUtilities;
 import com.ibm.cloud.iaesdk.test.SdkIntegrationTestBase;
 import com.ibm.cloud.sdk.core.http.Response;
-import com.ibm.cloud.sdk.core.security.Authenticator;
-import com.ibm.cloud.sdk.core.security.NoAuthAuthenticator;
+import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
-
-import com.ibm.cloud.sdk.core.util.EnvironmentUtils;
-
-import java.io.IOException;
+import com.ibm.cloud.sdk.core.util.CredentialUtils;
+import com.ibm.cloud.sdk.core.util.DateUtils;
 import java.io.InputStream;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * This class contains integration tests for example service.
+ * This class contains integration tests for IbmAnalyticsEngineV2Api service.
  *
  * Notes:
- * 1. By providing the name of our config file ("example-service.env") via the
+ * 1. By providing the name of our config file (ibmanalyticsengine-service.env.hide") via the
  *    getConfigFilename() method below, the base class (SdkIntegrationTestBase) will be able to
  *    mock up the getenv() method to cause the Java core's CredentialUtils class to "see" the
  *    config file via the mocked value of the IBM_CREDENTIALS_FILE env var.
@@ -81,297 +87,347 @@ import static org.testng.Assert.*;
  *
  * 5. Be sure to following the instructions here:
  *    https://github.ibm.com/CloudEngineering/java-sdk-template/blob/master/README_FIRST.md#integration-tests
- *    to start up an instance of the Example Service prior to running the integraton test.
+ *    to start up an instance of the IbmAnalyticsEngineV2Api Service prior to running the integraton test.
  *
  * 6. Before running this test, rename example-service.env.hide to example-service.env.
  */
 public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
+  public IbmAnalyticsEngineApi service = null;
+  public String instanceGuid = null;
+  public static Map<String, String> config = null;
+  final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
+  final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
+  /**
+   * This method provides our config filename to the base class.
+   */
 
-    // Example service v1 integration
-    public IbmAnalyticsEngineApi service = null;
-    public String instanceGuid = null;
+  public String getConfigFilename() {
+    return "../../ibmanalyticsengine-service.env";
+  }
 
-    /**
-     * This method provides our config filename to the base class.
-     */
-    public String getConfigFilename() {
-        return "../../ibmanalyticsengine-service.env";
+  @BeforeClass
+  public void constructService() {
+    // Ask super if we should skip the tests.
+    if (skipTests()) {
+      return;
     }
 
-    /**
-     * This method is invoked before any of the @Test-annotated methods, and is responsible for
-     * creating the instance of the service that will be used by the rest of the test methods,
-     * as well as any other required initialization.
-     */
-    @BeforeClass
-    public void constructService() {
-        // Ask super if we should skip the tests.
-        if (skipTests()) {
-            return;
-        }
+    service = IbmAnalyticsEngineApi.newInstance();
+    assertNotNull(service);
+    assertNotNull(service.getServiceUrl());
 
-        /**
-         * Construct our service client instance via external config (see the example-service.env file for details).
-         * The newInstance() method will load up our config file and look for properties that start with
-         * "EXAMPLE_SERVICE_" (the default service name associated with the Example Service, as specified by the
-         * IbmAnalyticsEngineApi.DEFAULT_SERVICE_NAME constant).
-         * Specifically, newInstance() will construct an authenticator based on the value of the
-         * EXAMPLE_SERVICE_AUTH_TYPE property.   After constructing the appropriate authenticator, it will construct
-         * an instance of the service and then set the URL to the value specified by the EXAMPLE_SERVICE_URL property.
-         */
-        service = IbmAnalyticsEngineApi.newInstance();
-        assertNotNull(service);
-        assertNotNull(service.getServiceUrl());
-        instanceGuid = System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_GUID");
+    // Load up our test-specific config properties.
+    config = CredentialUtils.getServiceProperties(IbmAnalyticsEngineApi.DEFAULT_SERVICE_NAME);
+    assertNotNull(config);
+    assertFalse(config.isEmpty());
+    assertEquals(service.getServiceUrl(), config.get("URL"));
+    instanceGuid = System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_GUID");
+    System.out.println("Setup complete.");
+  }
+
+  @Test
+  public void testGetAllAnalyticsEngines() throws Exception {
+    try {
+      GetAllAnalyticsEnginesOptions getAllAnalyticsEnginesOptions = new GetAllAnalyticsEnginesOptions();
+
+      // Invoke operation
+      Response<Void> response = service.getAllAnalyticsEngines(getAllAnalyticsEnginesOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
+  }
 
-    /**
-     * Each of the @Test-annotated methods below will be skipped if the config file (example-service.env)
-     * does not exist.
-     */
+  @Test
+  public void testGetAnalyticsEngineById() throws Exception {
+    try {
+      GetAnalyticsEngineByIdOptions getAnalyticsEngineByIdOptions = new GetAnalyticsEngineByIdOptions.Builder()
+      .instanceGuid(instanceGuid)
+      .build();
 
-    @Test
-    public void testGetAnalyticsEngineByIdWOptions() throws Throwable {
-        assertNotNull(service);
+      // Invoke operation
+      Response<AnalyticsEngine> response = service.getAnalyticsEngineById(getAnalyticsEngineByIdOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
 
-        // Construct an instance of the GetAnalyticsEngineByIdOptions model
-        GetAnalyticsEngineByIdOptions getAnalyticsEngineByIdOptionsModel = new GetAnalyticsEngineByIdOptions.Builder()
-        .instanceGuid(instanceGuid)
-        .build();
+      AnalyticsEngine analyticsEngineResult = response.getResult();
 
-        // Invoke operation with valid options model (positive test)
-        Response<AnalyticsEngine> response = service.getAnalyticsEngineById(getAnalyticsEngineByIdOptionsModel).execute();
-        assertNotNull(response);
-        assertEquals(response.getStatusCode(), 200);
-        AnalyticsEngine responseObj = response.getResult();
-        assertNotNull(responseObj);
-        // To print results
-        // System.out.println(Integer.toString(response.getStatusCode()));
-        // System.out.println(response.getStatusMessage());
-        // System.out.println(String.valueOf(response.getResult()));
+      assertNotNull(analyticsEngineResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
+  }
 
-    @Test
-    public void testGetAnalyticsEngineStateByIdWOptions() throws Throwable {
-        assertNotNull(service);
+  @Test
+  public void testGetAnalyticsEngineStateById() throws Exception {
+    try {
+      GetAnalyticsEngineStateByIdOptions getAnalyticsEngineStateByIdOptions = new GetAnalyticsEngineStateByIdOptions.Builder()
+      .instanceGuid(instanceGuid)
+      .build();
 
-        // Construct an instance of the GetAnalyticsEngineStateByIdOptions model
-        GetAnalyticsEngineStateByIdOptions getAnalyticsEngineStateByIdOptionsModel = new GetAnalyticsEngineStateByIdOptions.Builder()
-        .instanceGuid(instanceGuid)
-        .build();
+      // Invoke operation
+      Response<AnalyticsEngineState> response = service.getAnalyticsEngineStateById(getAnalyticsEngineStateByIdOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
 
-        Response<AnalyticsEngineState> response = service.getAnalyticsEngineStateById(getAnalyticsEngineStateByIdOptionsModel).execute();
-        assertNotNull(response);
-        assertEquals(response.getStatusCode(), 200);
-        AnalyticsEngineState responseObj = response.getResult();
-        assertNotNull(responseObj);
+      AnalyticsEngineState analyticsEngineStateResult = response.getResult();
+
+      assertNotNull(analyticsEngineStateResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
+  }
 
-    @Test
-    public void testCreateCustomizationRequestWOptions() throws Throwable {
-        assertNotNull(service);
+  @Test
+  public void testCreateCustomizationRequest() throws Exception {
+    try {
+      AnalyticsEngineCustomActionScript analyticsEngineCustomActionScriptModel = new AnalyticsEngineCustomActionScript.Builder()
+      .sourceType("http")
+      .scriptPath("testString")
+      .sourceProps(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      .build();
 
-        // Construct an instance of the AnalyticsEngineCustomActionScript model
-        AnalyticsEngineCustomActionScript analyticsEngineCustomActionScriptModel = new AnalyticsEngineCustomActionScript.Builder()
-        .sourceType("http")
-        .scriptPath("testString")
-        .sourceProps(new java.util.HashMap<String,Object>(){{put("foo", "testString"); }})
-        .build();
+      AnalyticsEngineCustomAction analyticsEngineCustomActionModel = new AnalyticsEngineCustomAction.Builder()
+      .name("testString")
+      .type("bootstrap")
+      .script(analyticsEngineCustomActionScriptModel)
+      .scriptParams(new java.util.ArrayList<String>(java.util.Arrays.asList("testString")))
+      .build();
 
-        // Construct an instance of the AnalyticsEngineCustomAction model
-        AnalyticsEngineCustomAction analyticsEngineCustomActionModel = new AnalyticsEngineCustomAction.Builder()
-        .name("testString")
-        .type("bootstrap")
-        .script(analyticsEngineCustomActionScriptModel)
-        .scriptParams(new ArrayList<String>(Arrays.asList("testString")))
-        .build();
+      CreateCustomizationRequestOptions createCustomizationRequestOptions = new CreateCustomizationRequestOptions.Builder()
+      .instanceGuid(instanceGuid)
+      .target("all")
+      .customActions(new java.util.ArrayList<AnalyticsEngineCustomAction>(java.util.Arrays.asList(analyticsEngineCustomActionModel)))
+      .build();
 
-        // Construct an instance of the CreateCustomizationRequestOptions model
-        CreateCustomizationRequestOptions createCustomizationRequestOptionsModel = new CreateCustomizationRequestOptions.Builder()
-        .instanceGuid(instanceGuid)
-        .target("all")
-        .customActions(new ArrayList<AnalyticsEngineCustomAction>(Arrays.asList(analyticsEngineCustomActionModel)))
-        .build();
+      // Invoke operation
+      Response<AnalyticsEngineCreateCustomizationResponse> response = service.createCustomizationRequest(createCustomizationRequestOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
 
-        // Invoke operation with valid options model (positive test)
-        Response<AnalyticsEngineCreateCustomizationResponse> response = service.createCustomizationRequest(createCustomizationRequestOptionsModel).execute();
-        assertNotNull(response);
-        assertEquals(response.getStatusCode(), 200);
-        AnalyticsEngineCreateCustomizationResponse responseObj = response.getResult();
-        assertNotNull(responseObj);
+      AnalyticsEngineCreateCustomizationResponse analyticsEngineCreateCustomizationResponseResult = response.getResult();
 
-        System.out.println(Integer.toString(response.getStatusCode()));
-        System.out.println(response.getStatusMessage());
-        System.out.println(String.valueOf(response.getResult()));
+      assertNotNull(analyticsEngineCreateCustomizationResponseResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
+  }
 
-    @Test
-    public void testGetAllCustomizationRequestsWOptions() throws Throwable {
-        assertNotNull(service);
+  @Test
+  public void testGetAllCustomizationRequests() throws Exception {
+    try {
+      GetAllCustomizationRequestsOptions getAllCustomizationRequestsOptions = new GetAllCustomizationRequestsOptions.Builder()
+      .instanceGuid(instanceGuid)
+      .build();
 
-        // Construct an instance of the GetAllCustomizationRequestsOptions model
-        GetAllCustomizationRequestsOptions getAllCustomizationRequestsOptionsModel = new GetAllCustomizationRequestsOptions.Builder()
-        .instanceGuid(instanceGuid)
-        .build();
+      // Invoke operation
+      Response<List<AnalyticsEngineCustomizationRequestCollectionItem>> response = service.getAllCustomizationRequests(getAllCustomizationRequestsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
 
-        // Invoke operation with valid options model (positive test)
-        Response<List<AnalyticsEngineCustomizationRequestCollectionItem>> response = service.getAllCustomizationRequests(getAllCustomizationRequestsOptionsModel).execute();
-        assertNotNull(response);
-        assertEquals(response.getStatusCode(), 200);
-        List<AnalyticsEngineCustomizationRequestCollectionItem> responseObj = response.getResult();
-        assertNotNull(responseObj);
+      List<AnalyticsEngineCustomizationRequestCollectionItem> listAnalyticsEngineCustomizationRequestCollectionItemResult = response.getResult();
+
+      assertNotNull(listAnalyticsEngineCustomizationRequestCollectionItemResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
+  }
 
-    @Test
-    public void testGetCustomizationRequestByIdWOptions() throws Throwable {
-        assertNotNull(service);
+  @Test
+  public void testGetCustomizationRequestById() throws Exception {
+    try {
+    GetAllCustomizationRequestsOptions getAllCustomizationRequestsOptions = new GetAllCustomizationRequestsOptions.Builder()
+  		      .instanceGuid(instanceGuid)
+  		      .build();
+  	
+	  // Invoke operation with valid options model (positive test)
+    Response<List<AnalyticsEngineCustomizationRequestCollectionItem>> responseId = service.getAllCustomizationRequests(getAllCustomizationRequestsOptions).execute();
+	  List<AnalyticsEngineCustomizationRequestCollectionItem> responseObjId = responseId.getResult();
+	  assertNotNull(responseObjId);
+	  String requestId = responseObjId.get(0).getId();
+	  System.out.println(requestId);
+  	
+  	
+    GetCustomizationRequestByIdOptions getCustomizationRequestByIdOptions = new GetCustomizationRequestByIdOptions.Builder()
+    .instanceGuid(instanceGuid)
+    .requestId(requestId)
+    .build();
 
-        // Construct an instance of the GetAllCustomizationRequestsOptions model
-        GetAllCustomizationRequestsOptions getAllCustomizationRequestsOptionsModel = new GetAllCustomizationRequestsOptions.Builder()
-        .instanceGuid(instanceGuid)
-        .build();
+      // Invoke operation
+      Response<AnalyticsEngineCustomizationRunDetails> response = service.getCustomizationRequestById(getCustomizationRequestByIdOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
 
-        // Invoke operation with valid options model (positive test)
-        Response<List<AnalyticsEngineCustomizationRequestCollectionItem>> responseId = service.getAllCustomizationRequests(getAllCustomizationRequestsOptionsModel).execute();
-        List<AnalyticsEngineCustomizationRequestCollectionItem> responseObjId = responseId.getResult();
-        assertNotNull(responseObjId);
-        String requestId = responseObjId.get(0).getId();
-        System.out.println(requestId);
+      AnalyticsEngineCustomizationRunDetails analyticsEngineCustomizationRunDetailsResult = response.getResult();
 
-        // Construct an instance of the GetCustomizationRequestByIdOptions model
-        GetCustomizationRequestByIdOptions getCustomizationRequestByIdOptionsModel = new GetCustomizationRequestByIdOptions.Builder()
-        .instanceGuid(instanceGuid)
-        .requestId(requestId)
-        .build();
-
-        // Invoke operation with valid options model (positive test)
-        Response<AnalyticsEngineCustomizationRunDetails> response = service.getCustomizationRequestById(getCustomizationRequestByIdOptionsModel).execute();
-        assertNotNull(response);
-        assertEquals(response.getStatusCode(), 200);
-        AnalyticsEngineCustomizationRunDetails responseObj = response.getResult();
-        assertNotNull(responseObj);
+      assertNotNull(analyticsEngineCustomizationRunDetailsResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
+  }
 
-    @Test
-    public void testResizeClusterWOptions() throws Throwable {
-        assertNotNull(service);
+  @Test
+  public void testResizeCluster() throws Exception {
+    try {
+      ResizeClusterRequestAnalyticsEngineResizeClusterByComputeNodesRequest resizeClusterRequestModel = new ResizeClusterRequestAnalyticsEngineResizeClusterByComputeNodesRequest.Builder()
+      .computeNodesCount(Long.valueOf("26"))
+      .build();
 
-        // Construct an instance of the ResizeClusterOptions model
-        ResizeClusterOptions resizeClusterOptionsModel = new ResizeClusterOptions.Builder()
-        .instanceGuid(instanceGuid)
-        .computeNodesCount(Long.valueOf("2"))
-        .build();
+      ResizeClusterOptions resizeClusterOptions = new ResizeClusterOptions.Builder()
+      .instanceGuid(instanceGuid)
+      .body(resizeClusterRequestModel)
+      .build();
 
-        // Invoke operation with valid options model (positive test)
-        Response<AnalyticsEngineResizeClusterResponse> response = service.resizeCluster(resizeClusterOptionsModel).execute();
-        assertNotNull(response);
-        assertEquals(response.getStatusCode(), 200);
-        AnalyticsEngineResizeClusterResponse responseObj = response.getResult();
-        assertNotNull(responseObj);
+      // Invoke operation
+      Response<AnalyticsEngineResizeClusterResponse> response = service.resizeCluster(resizeClusterOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      AnalyticsEngineResizeClusterResponse analyticsEngineResizeClusterResponseResult = response.getResult();
+
+      assertNotNull(analyticsEngineResizeClusterResponseResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
+  }
 
-    @Test
-    public void testResetClusterPasswordWOptions() throws Throwable {
-        assertNotNull(service);
+  @Test
+  public void testResetClusterPassword() throws Exception {
+    try {
+      ResetClusterPasswordOptions resetClusterPasswordOptions = new ResetClusterPasswordOptions.Builder()
+      .instanceGuid(instanceGuid)
+      .build();
 
-        // Construct an instance of the ResetClusterPasswordOptions model
-        ResetClusterPasswordOptions resetClusterPasswordOptionsModel = new ResetClusterPasswordOptions.Builder()
-        .instanceGuid(instanceGuid)
-        .build();
+      // Invoke operation
+      Response<AnalyticsEngineResetClusterPasswordResponse> response = service.resetClusterPassword(resetClusterPasswordOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
 
-        // Invoke operation with valid options model (positive test)
-        Response<AnalyticsEngineResetClusterPasswordResponse> response = service.resetClusterPassword(resetClusterPasswordOptionsModel).execute();
-        assertNotNull(response);
-        assertEquals(response.getStatusCode(), 200);
-        AnalyticsEngineResetClusterPasswordResponse responseObj = response.getResult();
-        assertNotNull(responseObj);
+      AnalyticsEngineResetClusterPasswordResponse analyticsEngineResetClusterPasswordResponseResult = response.getResult();
+
+      assertNotNull(analyticsEngineResetClusterPasswordResponseResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
+  }
 
-    @Test
-    public void testConfigureLoggingWOptions() throws Throwable {
-        assertNotNull(service);
+  @Test
+  public void testConfigureLogging() throws Exception {
+    try {
+      AnalyticsEngineLoggingNodeSpec analyticsEngineLoggingNodeSpecModel = new AnalyticsEngineLoggingNodeSpec.Builder()
+      .nodeType("management")
+      .components(new java.util.ArrayList<String>(java.util.Arrays.asList("ambari-server")))
+      .build();
 
-        // Construct an instance of the AnalyticsEngineLoggingServer model
-        AnalyticsEngineLoggingServer analyticsEngineLoggingServerModel = new AnalyticsEngineLoggingServer.Builder()
-        .type("logdna")
-        .credential("testString")
-        .apiHost("testString")
-        .logHost("testString")
-        .owner("testString")
-        .build();
+      AnalyticsEngineLoggingServer analyticsEngineLoggingServerModel = new AnalyticsEngineLoggingServer.Builder()
+      .type("logdna")
+      .credential("testString")
+      .apiHost("testString")
+      .logHost("testString")
+      .owner("testString")
+      .build();
 
-        // Construct an instance of the AnalyticsEngineLoggingNodeSpec model
-        AnalyticsEngineLoggingNodeSpec analyticsEngineLoggingNodeSpecModel = new AnalyticsEngineLoggingNodeSpec.Builder()
-        .nodeType("management")
-        .components(new ArrayList<String>(Arrays.asList("ambari-server")))
-        .build();
+      ConfigureLoggingOptions configureLoggingOptions = new ConfigureLoggingOptions.Builder()
+      .instanceGuid(instanceGuid)
+      .logSpecs(new java.util.ArrayList<AnalyticsEngineLoggingNodeSpec>(java.util.Arrays.asList(analyticsEngineLoggingNodeSpecModel)))
+      .logServer(analyticsEngineLoggingServerModel)
+      .build();
 
-        // Construct an instance of the ConfigureLoggingOptions model
-        ConfigureLoggingOptions configureLoggingOptionsModel = new ConfigureLoggingOptions.Builder()
-        .instanceGuid(instanceGuid)
-        .logSpecs(new ArrayList<AnalyticsEngineLoggingNodeSpec>(Arrays.asList(analyticsEngineLoggingNodeSpecModel)))
-        .logServer(analyticsEngineLoggingServerModel)
-        .build();
-
-        // Invoke operation with valid options model (positive test)
-        Response<Void> response = service.configureLogging(configureLoggingOptionsModel).execute();
-        assertNotNull(response);
-        assertEquals(response.getStatusCode(), 202);
-        Void responseObj = response.getResult();
-        // Response does not have a return type. Check that the result is null.
-        assertNull(responseObj);
+      // Invoke operation
+      Response<Void> response = service.configureLogging(configureLoggingOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 202);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
+  }
 
-    @Test
-    public void testGetLoggingConfigWOptions() throws Throwable {
-        assertNotNull(service);
+  @Test
+  public void testGetLoggingConfig() throws Exception {
+    try {
+      GetLoggingConfigOptions getLoggingConfigOptions = new GetLoggingConfigOptions.Builder()
+      .instanceGuid(instanceGuid)
+      .build();
 
-        // Construct an instance of the GetLoggingConfigOptions model
-        GetLoggingConfigOptions getLoggingConfigOptionsModel = new GetLoggingConfigOptions.Builder()
-        .instanceGuid(instanceGuid)
-        .build();
+      // Invoke operation
+      Response<AnalyticsEngineLoggingConfigDetails> response = service.getLoggingConfig(getLoggingConfigOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
 
-        // Invoke operation with valid options model (positive test)
-        Response<AnalyticsEngineLoggingConfigDetails> response = service.getLoggingConfig(getLoggingConfigOptionsModel).execute();
-        assertNotNull(response);
-        assertEquals(response.getStatusCode(), 200);
-        AnalyticsEngineLoggingConfigDetails responseObj = response.getResult();
-        assertNotNull(responseObj);
+      AnalyticsEngineLoggingConfigDetails analyticsEngineLoggingConfigDetailsResult = response.getResult();
+
+      assertNotNull(analyticsEngineLoggingConfigDetailsResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
+  }
 
-    @Test
-    public void testDeleteLoggingConfigWOptions() throws Throwable {
-        assertNotNull(service);
+  @Test
+  public void testUpdatePrivateEndpointWhitelist() throws Exception {
+    try {
+      UpdatePrivateEndpointWhitelistOptions updatePrivateEndpointWhitelistOptions = new UpdatePrivateEndpointWhitelistOptions.Builder()
+      .instanceGuid(instanceGuid)
+      .ipRanges(new java.util.ArrayList<String>(java.util.Arrays.asList("10.20.5.9/32")))
+      .action("add")
+      .build();
 
-        // Construct an instance of the DeleteLoggingConfigOptions model
-        DeleteLoggingConfigOptions deleteLoggingConfigOptionsModel = new DeleteLoggingConfigOptions.Builder()
-        .instanceGuid(instanceGuid)
-        .build();
+      // Invoke operation
+      Response<AnalyticsEngineWhitelistResponse> response = service.updatePrivateEndpointWhitelist(updatePrivateEndpointWhitelistOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
 
-        // Invoke operation with valid options model (positive test)
-        Response<Void> response = service.deleteLoggingConfig(deleteLoggingConfigOptionsModel).execute();
-        assertNotNull(response);
-        assertEquals(response.getStatusCode(), 202);
-        Void responseObj = response.getResult();
-        // Response does not have a return type. Check that the result is null.
-        assertNull(responseObj);
+      AnalyticsEngineWhitelistResponse analyticsEngineWhitelistResponseResult = response.getResult();
+
+      assertNotNull(analyticsEngineWhitelistResponseResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
+  }
 
-    @Test
-    public void testUpdatePrivateEndpointWhitelistWOptions() throws Throwable {
+  @Test
+  public void testDeleteLoggingConfig() throws Exception {
+    try {
+      DeleteLoggingConfigOptions deleteLoggingConfigOptions = new DeleteLoggingConfigOptions.Builder()
+      .instanceGuid(instanceGuid)
+      .build();
 
-        // Construct an instance of the UpdatePrivateEndpointWhitelistOptions model
-        UpdatePrivateEndpointWhitelistOptions updatePrivateEndpointWhitelistOptionsModel = new UpdatePrivateEndpointWhitelistOptions.Builder()
-        .instanceGuid(instanceGuid)
-        .ipRanges(new ArrayList<String>(Arrays.asList("10.20.5.9/32")))
-        .action("add")
-        .build();
-
-        // Invoke operation with valid options model (positive test)
-        Response<AnalyticsEngineWhitelistResponse> response = service.updatePrivateEndpointWhitelist(updatePrivateEndpointWhitelistOptionsModel).execute();
-        assertNotNull(response);
-        assertEquals(response.getStatusCode(), 200);
-        AnalyticsEngineWhitelistResponse responseObj = response.getResult();
-        assertNotNull(responseObj);
+      // Invoke operation
+      Response<Void> response = service.deleteLoggingConfig(deleteLoggingConfigOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 202);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
-}
+  }
+
+  @AfterClass
+  public void tearDown() {
+    // Add any clean up logic here
+    System.out.println("Clean up complete.");
+  }
+ }

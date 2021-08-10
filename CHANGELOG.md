@@ -1,3 +1,10 @@
+# [0.2.0](https://github.com/IBM/ibm-iae-java-sdk/compare/0.1.0...0.2.0) (2021-08-10)
+
+
+### Features
+
+* analytics engine v3 feature changes ([9b157d7](https://github.com/IBM/ibm-iae-java-sdk/commit/9b157d7f5458b51e48bc3281f56899a0c2451d62))
+
 # [0.1.0](https://github.com/IBM/ibm-iae-java-sdk/compare/0.0.5...0.1.0) (2020-05-28)
 
 

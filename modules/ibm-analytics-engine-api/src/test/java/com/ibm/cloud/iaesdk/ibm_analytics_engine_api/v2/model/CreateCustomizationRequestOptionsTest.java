@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -17,15 +17,12 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCus
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomActionScript;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.CreateCustomizationRequestOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.utils.TestUtilities;
-
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
@@ -41,33 +38,33 @@ public class CreateCustomizationRequestOptionsTest {
     AnalyticsEngineCustomActionScript analyticsEngineCustomActionScriptModel = new AnalyticsEngineCustomActionScript.Builder()
       .sourceType("http")
       .scriptPath("testString")
-      .sourceProps(new java.util.HashMap<String,Object>(){{put("foo", "testString"); }})
+      .sourceProps(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       .build();
     assertEquals(analyticsEngineCustomActionScriptModel.sourceType(), "http");
     assertEquals(analyticsEngineCustomActionScriptModel.scriptPath(), "testString");
-    assertEquals(analyticsEngineCustomActionScriptModel.sourceProps(), new java.util.HashMap<String,Object>(){{put("foo", "testString"); }});
+    assertEquals(analyticsEngineCustomActionScriptModel.sourceProps(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } });
 
     AnalyticsEngineCustomAction analyticsEngineCustomActionModel = new AnalyticsEngineCustomAction.Builder()
       .name("testString")
       .type("bootstrap")
       .script(analyticsEngineCustomActionScriptModel)
-      .scriptParams(new ArrayList<String>(Arrays.asList("testString")))
+      .scriptParams(new java.util.ArrayList<String>(java.util.Arrays.asList("testString")))
       .build();
     assertEquals(analyticsEngineCustomActionModel.name(), "testString");
     assertEquals(analyticsEngineCustomActionModel.type(), "bootstrap");
     assertEquals(analyticsEngineCustomActionModel.script(), analyticsEngineCustomActionScriptModel);
-    assertEquals(analyticsEngineCustomActionModel.scriptParams(), new ArrayList<String>(Arrays.asList("testString")));
+    assertEquals(analyticsEngineCustomActionModel.scriptParams(), new java.util.ArrayList<String>(java.util.Arrays.asList("testString")));
 
     CreateCustomizationRequestOptions createCustomizationRequestOptionsModel = new CreateCustomizationRequestOptions.Builder()
       .instanceGuid("testString")
       .target("all")
-      .customActions(new ArrayList<AnalyticsEngineCustomAction>(Arrays.asList(analyticsEngineCustomActionModel)))
+      .customActions(new java.util.ArrayList<AnalyticsEngineCustomAction>(java.util.Arrays.asList(analyticsEngineCustomActionModel)))
       .build();
     assertEquals(createCustomizationRequestOptionsModel.instanceGuid(), "testString");
     assertEquals(createCustomizationRequestOptionsModel.target(), "all");
-    assertEquals(createCustomizationRequestOptionsModel.customActions(), new ArrayList<AnalyticsEngineCustomAction>(Arrays.asList(analyticsEngineCustomActionModel)));
+    assertEquals(createCustomizationRequestOptionsModel.customActions(), new java.util.ArrayList<AnalyticsEngineCustomAction>(java.util.Arrays.asList(analyticsEngineCustomActionModel)));
   }
-  
+
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testCreateCustomizationRequestOptionsError() throws Throwable {
     new CreateCustomizationRequestOptions.Builder().build();

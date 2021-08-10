@@ -13,7 +13,6 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.IbmAnalyticsEngineApi;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollection;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
@@ -43,12 +42,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
@@ -61,15 +60,12 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
   public String instanceGuid = null;
   public String applicationId = null;
-  
-  
-  
   /**
    * This method provides our config filename to the base class.
    */
 
   public String getConfigFilename() {
-    return "../../ibmanalyticsengine-service.env";
+    return "../../ibm_analytics_engine_api_v3.env";
   }
 
   @BeforeClass
@@ -89,37 +85,30 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     assertFalse(config.isEmpty());
     assertEquals(service.getServiceUrl(), config.get("URL"));
     instanceGuid = System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_GUID");
-    
     System.out.println("Setup complete.");
-    
   }
 
   @Test
   public void testGetInstanceById() throws Exception {
     try {
       GetInstanceByIdOptions getInstanceByIdOptions = new GetInstanceByIdOptions.Builder()
-      //.instanceId(instanceGuid)
       .instanceId(instanceGuid)
       .build();
 
-      
-      System.out.println("instanceGuid passed "+instanceGuid);
-      
       // Invoke operation
       Response<InstanceDetails> response = service.getInstanceById(getInstanceByIdOptions).execute();
-      
-      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
-      System.out.println("Response String "+String.valueOf(response.getResult()));
-      
       // Validate response
       assertNotNull(response);
+      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
+      System.out.println("Response String "+String.valueOf(response.getResult()));
       assertEquals(response.getStatusCode(), 200);
 
       InstanceDetails instanceDetailsResult = response.getResult();
 
       assertNotNull(instanceDetailsResult);
+      
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s\nError details: %s",
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
@@ -139,25 +128,23 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       .instanceId(instanceGuid)
       .applicationDetails(applicationRequestApplicationDetailsModel)
       .build();
+
       // Invoke operation
       Response<ApplicationResponse> response = service.createApplication(createApplicationOptions).execute();
-      //response.
       // Validate response
-      
+      assertNotNull(response);
       System.out.println("Status code "+Integer.toString(response.getStatusCode()));
       System.out.println("Response String "+String.valueOf(response.getResult()));
-     
-      assertNotNull(response);
       assertEquals(response.getStatusCode(), 202);
+
       ApplicationResponse applicationResponseResult = response.getResult();
-      assertNotNull(applicationResponseResult);      
-      
+
+      assertNotNull(applicationResponseResult);
       String jsonString = String.valueOf(response.getResult());
       JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonString);
       applicationId = jsonObject.get("application_id").toString();
-
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s\nError details: %s",
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
@@ -171,10 +158,6 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
 
       // Invoke operation
       Response<ApplicationCollection> response = service.getApplications(getApplicationsOptions).execute();
-      
-      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
-      System.out.println("Response String "+String.valueOf(response.getResult()));
-      
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
@@ -183,7 +166,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
 
       assertNotNull(applicationCollectionResult);
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s\nError details: %s",
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
@@ -198,9 +181,6 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
 
       // Invoke operation
       Response<ApplicationGetResponse> response = service.getApplicationById(getApplicationByIdOptions).execute();
-      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
-      System.out.println("Response String "+String.valueOf(response.getResult()));
-      
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
@@ -209,7 +189,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
 
       assertNotNull(applicationGetResponseResult);
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s\nError details: %s",
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
@@ -224,9 +204,6 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
 
       // Invoke operation
       Response<ApplicationGetStateResponse> response = service.getApplicationState(getApplicationStateOptions).execute();
-      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
-      System.out.println("Response String "+String.valueOf(response.getResult()));
-      
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
@@ -235,7 +212,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
 
       assertNotNull(applicationGetStateResponseResult);
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s\nError details: %s",
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
@@ -250,15 +227,11 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
 
       // Invoke operation
       Response<Void> response = service.deleteApplicationById(deleteApplicationByIdOptions).execute();
-      
-      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
-      System.out.println("Response String "+String.valueOf(response.getResult()));
-      
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 204);
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s\nError details: %s",
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }

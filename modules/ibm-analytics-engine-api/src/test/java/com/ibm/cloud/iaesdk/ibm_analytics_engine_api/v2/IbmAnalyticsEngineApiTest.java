@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -43,6 +43,9 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.GetCustomizationRe
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.GetLoggingConfigOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResetClusterPasswordOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResizeClusterOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResizeClusterRequest;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResizeClusterRequestAnalyticsEngineResizeClusterByComputeNodesRequest;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResizeClusterRequestAnalyticsEngineResizeClusterByTaskNodesRequest;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ServiceEndpoints;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.UpdatePrivateEndpointWhitelistOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.utils.TestUtilities;
@@ -50,30 +53,24 @@ import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.security.Authenticator;
 import com.ibm.cloud.sdk.core.security.NoAuthAuthenticator;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
-
+import com.ibm.cloud.sdk.core.util.DateUtils;
 import com.ibm.cloud.sdk.core.util.EnvironmentUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
-
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.testng.PowerMockTestCase;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
@@ -81,14 +78,14 @@ import static org.testng.Assert.*;
  * Unit test class for the IbmAnalyticsEngineApi service.
  */
 @PrepareForTest({ EnvironmentUtils.class })
-@PowerMockIgnore("javax.net.ssl.*")
+@PowerMockIgnore({"javax.net.ssl.*", "org.mockito.*"})
 public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
-  
+
   protected MockWebServer server;
-  protected IbmAnalyticsEngineApi testService;
+  protected IbmAnalyticsEngineApi ibmAnalyticsEngineApiService;
 
   // Creates a mock set of environment variables that are returned by EnvironmentUtils.getenv().
   private Map<String, String> getTestProcessEnvironment() {
@@ -102,9 +99,9 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     PowerMockito.when(EnvironmentUtils.getenv()).thenReturn(getTestProcessEnvironment());
     final String serviceName = "testService";
 
-    testService = IbmAnalyticsEngineApi.newInstance(serviceName);
+    ibmAnalyticsEngineApiService = IbmAnalyticsEngineApi.newInstance(serviceName);
     String url = server.url("/").toString();
-    testService.setServiceUrl(url);
+    ibmAnalyticsEngineApiService.setServiceUrl(url);
   }
 
   /**
@@ -133,7 +130,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     GetAllAnalyticsEnginesOptions getAllAnalyticsEnginesOptionsModel = new GetAllAnalyticsEnginesOptions();
 
     // Invoke operation with valid options model (positive test)
-    Response<Void> response = testService.getAllAnalyticsEngines(getAllAnalyticsEnginesOptionsModel).execute();
+    Response<Void> response = ibmAnalyticsEngineApiService.getAllAnalyticsEngines(getAllAnalyticsEnginesOptionsModel).execute();
     assertNotNull(response);
     Void responseObj = response.getResult();
     // Response does not have a return type. Check that the result is null.
@@ -156,7 +153,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   @Test
   public void testGetAnalyticsEngineByIdWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"id\": \"id\", \"name\": \"name\", \"service_plan\": \"servicePlan\", \"hardware_size\": \"hardwareSize\", \"software_package\": \"softwarePackage\", \"domain\": \"domain\", \"creation_time\": \"2019-01-01T12:00:00\", \"commision_time\": \"2019-01-01T12:00:00\", \"decommision_time\": \"2019-01-01T12:00:00\", \"deletion_time\": \"2019-01-01T12:00:00\", \"state_change_time\": \"2019-01-01T12:00:00\", \"state\": \"state\", \"nodes\": [{\"id\": 2, \"fqdn\": \"fqdn\", \"type\": \"type\", \"state\": \"state\", \"public_ip\": \"publicIp\", \"private_ip\": \"privateIp\", \"state_change_time\": \"2019-01-01T12:00:00\", \"commission_time\": \"2019-01-01T12:00:00\"}], \"user_credentials\": {\"user\": \"user\"}, \"service_endpoints\": {\"phoenix_jdbc\": \"phoenixJdbc\", \"ambari_console\": \"ambariConsole\", \"livy\": \"livy\", \"spark_history_server\": \"sparkHistoryServer\", \"oozie_rest\": \"oozieRest\", \"hive_jdbc\": \"hiveJdbc\", \"notebook_gateway_websocket\": \"notebookGatewayWebsocket\", \"notebook_gateway\": \"notebookGateway\", \"webhdfs\": \"webhdfs\", \"ssh\": \"ssh\", \"spark_sql\": \"sparkSql\"}, \"service_endpoints_ip\": {\"phoenix_jdbc\": \"phoenixJdbc\", \"ambari_console\": \"ambariConsole\", \"livy\": \"livy\", \"spark_history_server\": \"sparkHistoryServer\", \"oozie_rest\": \"oozieRest\", \"hive_jdbc\": \"hiveJdbc\", \"notebook_gateway_websocket\": \"notebookGatewayWebsocket\", \"notebook_gateway\": \"notebookGateway\", \"webhdfs\": \"webhdfs\", \"ssh\": \"ssh\", \"spark_sql\": \"sparkSql\"}, \"private_endpoint_whitelist\": [\"privateEndpointWhitelist\"]}";
+    String mockResponseBody = "{\"id\": \"id\", \"name\": \"name\", \"service_plan\": \"servicePlan\", \"hardware_size\": \"hardwareSize\", \"software_package\": \"softwarePackage\", \"domain\": \"domain\", \"creation_time\": \"2019-01-01T12:00:00.000Z\", \"commision_time\": \"2019-01-01T12:00:00.000Z\", \"decommision_time\": \"2019-01-01T12:00:00.000Z\", \"deletion_time\": \"2019-01-01T12:00:00.000Z\", \"state_change_time\": \"2019-01-01T12:00:00.000Z\", \"state\": \"state\", \"nodes\": [{\"id\": 2, \"fqdn\": \"fqdn\", \"type\": \"type\", \"state\": \"state\", \"public_ip\": \"publicIp\", \"private_ip\": \"privateIp\", \"state_change_time\": \"2019-01-01T12:00:00.000Z\", \"commission_time\": \"2019-01-01T12:00:00.000Z\"}], \"user_credentials\": {\"user\": \"user\"}, \"service_endpoints\": {\"phoenix_jdbc\": \"phoenixJdbc\", \"ambari_console\": \"ambariConsole\", \"livy\": \"livy\", \"spark_history_server\": \"sparkHistoryServer\", \"oozie_rest\": \"oozieRest\", \"hive_jdbc\": \"hiveJdbc\", \"notebook_gateway_websocket\": \"notebookGatewayWebsocket\", \"notebook_gateway\": \"notebookGateway\", \"webhdfs\": \"webhdfs\", \"ssh\": \"ssh\", \"spark_sql\": \"sparkSql\"}, \"service_endpoints_ip\": {\"phoenix_jdbc\": \"phoenixJdbc\", \"ambari_console\": \"ambariConsole\", \"livy\": \"livy\", \"spark_history_server\": \"sparkHistoryServer\", \"oozie_rest\": \"oozieRest\", \"hive_jdbc\": \"hiveJdbc\", \"notebook_gateway_websocket\": \"notebookGatewayWebsocket\", \"notebook_gateway\": \"notebookGateway\", \"webhdfs\": \"webhdfs\", \"ssh\": \"ssh\", \"spark_sql\": \"sparkSql\"}, \"private_endpoint_whitelist\": [\"privateEndpointWhitelist\"]}";
     String getAnalyticsEngineByIdPath = "/v2/analytics_engines/testString";
 
     server.enqueue(new MockResponse()
@@ -172,7 +169,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<AnalyticsEngine> response = testService.getAnalyticsEngineById(getAnalyticsEngineByIdOptionsModel).execute();
+    Response<AnalyticsEngine> response = ibmAnalyticsEngineApiService.getAnalyticsEngineById(getAnalyticsEngineByIdOptionsModel).execute();
     assertNotNull(response);
     AnalyticsEngine responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -200,7 +197,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    testService.getAnalyticsEngineById(null).execute();
+    ibmAnalyticsEngineApiService.getAnalyticsEngineById(null).execute();
   }
 
   @Test
@@ -222,7 +219,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<AnalyticsEngineState> response = testService.getAnalyticsEngineStateById(getAnalyticsEngineStateByIdOptionsModel).execute();
+    Response<AnalyticsEngineState> response = ibmAnalyticsEngineApiService.getAnalyticsEngineStateById(getAnalyticsEngineStateByIdOptionsModel).execute();
     assertNotNull(response);
     AnalyticsEngineState responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -250,7 +247,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    testService.getAnalyticsEngineStateById(null).execute();
+    ibmAnalyticsEngineApiService.getAnalyticsEngineStateById(null).execute();
   }
 
   @Test
@@ -270,7 +267,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     AnalyticsEngineCustomActionScript analyticsEngineCustomActionScriptModel = new AnalyticsEngineCustomActionScript.Builder()
     .sourceType("http")
     .scriptPath("testString")
-    .sourceProps(new java.util.HashMap<String,Object>(){{put("foo", "testString"); }})
+    .sourceProps(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
     .build();
 
     // Construct an instance of the AnalyticsEngineCustomAction model
@@ -278,18 +275,18 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     .name("testString")
     .type("bootstrap")
     .script(analyticsEngineCustomActionScriptModel)
-    .scriptParams(new ArrayList<String>(Arrays.asList("testString")))
+    .scriptParams(new java.util.ArrayList<String>(java.util.Arrays.asList("testString")))
     .build();
 
     // Construct an instance of the CreateCustomizationRequestOptions model
     CreateCustomizationRequestOptions createCustomizationRequestOptionsModel = new CreateCustomizationRequestOptions.Builder()
     .instanceGuid("testString")
     .target("all")
-    .customActions(new ArrayList<AnalyticsEngineCustomAction>(Arrays.asList(analyticsEngineCustomActionModel)))
+    .customActions(new java.util.ArrayList<AnalyticsEngineCustomAction>(java.util.Arrays.asList(analyticsEngineCustomActionModel)))
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<AnalyticsEngineCreateCustomizationResponse> response = testService.createCustomizationRequest(createCustomizationRequestOptionsModel).execute();
+    Response<AnalyticsEngineCreateCustomizationResponse> response = ibmAnalyticsEngineApiService.createCustomizationRequest(createCustomizationRequestOptionsModel).execute();
     assertNotNull(response);
     AnalyticsEngineCreateCustomizationResponse responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -317,7 +314,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    testService.createCustomizationRequest(null).execute();
+    ibmAnalyticsEngineApiService.createCustomizationRequest(null).execute();
   }
 
   @Test
@@ -339,7 +336,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<List<AnalyticsEngineCustomizationRequestCollectionItem>> response = testService.getAllCustomizationRequests(getAllCustomizationRequestsOptionsModel).execute();
+    Response<List<AnalyticsEngineCustomizationRequestCollectionItem>> response = ibmAnalyticsEngineApiService.getAllCustomizationRequests(getAllCustomizationRequestsOptionsModel).execute();
     assertNotNull(response);
     List<AnalyticsEngineCustomizationRequestCollectionItem> responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -367,7 +364,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    testService.getAllCustomizationRequests(null).execute();
+    ibmAnalyticsEngineApiService.getAllCustomizationRequests(null).execute();
   }
 
   @Test
@@ -390,7 +387,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<AnalyticsEngineCustomizationRunDetails> response = testService.getCustomizationRequestById(getCustomizationRequestByIdOptionsModel).execute();
+    Response<AnalyticsEngineCustomizationRunDetails> response = ibmAnalyticsEngineApiService.getCustomizationRequestById(getCustomizationRequestByIdOptionsModel).execute();
     assertNotNull(response);
     AnalyticsEngineCustomizationRunDetails responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -418,7 +415,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    testService.getCustomizationRequestById(null).execute();
+    ibmAnalyticsEngineApiService.getCustomizationRequestById(null).execute();
   }
 
   @Test
@@ -434,14 +431,19 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
     constructClientService();
 
-    // Construct an instance of the ResizeClusterOptions model
-    ResizeClusterOptions resizeClusterOptionsModel = new ResizeClusterOptions.Builder()
-    .instanceGuid("testString")
+    // Construct an instance of the ResizeClusterRequestAnalyticsEngineResizeClusterByComputeNodesRequest model
+    ResizeClusterRequestAnalyticsEngineResizeClusterByComputeNodesRequest resizeClusterRequestModel = new ResizeClusterRequestAnalyticsEngineResizeClusterByComputeNodesRequest.Builder()
     .computeNodesCount(Long.valueOf("26"))
     .build();
 
+    // Construct an instance of the ResizeClusterOptions model
+    ResizeClusterOptions resizeClusterOptionsModel = new ResizeClusterOptions.Builder()
+    .instanceGuid("testString")
+    .body(resizeClusterRequestModel)
+    .build();
+
     // Invoke operation with valid options model (positive test)
-    Response<AnalyticsEngineResizeClusterResponse> response = testService.resizeCluster(resizeClusterOptionsModel).execute();
+    Response<AnalyticsEngineResizeClusterResponse> response = ibmAnalyticsEngineApiService.resizeCluster(resizeClusterOptionsModel).execute();
     assertNotNull(response);
     AnalyticsEngineResizeClusterResponse responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -469,7 +471,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    testService.resizeCluster(null).execute();
+    ibmAnalyticsEngineApiService.resizeCluster(null).execute();
   }
 
   @Test
@@ -491,7 +493,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<AnalyticsEngineResetClusterPasswordResponse> response = testService.resetClusterPassword(resetClusterPasswordOptionsModel).execute();
+    Response<AnalyticsEngineResetClusterPasswordResponse> response = ibmAnalyticsEngineApiService.resetClusterPassword(resetClusterPasswordOptionsModel).execute();
     assertNotNull(response);
     AnalyticsEngineResetClusterPasswordResponse responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -519,7 +521,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    testService.resetClusterPassword(null).execute();
+    ibmAnalyticsEngineApiService.resetClusterPassword(null).execute();
   }
 
   @Test
@@ -537,7 +539,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     // Construct an instance of the AnalyticsEngineLoggingNodeSpec model
     AnalyticsEngineLoggingNodeSpec analyticsEngineLoggingNodeSpecModel = new AnalyticsEngineLoggingNodeSpec.Builder()
     .nodeType("management")
-    .components(new ArrayList<String>(Arrays.asList("ambari-server")))
+    .components(new java.util.ArrayList<String>(java.util.Arrays.asList("ambari-server")))
     .build();
 
     // Construct an instance of the AnalyticsEngineLoggingServer model
@@ -552,12 +554,12 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     // Construct an instance of the ConfigureLoggingOptions model
     ConfigureLoggingOptions configureLoggingOptionsModel = new ConfigureLoggingOptions.Builder()
     .instanceGuid("testString")
-    .logSpecs(new ArrayList<AnalyticsEngineLoggingNodeSpec>(Arrays.asList(analyticsEngineLoggingNodeSpecModel)))
+    .logSpecs(new java.util.ArrayList<AnalyticsEngineLoggingNodeSpec>(java.util.Arrays.asList(analyticsEngineLoggingNodeSpecModel)))
     .logServer(analyticsEngineLoggingServerModel)
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<Void> response = testService.configureLogging(configureLoggingOptionsModel).execute();
+    Response<Void> response = ibmAnalyticsEngineApiService.configureLogging(configureLoggingOptionsModel).execute();
     assertNotNull(response);
     Void responseObj = response.getResult();
     // Response does not have a return type. Check that the result is null.
@@ -586,7 +588,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    testService.configureLogging(null).execute();
+    ibmAnalyticsEngineApiService.configureLogging(null).execute();
   }
 
   @Test
@@ -608,7 +610,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<AnalyticsEngineLoggingConfigDetails> response = testService.getLoggingConfig(getLoggingConfigOptionsModel).execute();
+    Response<AnalyticsEngineLoggingConfigDetails> response = ibmAnalyticsEngineApiService.getLoggingConfig(getLoggingConfigOptionsModel).execute();
     assertNotNull(response);
     AnalyticsEngineLoggingConfigDetails responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -636,7 +638,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    testService.getLoggingConfig(null).execute();
+    ibmAnalyticsEngineApiService.getLoggingConfig(null).execute();
   }
 
   @Test
@@ -657,7 +659,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<Void> response = testService.deleteLoggingConfig(deleteLoggingConfigOptionsModel).execute();
+    Response<Void> response = ibmAnalyticsEngineApiService.deleteLoggingConfig(deleteLoggingConfigOptionsModel).execute();
     assertNotNull(response);
     Void responseObj = response.getResult();
     // Response does not have a return type. Check that the result is null.
@@ -686,7 +688,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    testService.deleteLoggingConfig(null).execute();
+    ibmAnalyticsEngineApiService.deleteLoggingConfig(null).execute();
   }
 
   @Test
@@ -705,12 +707,12 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     // Construct an instance of the UpdatePrivateEndpointWhitelistOptions model
     UpdatePrivateEndpointWhitelistOptions updatePrivateEndpointWhitelistOptionsModel = new UpdatePrivateEndpointWhitelistOptions.Builder()
     .instanceGuid("testString")
-    .ipRanges(new ArrayList<String>(Arrays.asList("testString")))
+    .ipRanges(new java.util.ArrayList<String>(java.util.Arrays.asList("testString")))
     .action("add")
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<AnalyticsEngineWhitelistResponse> response = testService.updatePrivateEndpointWhitelist(updatePrivateEndpointWhitelistOptionsModel).execute();
+    Response<AnalyticsEngineWhitelistResponse> response = ibmAnalyticsEngineApiService.updatePrivateEndpointWhitelist(updatePrivateEndpointWhitelistOptionsModel).execute();
     assertNotNull(response);
     AnalyticsEngineWhitelistResponse responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -738,7 +740,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    testService.updatePrivateEndpointWhitelist(null).execute();
+    ibmAnalyticsEngineApiService.updatePrivateEndpointWhitelist(null).execute();
   }
 
   /** Initialize the server */
@@ -757,6 +759,6 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   @AfterMethod
   public void tearDownMockServer() throws IOException {
     server.shutdown();
-    testService = null;
+    ibmAnalyticsEngineApiService = null;
   }
 }

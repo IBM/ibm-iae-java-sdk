@@ -1,0 +1,55 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.ibm.cloud</groupId>
+        <artifactId>iaesdk</artifactId>
+        <version>99-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
+    </parent>
+
+    <artifactId>ibm-analytics-engine-api-examples</artifactId>
+    <packaging>jar</packaging>
+    <name>IBM Analytics Engine Service Code Examples</name>
+
+    <dependencies>
+        <!-- There should be a dependency for each module whose request example class exists in this "examples" module. Add 
+            new "dependency" entries here as needed when you add a request examples class for a new service. Note: the "artifactId" values 
+            below should reflect the "artifactId" value specified in each module's pom.xml file (i.e. not the module's directory name). -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ibm-analytics-engine-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <configuration>
+                    <minimizeJar>true</minimizeJar>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <developers>
+        <developer>
+            <name>IBM Cloud DevX SDK Development</name>
+            <email>devxsdk@us.ibm.com</email>
+            <url>https://www.ibm.com/</url>
+        </developer>
+    </developers>
+</project>

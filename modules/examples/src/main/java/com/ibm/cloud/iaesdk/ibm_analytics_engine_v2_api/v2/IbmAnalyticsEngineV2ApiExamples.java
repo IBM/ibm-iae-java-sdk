@@ -11,31 +11,33 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2;
+package com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngine;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCreateCustomizationResponse;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomAction;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineCustomizationRequestCollectionItem;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineLoggingConfigDetails;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineLoggingNodeSpec;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineLoggingServer;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineResetClusterPasswordResponse;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineResizeClusterResponse;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineState;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.AnalyticsEngineWhitelistResponse;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ConfigureLoggingOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.CreateCustomizationRequestOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.DeleteLoggingConfigOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.GetAllAnalyticsEnginesOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.GetAllCustomizationRequestsOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.GetAnalyticsEngineByIdOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.GetAnalyticsEngineStateByIdOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.GetLoggingConfigOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResetClusterPasswordOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResizeClusterOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.ResizeClusterRequestAnalyticsEngineResizeClusterByComputeNodesRequest;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2.model.UpdatePrivateEndpointWhitelistOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.AnalyticsEngine;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.AnalyticsEngineCreateCustomizationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.AnalyticsEngineCustomAction;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.AnalyticsEngineCustomizationRequestCollectionItem;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.AnalyticsEngineCustomizationRunDetails;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.AnalyticsEngineLoggingConfigDetails;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.AnalyticsEngineLoggingNodeSpec;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.AnalyticsEngineLoggingServer;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.AnalyticsEngineResetClusterPasswordResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.AnalyticsEngineResizeClusterResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.AnalyticsEngineState;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.AnalyticsEngineWhitelistResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.ConfigureLoggingOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.CreateCustomizationRequestOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.DeleteLoggingConfigOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.GetAllAnalyticsEnginesOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.GetAllCustomizationRequestsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.GetAnalyticsEngineByIdOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.GetAnalyticsEngineStateByIdOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.GetCustomizationRequestByIdOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.GetLoggingConfigOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.ResetClusterPasswordOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.ResizeClusterOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.ResizeClusterRequestAnalyticsEngineResizeClusterByComputeNodesRequest;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_v2_api.v2.model.UpdatePrivateEndpointWhitelistOptions;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
 import com.ibm.cloud.sdk.core.util.CredentialUtils;
@@ -44,33 +46,35 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// This file provides an example of how to use the IBM Analytics Engine API service.
-
+//
+// This file provides an example of how to use the IBM Analytics Engine v2 API service.
+//
 // The following configuration properties are assumed to be defined:
-// IBM_ANALYTICS_ENGINE_API_URL=<service base url>
-// IBM_ANALYTICS_ENGINE_API_AUTH_TYPE=iam
-// IBM_ANALYTICS_ENGINE_API_APIKEY=<IAM apikey>
-// IBM_ANALYTICS_ENGINE_API_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
+// IBM_ANALYTICS_ENGINE_V2_API_URL=<service base url>
+// IBM_ANALYTICS_ENGINE_V2_API_AUTH_TYPE=iam
+// IBM_ANALYTICS_ENGINE_V2_API_APIKEY=<IAM apikey>
+// IBM_ANALYTICS_ENGINE_V2_API_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
 // export IBM_CREDENTIALS_FILE=<name of configuration file>
-
-public class IbmAnalyticsEngineApiExamples {
-  private static final Logger logger = LoggerFactory.getLogger(IbmAnalyticsEngineApiExamples.class);
-  protected IbmAnalyticsEngineApiExamples() { }
+//
+public class IbmAnalyticsEngineV2ApiExamples {
+  private static final Logger logger = LoggerFactory.getLogger(IbmAnalyticsEngineV2ApiExamples.class);
+  protected IbmAnalyticsEngineV2ApiExamples() { }
 
   @SuppressWarnings("checkstyle:methodlength")
   public static void main(String[] args) throws Exception {
-    IbmAnalyticsEngineApi ibmAnalyticsEngineApiService = IbmAnalyticsEngineApi.newInstance();
+    IbmAnalyticsEngineV2Api ibmAnalyticsEngineV2ApiService = IbmAnalyticsEngineV2Api.newInstance();
 
     // Load up our test-specific config properties.
-    Map<String, String> config = CredentialUtils.getServiceProperties(IbmAnalyticsEngineApi.DEFAULT_SERVICE_NAME);
+    Map<String, String> config = CredentialUtils.getServiceProperties(IbmAnalyticsEngineV2Api.DEFAULT_SERVICE_NAME);
 
     try {
       // begin-getAllAnalyticsEngines
       GetAllAnalyticsEnginesOptions getAllAnalyticsEnginesOptions = new GetAllAnalyticsEnginesOptions();
-      Response<Void> response = ibmAnalyticsEngineApiService.getAllAnalyticsEngines(getAllAnalyticsEnginesOptions).execute();
+
+      Response<Void> response = ibmAnalyticsEngineV2ApiService.getAllAnalyticsEngines(getAllAnalyticsEnginesOptions).execute();
       // end-getAllAnalyticsEngines
       System.out.printf("getAllAnalyticsEngines() response status code: %d%n", response.getStatusCode());
     } catch (ServiceResponseException e) {
@@ -85,8 +89,10 @@ public class IbmAnalyticsEngineApiExamples {
         .instanceGuid("testString")
         .build();
 
-      Response<AnalyticsEngine> response = ibmAnalyticsEngineApiService.getAnalyticsEngineById(getAnalyticsEngineByIdOptions).execute();
+      Response<AnalyticsEngine> response = ibmAnalyticsEngineV2ApiService.getAnalyticsEngineById(getAnalyticsEngineByIdOptions).execute();
       AnalyticsEngine analyticsEngine = response.getResult();
+
+      System.out.println(analyticsEngine);
       // end-getAnalyticsEngineById
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
@@ -100,7 +106,7 @@ public class IbmAnalyticsEngineApiExamples {
         .instanceGuid("testString")
         .build();
 
-      Response<AnalyticsEngineState> response = ibmAnalyticsEngineApiService.getAnalyticsEngineStateById(getAnalyticsEngineStateByIdOptions).execute();
+      Response<AnalyticsEngineState> response = ibmAnalyticsEngineV2ApiService.getAnalyticsEngineStateById(getAnalyticsEngineStateByIdOptions).execute();
       AnalyticsEngineState analyticsEngineState = response.getResult();
 
       System.out.println(analyticsEngineState);
@@ -122,7 +128,7 @@ public class IbmAnalyticsEngineApiExamples {
         .customActions(new java.util.ArrayList<AnalyticsEngineCustomAction>(java.util.Arrays.asList(analyticsEngineCustomActionModel)))
         .build();
 
-      Response<AnalyticsEngineCreateCustomizationResponse> response = ibmAnalyticsEngineApiService.createCustomizationRequest(createCustomizationRequestOptions).execute();
+      Response<AnalyticsEngineCreateCustomizationResponse> response = ibmAnalyticsEngineV2ApiService.createCustomizationRequest(createCustomizationRequestOptions).execute();
       AnalyticsEngineCreateCustomizationResponse analyticsEngineCreateCustomizationResponse = response.getResult();
 
       System.out.println(analyticsEngineCreateCustomizationResponse);
@@ -139,9 +145,29 @@ public class IbmAnalyticsEngineApiExamples {
         .instanceGuid("testString")
         .build();
 
-      Response<List<AnalyticsEngineCustomizationRequestCollectionItem>> response = ibmAnalyticsEngineApiService.getAllCustomizationRequests(getAllCustomizationRequestsOptions).execute();
+      Response<List<AnalyticsEngineCustomizationRequestCollectionItem>> response = ibmAnalyticsEngineV2ApiService.getAllCustomizationRequests(getAllCustomizationRequestsOptions).execute();
       List<AnalyticsEngineCustomizationRequestCollectionItem> listAnalyticsEngineCustomizationRequestCollectionItem = response.getResult();
+
+      System.out.println(listAnalyticsEngineCustomizationRequestCollectionItem);
       // end-getAllCustomizationRequests
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      System.out.println("getCustomizationRequestById() result:");
+      // begin-getCustomizationRequestById
+      GetCustomizationRequestByIdOptions getCustomizationRequestByIdOptions = new GetCustomizationRequestByIdOptions.Builder()
+        .instanceGuid("testString")
+        .requestId("testString")
+        .build();
+
+      Response<AnalyticsEngineCustomizationRunDetails> response = ibmAnalyticsEngineV2ApiService.getCustomizationRequestById(getCustomizationRequestByIdOptions).execute();
+      AnalyticsEngineCustomizationRunDetails analyticsEngineCustomizationRunDetails = response.getResult();
+
+      System.out.println(analyticsEngineCustomizationRunDetails);
+      // end-getCustomizationRequestById
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
@@ -157,7 +183,7 @@ public class IbmAnalyticsEngineApiExamples {
         .body(resizeClusterRequestModel)
         .build();
 
-      Response<AnalyticsEngineResizeClusterResponse> response = ibmAnalyticsEngineApiService.resizeCluster(resizeClusterOptions).execute();
+      Response<AnalyticsEngineResizeClusterResponse> response = ibmAnalyticsEngineV2ApiService.resizeCluster(resizeClusterOptions).execute();
       AnalyticsEngineResizeClusterResponse analyticsEngineResizeClusterResponse = response.getResult();
 
       System.out.println(analyticsEngineResizeClusterResponse);
@@ -174,7 +200,7 @@ public class IbmAnalyticsEngineApiExamples {
         .instanceGuid("testString")
         .build();
 
-      Response<AnalyticsEngineResetClusterPasswordResponse> response = ibmAnalyticsEngineApiService.resetClusterPassword(resetClusterPasswordOptions).execute();
+      Response<AnalyticsEngineResetClusterPasswordResponse> response = ibmAnalyticsEngineV2ApiService.resetClusterPassword(resetClusterPasswordOptions).execute();
       AnalyticsEngineResetClusterPasswordResponse analyticsEngineResetClusterPasswordResponse = response.getResult();
 
       System.out.println(analyticsEngineResetClusterPasswordResponse);
@@ -202,7 +228,7 @@ public class IbmAnalyticsEngineApiExamples {
         .logServer(analyticsEngineLoggingServerModel)
         .build();
 
-      Response<Void> response = ibmAnalyticsEngineApiService.configureLogging(configureLoggingOptions).execute();
+      Response<Void> response = ibmAnalyticsEngineV2ApiService.configureLogging(configureLoggingOptions).execute();
       // end-configureLogging
       System.out.printf("configureLogging() response status code: %d%n", response.getStatusCode());
     } catch (ServiceResponseException e) {
@@ -217,7 +243,7 @@ public class IbmAnalyticsEngineApiExamples {
         .instanceGuid("testString")
         .build();
 
-      Response<AnalyticsEngineLoggingConfigDetails> response = ibmAnalyticsEngineApiService.getLoggingConfig(getLoggingConfigOptions).execute();
+      Response<AnalyticsEngineLoggingConfigDetails> response = ibmAnalyticsEngineV2ApiService.getLoggingConfig(getLoggingConfigOptions).execute();
       AnalyticsEngineLoggingConfigDetails analyticsEngineLoggingConfigDetails = response.getResult();
 
       System.out.println(analyticsEngineLoggingConfigDetails);
@@ -236,7 +262,7 @@ public class IbmAnalyticsEngineApiExamples {
         .action("add")
         .build();
 
-      Response<AnalyticsEngineWhitelistResponse> response = ibmAnalyticsEngineApiService.updatePrivateEndpointWhitelist(updatePrivateEndpointWhitelistOptions).execute();
+      Response<AnalyticsEngineWhitelistResponse> response = ibmAnalyticsEngineV2ApiService.updatePrivateEndpointWhitelist(updatePrivateEndpointWhitelistOptions).execute();
       AnalyticsEngineWhitelistResponse analyticsEngineWhitelistResponse = response.getResult();
 
       System.out.println(analyticsEngineWhitelistResponse);
@@ -252,7 +278,7 @@ public class IbmAnalyticsEngineApiExamples {
         .instanceGuid("testString")
         .build();
 
-      Response<Void> response = ibmAnalyticsEngineApiService.deleteLoggingConfig(deleteLoggingConfigOptions).execute();
+      Response<Void> response = ibmAnalyticsEngineV2ApiService.deleteLoggingConfig(deleteLoggingConfigOptions).execute();
       // end-deleteLoggingConfig
       System.out.printf("deleteLoggingConfig() response status code: %d%n", response.getStatusCode());
     } catch (ServiceResponseException e) {

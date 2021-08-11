@@ -63,7 +63,7 @@
         <module>modules/coverage-reports</module>
 
         <!-- This module should always be listed last -->
-         <module>modules/examples/ibm_analytics_engine_api</module>
+         <module>modules/examples</module>
     </modules>
 
     <licenses>

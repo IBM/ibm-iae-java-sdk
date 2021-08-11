@@ -154,25 +154,6 @@ public class IbmAnalyticsEngineApiExamples {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
     }
-
-    try {
-      System.out.println("getCustomizationRequestById() result:");
-      // begin-getCustomizationRequestById
-      GetCustomizationRequestByIdOptions getCustomizationRequestByIdOptions = new GetCustomizationRequestByIdOptions.Builder()
-        .instanceGuid("testString")
-        .requestId("testString")
-        .build();
-
-      Response<AnalyticsEngineCustomizationRunDetails> response = ibmAnalyticsEngineApiService.getCustomizationRequestById(getCustomizationRequestByIdOptions).execute();
-      AnalyticsEngineCustomizationRunDetails analyticsEngineCustomizationRunDetails = response.getResult();
-
-      System.out.println(analyticsEngineCustomizationRunDetails);
-      // end-getCustomizationRequestById
-    } catch (ServiceResponseException e) {
-        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
-          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
-    }
-
     try {
       System.out.println("resizeCluster() result:");
       // begin-resizeCluster

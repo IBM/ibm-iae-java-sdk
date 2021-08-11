@@ -46,9 +46,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//
 // This file provides an example of how to use the IBM Analytics Engine API service.
-//
 // The following configuration properties are assumed to be defined:
 // IBM_ANALYTICS_ENGINE_API_URL=<service base url>
 // IBM_ANALYTICS_ENGINE_API_AUTH_TYPE=iam
@@ -58,7 +56,6 @@ import org.slf4j.LoggerFactory;
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
 // export IBM_CREDENTIALS_FILE=<name of configuration file>
-//
 public class IbmAnalyticsEngineApiExamples {
   private static final Logger logger = LoggerFactory.getLogger(IbmAnalyticsEngineApiExamples.class);
   protected IbmAnalyticsEngineApiExamples() { }
@@ -73,7 +70,6 @@ public class IbmAnalyticsEngineApiExamples {
     try {
       // begin-getAllAnalyticsEngines
       GetAllAnalyticsEnginesOptions getAllAnalyticsEnginesOptions = new GetAllAnalyticsEnginesOptions();
-
       Response<Void> response = ibmAnalyticsEngineApiService.getAllAnalyticsEngines(getAllAnalyticsEnginesOptions).execute();
       // end-getAllAnalyticsEngines
       System.out.printf("getAllAnalyticsEngines() response status code: %d%n", response.getStatusCode());
@@ -91,8 +87,6 @@ public class IbmAnalyticsEngineApiExamples {
 
       Response<AnalyticsEngine> response = ibmAnalyticsEngineApiService.getAnalyticsEngineById(getAnalyticsEngineByIdOptions).execute();
       AnalyticsEngine analyticsEngine = response.getResult();
-
-      System.out.println(analyticsEngine);
       // end-getAnalyticsEngineById
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
@@ -147,8 +141,6 @@ public class IbmAnalyticsEngineApiExamples {
 
       Response<List<AnalyticsEngineCustomizationRequestCollectionItem>> response = ibmAnalyticsEngineApiService.getAllCustomizationRequests(getAllCustomizationRequestsOptions).execute();
       List<AnalyticsEngineCustomizationRequestCollectionItem> listAnalyticsEngineCustomizationRequestCollectionItem = response.getResult();
-
-      System.out.println(listAnalyticsEngineCustomizationRequestCollectionItem);
       // end-getAllCustomizationRequests
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",

@@ -36,7 +36,12 @@ The IBM Cloud Analytics Engine Services Java SDK allows developers to programmat
 
 Service Name | Artifact Id 
 --- | --- 
-[IBM Analytics Engine APIs](https://cloud.ibm.com/apidocs/ibm-analytics-engine) | ibm-analytics-engine-api
+[IBM Analytics Engine APIs v2](https://cloud.ibm.com/apidocs/ibm-analytics-engine/ibm-analytics-engine-v2) | iaesdk
+[IBM Analytics Engine APIs v3](https://cloud.ibm.com/apidocs/ibm-analytics-engine/ibm-analytics-engine-v3) | iaesdk
+
+The module name for both the versions are same : `ibm-analytics-engine-api`
+The two versions are differntiated by the version number in the Java package structure. Example : `com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2` vs `com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3`
+
 
 ## Prerequisites
 

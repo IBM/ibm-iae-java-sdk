@@ -42,6 +42,12 @@ Service Name | Artifact Id
 The module name for both the versions are same : `ibm-analytics-engine-api`
 The two versions are differntiated by the version number in the Java package structure. Example : `com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2` vs `com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3`
 
+**NOTE**
+
+IBM Analytics Engine v2 is for the classic plans : Lite, Standard Hourly and Standard monthly
+
+IBM Analytics Engine v3 is for the Standard Serverless Spark plan
+
 
 ## Prerequisites
 

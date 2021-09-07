@@ -32,8 +32,7 @@ public class ApplicationResponseTest {
   @Test
   public void testApplicationResponse() throws Throwable {
     ApplicationResponse applicationResponseModel = new ApplicationResponse();
-    assertNull(applicationResponseModel.getApplicationId());
+    assertNull(applicationResponseModel.getId());
     assertNull(applicationResponseModel.getState());
-    assertNull(applicationResponseModel.getStartTime());
   }
 }

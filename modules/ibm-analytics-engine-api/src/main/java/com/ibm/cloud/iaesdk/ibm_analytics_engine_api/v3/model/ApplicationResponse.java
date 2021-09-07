@@ -12,9 +12,6 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import java.util.Date;
-
-import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
@@ -23,66 +20,40 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
 public class ApplicationResponse extends GenericModel {
 
   /**
-   * Application state.
+   * State of the submitted application.
    */
   public interface State {
     /** accepted. */
     String ACCEPTED = "accepted";
-    /** finished. */
-    String FINISHED = "finished";
-    /** killed. */
-    String KILLED = "killed";
     /** failed. */
     String FAILED = "failed";
     /** error. */
     String ERROR = "error";
-    /** running. */
-    String RUNNING = "running";
-    /** submitted. */
-    String SUBMITTED = "submitted";
-    /** stopped. */
-    String STOPPED = "stopped";
-    /** waiting. */
-    String WAITING = "waiting";
   }
 
-  @SerializedName("application_id")
-  protected String applicationId;
+  protected String id;
   protected String state;
-  @SerializedName("start_time")
-  protected Date startTime;
 
   /**
-   * Gets the applicationId.
+   * Gets the id.
    *
-   * Application ID.
+   * Identifier of the application that was submitted.
    *
-   * @return the applicationId
+   * @return the id
    */
-  public String getApplicationId() {
-    return applicationId;
+  public String getId() {
+    return id;
   }
 
   /**
    * Gets the state.
    *
-   * Application state.
+   * State of the submitted application.
    *
    * @return the state
    */
   public String getState() {
     return state;
-  }
-
-  /**
-   * Gets the startTime.
-   *
-   * Application start time.
-   *
-   * @return the startTime
-   */
-  public Date getStartTime() {
-    return startTime;
   }
 }
 

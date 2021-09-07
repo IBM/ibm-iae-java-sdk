@@ -13,23 +13,23 @@
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
 
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.IbmAnalyticsEngineApi;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Application;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollection;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequest;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequestApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationByIdOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationByIdOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationsOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceByIdOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDetails;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDetailsDefaultConfig;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDetailsDefaultRuntime;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDetailsInstanceHome;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultConfig;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultRuntime;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHome;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.security.Authenticator;
@@ -96,10 +96,10 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   }
 
   @Test
-  public void testGetInstanceByIdWOptions() throws Throwable {
+  public void testGetInstanceWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"instance_id\": \"instanceId\", \"state\": \"created\", \"state_change_time\": \"2019-01-01T12:00:00.000Z\", \"default_runtime\": {\"spark_version\": \"sparkVersion\", \"additional_packages\": [\"additionalPackages\"]}, \"instance_home\": {\"guid\": \"guid\", \"provider\": \"provider\", \"type\": \"type\", \"region\": \"region\", \"endpoint\": \"endpoint\", \"bucket\": \"bucket\", \"hmac_access_key\": \"hmacAccessKey\", \"hmac_secret_key\": \"hmacSecretKey\"}, \"default_config\": {\"key\": \"key\"}}";
-    String getInstanceByIdPath = "/v3/analytics_engines/testString";
+    String mockResponseBody = "{\"id\": \"id\", \"href\": \"href\", \"state\": \"created\", \"state_change_time\": \"2021-01-30T08:30:00.000Z\", \"default_runtime\": {\"spark_version\": \"sparkVersion\"}, \"instance_home\": {\"id\": \"id\", \"provider\": \"provider\", \"type\": \"type\", \"region\": \"region\", \"endpoint\": \"endpoint\", \"bucket\": \"bucket\", \"hmac_access_key\": \"hmacAccessKey\", \"hmac_secret_key\": \"hmacSecretKey\"}, \"default_config\": {\"key\": \"key\"}}";
+    String getInstancePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09";
 
     server.enqueue(new MockResponse()
     .setHeader("Content-type", "application/json")
@@ -108,15 +108,15 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
     constructClientService();
 
-    // Construct an instance of the GetInstanceByIdOptions model
-    GetInstanceByIdOptions getInstanceByIdOptionsModel = new GetInstanceByIdOptions.Builder()
-    .instanceId("testString")
+    // Construct an instance of the GetInstanceOptions model
+    GetInstanceOptions getInstanceOptionsModel = new GetInstanceOptions.Builder()
+    .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<InstanceDetails> response = ibmAnalyticsEngineApiService.getInstanceById(getInstanceByIdOptionsModel).execute();
+    Response<Instance> response = ibmAnalyticsEngineApiService.getInstance(getInstanceOptionsModel).execute();
     assertNotNull(response);
-    InstanceDetails responseObj = response.getResult();
+    Instance responseObj = response.getResult();
     assertNotNull(responseObj);
 
     // Verify the contents of the request
@@ -130,46 +130,46 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
     // Check request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, getInstanceByIdPath);
+    assertEquals(parsedPath, getInstancePath);
   }
 
-  // Test the getInstanceById operation with null options model parameter
+  // Test the getInstance operation with null options model parameter
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testGetInstanceByIdNoOptions() throws Throwable {
+  public void testGetInstanceNoOptions() throws Throwable {
     // construct the service
     constructClientService();
 
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    ibmAnalyticsEngineApiService.getInstanceById(null).execute();
+    ibmAnalyticsEngineApiService.getInstance(null).execute();
   }
 
   @Test
   public void testCreateApplicationWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"application_id\": \"applicationId\", \"state\": \"accepted\", \"start_time\": \"2019-01-01T12:00:00.000Z\"}";
-    String createApplicationPath = "/v3/analytics_engines/testString/spark/applications";
+    String mockResponseBody = "{\"id\": \"id\", \"state\": \"accepted\"}";
+    String createApplicationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications";
 
     server.enqueue(new MockResponse()
     .setHeader("Content-type", "application/json")
-    .setResponseCode(201)
+    .setResponseCode(202)
     .setBody(mockResponseBody));
 
     constructClientService();
 
     // Construct an instance of the ApplicationRequestApplicationDetails model
     ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
-    .application("testString")
-    .xClass("testString")
-    .applicationArguments(new java.util.ArrayList<String>(java.util.Arrays.asList("testString")))
+    .application("cos://bucket_name.my_cos/my_spark_app.py")
+    .xClass("com.company.path.ClassName")
+    .arguments(new java.util.ArrayList<String>(java.util.Arrays.asList("[arg1, arg2, arg3]")))
     .conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
     .env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
     .build();
 
     // Construct an instance of the CreateApplicationOptions model
     CreateApplicationOptions createApplicationOptionsModel = new CreateApplicationOptions.Builder()
-    .instanceId("testString")
+    .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
     .applicationDetails(applicationRequestApplicationDetailsModel)
     .build();
 
@@ -206,10 +206,10 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   }
 
   @Test
-  public void testGetApplicationsWOptions() throws Throwable {
+  public void testListApplicationsWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"applications\": [{\"application_id\": \"applicationId\", \"spark_application_id\": \"sparkApplicationId\", \"state\": \"state\", \"start_time\": \"startTime\", \"finish_time\": \"finishTime\"}]}";
-    String getApplicationsPath = "/v3/analytics_engines/testString/spark/applications";
+    String mockResponseBody = "{\"applications\": [{\"id\": \"id\", \"href\": \"href\", \"spark_application_id\": \"sparkApplicationId\", \"state\": \"state\", \"start_time\": \"startTime\", \"finish_time\": \"finishTime\"}]}";
+    String listApplicationsPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications";
 
     server.enqueue(new MockResponse()
     .setHeader("Content-type", "application/json")
@@ -218,13 +218,13 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
     constructClientService();
 
-    // Construct an instance of the GetApplicationsOptions model
-    GetApplicationsOptions getApplicationsOptionsModel = new GetApplicationsOptions.Builder()
-    .instanceId("testString")
+    // Construct an instance of the ListApplicationsOptions model
+    ListApplicationsOptions listApplicationsOptionsModel = new ListApplicationsOptions.Builder()
+    .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<ApplicationCollection> response = ibmAnalyticsEngineApiService.getApplications(getApplicationsOptionsModel).execute();
+    Response<ApplicationCollection> response = ibmAnalyticsEngineApiService.listApplications(listApplicationsOptionsModel).execute();
     assertNotNull(response);
     ApplicationCollection responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -240,26 +240,26 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
     // Check request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, getApplicationsPath);
+    assertEquals(parsedPath, listApplicationsPath);
   }
 
-  // Test the getApplications operation with null options model parameter
+  // Test the listApplications operation with null options model parameter
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testGetApplicationsNoOptions() throws Throwable {
+  public void testListApplicationsNoOptions() throws Throwable {
     // construct the service
     constructClientService();
 
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    ibmAnalyticsEngineApiService.getApplications(null).execute();
+    ibmAnalyticsEngineApiService.listApplications(null).execute();
   }
 
   @Test
-  public void testGetApplicationByIdWOptions() throws Throwable {
+  public void testGetApplicationWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"application_details\": {\"application_details\": {\"application\": \"application\", \"class\": \"xClass\", \"application_arguments\": [\"applicationArguments\"], \"conf\": {\"mapKey\": \"anyValue\"}, \"env\": {\"mapKey\": \"anyValue\"}}}, \"mode\": \"mode\", \"application_id\": \"applicationId\", \"state\": \"state\", \"start_time\": \"startTime\", \"finish_time\": \"finishTime\"}";
-    String getApplicationByIdPath = "/v3/analytics_engines/testString/spark/applications/testString";
+    String mockResponseBody = "{\"application_details\": {\"application_details\": {\"application\": \"cos://bucket_name.my_cos/my_spark_app.py\", \"class\": \"com.company.path.ClassName\", \"arguments\": [\"[arg1, arg2, arg3]\"], \"conf\": {\"mapKey\": \"anyValue\"}, \"env\": {\"mapKey\": \"anyValue\"}}}, \"id\": \"2b83d31c-397b-48ad-ad76-b83347c982db\", \"state\": \"accepted\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\"}";
+    String getApplicationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications/ff48cc19-0e7e-4627-aac6-0b4ad080397b";
 
     server.enqueue(new MockResponse()
     .setHeader("Content-type", "application/json")
@@ -268,14 +268,14 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
     constructClientService();
 
-    // Construct an instance of the GetApplicationByIdOptions model
-    GetApplicationByIdOptions getApplicationByIdOptionsModel = new GetApplicationByIdOptions.Builder()
-    .instanceId("testString")
-    .applicationId("testString")
+    // Construct an instance of the GetApplicationOptions model
+    GetApplicationOptions getApplicationOptionsModel = new GetApplicationOptions.Builder()
+    .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+    .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<ApplicationGetResponse> response = ibmAnalyticsEngineApiService.getApplicationById(getApplicationByIdOptionsModel).execute();
+    Response<ApplicationGetResponse> response = ibmAnalyticsEngineApiService.getApplication(getApplicationOptionsModel).execute();
     assertNotNull(response);
     ApplicationGetResponse responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -291,26 +291,26 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
     // Check request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, getApplicationByIdPath);
+    assertEquals(parsedPath, getApplicationPath);
   }
 
-  // Test the getApplicationById operation with null options model parameter
+  // Test the getApplication operation with null options model parameter
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testGetApplicationByIdNoOptions() throws Throwable {
+  public void testGetApplicationNoOptions() throws Throwable {
     // construct the service
     constructClientService();
 
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    ibmAnalyticsEngineApiService.getApplicationById(null).execute();
+    ibmAnalyticsEngineApiService.getApplication(null).execute();
   }
 
   @Test
-  public void testDeleteApplicationByIdWOptions() throws Throwable {
+  public void testDeleteApplicationWOptions() throws Throwable {
     // Schedule some responses.
     String mockResponseBody = "";
-    String deleteApplicationByIdPath = "/v3/analytics_engines/testString/spark/applications/testString";
+    String deleteApplicationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications/ff48cc19-0e7e-4627-aac6-0b4ad080397b";
 
     server.enqueue(new MockResponse()
     .setResponseCode(204)
@@ -318,14 +318,14 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
     constructClientService();
 
-    // Construct an instance of the DeleteApplicationByIdOptions model
-    DeleteApplicationByIdOptions deleteApplicationByIdOptionsModel = new DeleteApplicationByIdOptions.Builder()
-    .instanceId("testString")
-    .applicationId("testString")
+    // Construct an instance of the DeleteApplicationOptions model
+    DeleteApplicationOptions deleteApplicationOptionsModel = new DeleteApplicationOptions.Builder()
+    .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+    .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
     .build();
 
     // Invoke operation with valid options model (positive test)
-    Response<Void> response = ibmAnalyticsEngineApiService.deleteApplicationById(deleteApplicationByIdOptionsModel).execute();
+    Response<Void> response = ibmAnalyticsEngineApiService.deleteApplication(deleteApplicationOptionsModel).execute();
     assertNotNull(response);
     Void responseObj = response.getResult();
     // Response does not have a return type. Check that the result is null.
@@ -342,26 +342,26 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
     // Check request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, deleteApplicationByIdPath);
+    assertEquals(parsedPath, deleteApplicationPath);
   }
 
-  // Test the deleteApplicationById operation with null options model parameter
+  // Test the deleteApplication operation with null options model parameter
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testDeleteApplicationByIdNoOptions() throws Throwable {
+  public void testDeleteApplicationNoOptions() throws Throwable {
     // construct the service
     constructClientService();
 
     server.enqueue(new MockResponse());
 
     // Invoke operation with null options model (negative test)
-    ibmAnalyticsEngineApiService.deleteApplicationById(null).execute();
+    ibmAnalyticsEngineApiService.deleteApplication(null).execute();
   }
 
   @Test
   public void testGetApplicationStateWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"application_id\": \"applicationId\", \"state\": \"state\", \"start_time\": \"startTime\", \"finish_time\": \"finishTime\"}";
-    String getApplicationStatePath = "/v3/analytics_engines/testString/spark/applications/testString/state";
+    String mockResponseBody = "{\"id\": \"id\", \"state\": \"state\", \"start_time\": \"startTime\", \"finish_time\": \"finishTime\"}";
+    String getApplicationStatePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications/ff48cc19-0e7e-4627-aac6-0b4ad080397b/state";
 
     server.enqueue(new MockResponse()
     .setHeader("Content-type", "application/json")
@@ -372,8 +372,8 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
     // Construct an instance of the GetApplicationStateOptions model
     GetApplicationStateOptions getApplicationStateOptionsModel = new GetApplicationStateOptions.Builder()
-    .instanceId("testString")
-    .applicationId("testString")
+    .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+    .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
     .build();
 
     // Invoke operation with valid options model (positive test)

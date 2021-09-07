@@ -13,7 +13,7 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Application;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -23,18 +23,20 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the ApplicationGetStateResponse model.
+ * Unit test class for the Application model.
  */
-public class ApplicationGetStateResponseTest {
+public class ApplicationTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testApplicationGetStateResponse() throws Throwable {
-    ApplicationGetStateResponse applicationGetStateResponseModel = new ApplicationGetStateResponse();
-    assertNull(applicationGetStateResponseModel.getId());
-    assertNull(applicationGetStateResponseModel.getState());
-    assertNull(applicationGetStateResponseModel.getStartTime());
-    assertNull(applicationGetStateResponseModel.getFinishTime());
+  public void testApplication() throws Throwable {
+    Application applicationModel = new Application();
+    assertNull(applicationModel.getId());
+    assertNull(applicationModel.getHref());
+    assertNull(applicationModel.getSparkApplicationId());
+    assertNull(applicationModel.getState());
+    assertNull(applicationModel.getStartTime());
+    assertNull(applicationModel.getFinishTime());
   }
 }

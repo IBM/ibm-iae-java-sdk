@@ -32,11 +32,11 @@ public class GetApplicationStateOptionsTest {
   @Test
   public void testGetApplicationStateOptions() throws Throwable {
     GetApplicationStateOptions getApplicationStateOptionsModel = new GetApplicationStateOptions.Builder()
-      .instanceId("testString")
-      .applicationId("testString")
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
       .build();
-    assertEquals(getApplicationStateOptionsModel.instanceId(), "testString");
-    assertEquals(getApplicationStateOptionsModel.applicationId(), "testString");
+    assertEquals(getApplicationStateOptionsModel.instanceId(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
+    assertEquals(getApplicationStateOptionsModel.applicationId(), "ff48cc19-0e7e-4627-aac6-0b4ad080397b");
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)

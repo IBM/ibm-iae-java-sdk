@@ -13,23 +13,23 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
 
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Application;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollection;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequest;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequestApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationByIdOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationByIdOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationsOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceByIdOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDetails;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDetailsDefaultConfig;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDetailsDefaultRuntime;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDetailsInstanceHome;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultConfig;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultRuntime;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHome;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.iaesdk.test.SdkIntegrationTestBase;
 import com.ibm.cloud.sdk.core.http.Response;
@@ -42,7 +42,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.testng.annotations.AfterClass;
@@ -51,43 +50,21 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * This class contains integration tests for IbmAnalyticsEngineV3Api service.
- *
- * Notes:
- * 1. By providing the name of our config file (ibmanalyticsengine-service.env.hide") via the
- *    getConfigFilename() method below, the base class (SdkIntegrationTestBase) will be able to
- *    mock up the getenv() method to cause the Java core's CredentialUtils class to "see" the
- *    config file via the mocked value of the IBM_CREDENTIALS_FILE env var.
- *
- * 2. The base class will automatically set the "skipTests" flag to true if it can't find the config file.
- *
- * 3. The base class contains a "before method" function that will automatically skip each test method if
- *    the "skipTests" flag is true.   This means that this subclass doesn't need to concern
- *    itself with skipping tests in the event that the config file is not available.
- *
- * 4. This example testcase uses the "dependsOnMethods" attribute of the @Test annotation to ensure that the test
- *    methods are executed in the the order they appear in this file.  Without this, there's no guaranteed ordering
- *    imposed by TestNG.
- *
- * 5. Be sure to following the instructions here:
- *    https://github.ibm.com/CloudEngineering/java-sdk-template/blob/master/README_FIRST.md#integration-tests
- *    to start up an instance of the IbmAnalyticsEngineV2Api Service prior to running the integraton test.
- *
- * 6. Before running this test, rename example-service.env.hide to example-service.env.
+ * Integration test class for the IbmAnalyticsEngineApi service.
  */
 public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public IbmAnalyticsEngineApi service = null;
   public static Map<String, String> config = null;
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
-  public String instanceGuid = null;
+  public String instanceId = null;
   public String applicationId = null;
   /**
    * This method provides our config filename to the base class.
    */
 
   public String getConfigFilename() {
-    return "../../ibmanalyticsengine-service.env";
+    return "../../ibm_analytics_engine_api_v3.env";
   }
 
   @BeforeClass
@@ -106,29 +83,40 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     assertNotNull(config);
     assertFalse(config.isEmpty());
     assertEquals(service.getServiceUrl(), config.get("URL"));
-    instanceGuid = System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_GUID");
+    instanceId = System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_ID");
+
     System.out.println("Setup complete.");
   }
 
   @Test
-  public void testGetInstanceById() throws Exception {
+  public void testGetInstance() throws Exception {
     try {
-      GetInstanceByIdOptions getInstanceByIdOptions = new GetInstanceByIdOptions.Builder()
-      .instanceId(instanceGuid)
+      GetInstanceOptions getInstanceOptions = new GetInstanceOptions.Builder()
+      .instanceId(instanceId)
       .build();
 
       // Invoke operation
-      Response<InstanceDetails> response = service.getInstanceById(getInstanceByIdOptions).execute();
+      Response<Instance> response = service.getInstance(getInstanceOptions).execute();
       // Validate response
       assertNotNull(response);
-      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
-      System.out.println("Response String "+String.valueOf(response.getResult()));
       assertEquals(response.getStatusCode(), 200);
 
-      InstanceDetails instanceDetailsResult = response.getResult();
+      Instance instanceResult = response.getResult();
 
-      assertNotNull(instanceDetailsResult);
-      
+      assertNotNull(instanceResult);
+
+      //
+      // The following status codes aren't covered by tests.
+      // Please provide integration tests for these too.
+      //
+      // 400
+      // 401
+      // 403
+      // 404
+      // 500
+      //
+      //
+
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
@@ -140,14 +128,14 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     try {
       ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
       .application("/opt/ibm/spark/examples/src/main/python/wordcount.py")
-      //.xClass("testString")
-      .applicationArguments(new java.util.ArrayList<String>(java.util.Arrays.asList("/opt/ibm/spark/examples/src/main/resources/people.txt")))
+      //.xClass("com.company.path.ClassName")
+      .arguments(new java.util.ArrayList<String>(java.util.Arrays.asList("/opt/ibm/spark/examples/src/main/resources/people.txt")))
       //.conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       //.env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       .build();
 
       CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
-      .instanceId(instanceGuid)
+      .instanceId(instanceId)
       .applicationDetails(applicationRequestApplicationDetailsModel)
       .build();
 
@@ -155,8 +143,6 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       Response<ApplicationResponse> response = service.createApplication(createApplicationOptions).execute();
       // Validate response
       assertNotNull(response);
-      System.out.println("Status code "+Integer.toString(response.getStatusCode()));
-      System.out.println("Response String "+String.valueOf(response.getResult()));
       assertEquals(response.getStatusCode(), 202);
 
       ApplicationResponse applicationResponseResult = response.getResult();
@@ -164,7 +150,20 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       assertNotNull(applicationResponseResult);
       String jsonString = String.valueOf(response.getResult());
       JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonString);
-      applicationId = jsonObject.get("application_id").toString();
+      applicationId = jsonObject.get("id").toString();
+
+      //
+      // The following status codes aren't covered by tests.
+      // Please provide integration tests for these too.
+      //
+      // 400
+      // 401
+      // 403
+      // 404
+      // 500
+      //
+      //
+
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
@@ -172,14 +171,14 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   }
 
   @Test
-  public void testGetApplications() throws Exception {
+  public void testListApplications() throws Exception {
     try {
-      GetApplicationsOptions getApplicationsOptions = new GetApplicationsOptions.Builder()
-      .instanceId(instanceGuid)
+      ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
+      .instanceId(instanceId)
       .build();
 
       // Invoke operation
-      Response<ApplicationCollection> response = service.getApplications(getApplicationsOptions).execute();
+      Response<ApplicationCollection> response = service.listApplications(listApplicationsOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
@@ -187,6 +186,19 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       ApplicationCollection applicationCollectionResult = response.getResult();
 
       assertNotNull(applicationCollectionResult);
+
+      //
+      // The following status codes aren't covered by tests.
+      // Please provide integration tests for these too.
+      //
+      // 400
+      // 401
+      // 403
+      // 404
+      // 500
+      //
+      //
+
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
@@ -194,15 +206,15 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   }
 
   @Test
-  public void testGetApplicationById() throws Exception {
+  public void testGetApplication() throws Exception {
     try {
-      GetApplicationByIdOptions getApplicationByIdOptions = new GetApplicationByIdOptions.Builder()
-      .instanceId(instanceGuid)
+      GetApplicationOptions getApplicationOptions = new GetApplicationOptions.Builder()
+      .instanceId(instanceId)
       .applicationId(applicationId)
       .build();
 
       // Invoke operation
-      Response<ApplicationGetResponse> response = service.getApplicationById(getApplicationByIdOptions).execute();
+      Response<ApplicationGetResponse> response = service.getApplication(getApplicationOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
@@ -210,6 +222,19 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       ApplicationGetResponse applicationGetResponseResult = response.getResult();
 
       assertNotNull(applicationGetResponseResult);
+
+      //
+      // The following status codes aren't covered by tests.
+      // Please provide integration tests for these too.
+      //
+      // 400
+      // 401
+      // 403
+      // 404
+      // 500
+      //
+      //
+
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
@@ -220,7 +245,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetApplicationState() throws Exception {
     try {
       GetApplicationStateOptions getApplicationStateOptions = new GetApplicationStateOptions.Builder()
-      .instanceId(instanceGuid)
+      .instanceId(instanceId)
       .applicationId(applicationId)
       .build();
 
@@ -233,6 +258,19 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       ApplicationGetStateResponse applicationGetStateResponseResult = response.getResult();
 
       assertNotNull(applicationGetStateResponseResult);
+
+      //
+      // The following status codes aren't covered by tests.
+      // Please provide integration tests for these too.
+      //
+      // 400
+      // 401
+      // 403
+      // 404
+      // 500
+      //
+      //
+
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
@@ -240,18 +278,32 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   }
 
   @Test
-  public void testDeleteApplicationById() throws Exception {
+  public void testDeleteApplication() throws Exception {
     try {
-      DeleteApplicationByIdOptions deleteApplicationByIdOptions = new DeleteApplicationByIdOptions.Builder()
-      .instanceId(instanceGuid)
+      Thread.sleep(20000);
+      DeleteApplicationOptions deleteApplicationOptions = new DeleteApplicationOptions.Builder()
+      .instanceId(instanceId)
       .applicationId(applicationId)
       .build();
 
       // Invoke operation
-      Response<Void> response = service.deleteApplicationById(deleteApplicationByIdOptions).execute();
+      Response<Void> response = service.deleteApplication(deleteApplicationOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 204);
+
+      //
+      // The following status codes aren't covered by tests.
+      // Please provide integration tests for these too.
+      //
+      // 400
+      // 401
+      // 403
+      // 404
+      // 500
+      //
+      //
+
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));

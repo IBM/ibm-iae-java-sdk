@@ -20,8 +20,7 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
  */
 public class ApplicationGetStateResponse extends GenericModel {
 
-  @SerializedName("application_id")
-  protected String applicationId;
+  protected String id;
   protected String state;
   @SerializedName("start_time")
   protected String startTime;
@@ -29,14 +28,14 @@ public class ApplicationGetStateResponse extends GenericModel {
   protected String finishTime;
 
   /**
-   * Gets the applicationId.
+   * Gets the id.
    *
    * Identifier of the application.
    *
-   * @return the applicationId
+   * @return the id
    */
-  public String getApplicationId() {
-    return applicationId;
+  public String getId() {
+    return id;
   }
 
   /**

@@ -27,8 +27,7 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
   protected String application;
   @SerializedName("class")
   protected String xClass;
-  @SerializedName("application_arguments")
-  protected List<String> applicationArguments;
+  protected List<String> arguments;
   protected Map<String, Object> conf;
   protected Map<String, Object> env;
 
@@ -38,14 +37,14 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
   public static class Builder {
     private String application;
     private String xClass;
-    private List<String> applicationArguments;
+    private List<String> arguments;
     private Map<String, Object> conf;
     private Map<String, Object> env;
 
     private Builder(ApplicationRequestApplicationDetails applicationRequestApplicationDetails) {
       this.application = applicationRequestApplicationDetails.application;
       this.xClass = applicationRequestApplicationDetails.xClass;
-      this.applicationArguments = applicationRequestApplicationDetails.applicationArguments;
+      this.arguments = applicationRequestApplicationDetails.arguments;
       this.conf = applicationRequestApplicationDetails.conf;
       this.env = applicationRequestApplicationDetails.env;
     }
@@ -66,18 +65,18 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
     }
 
     /**
-     * Adds an applicationArguments to applicationArguments.
+     * Adds an arguments to arguments.
      *
-     * @param applicationArguments the new applicationArguments
+     * @param arguments the new arguments
      * @return the ApplicationRequestApplicationDetails builder
      */
-    public Builder addApplicationArguments(String applicationArguments) {
-      com.ibm.cloud.sdk.core.util.Validator.notNull(applicationArguments,
-        "applicationArguments cannot be null");
-      if (this.applicationArguments == null) {
-        this.applicationArguments = new ArrayList<String>();
+    public Builder addArguments(String arguments) {
+      com.ibm.cloud.sdk.core.util.Validator.notNull(arguments,
+        "arguments cannot be null");
+      if (this.arguments == null) {
+        this.arguments = new ArrayList<String>();
       }
-      this.applicationArguments.add(applicationArguments);
+      this.arguments.add(arguments);
       return this;
     }
 
@@ -104,14 +103,14 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
     }
 
     /**
-     * Set the applicationArguments.
-     * Existing applicationArguments will be replaced.
+     * Set the arguments.
+     * Existing arguments will be replaced.
      *
-     * @param applicationArguments the applicationArguments
+     * @param arguments the arguments
      * @return the ApplicationRequestApplicationDetails builder
      */
-    public Builder applicationArguments(List<String> applicationArguments) {
-      this.applicationArguments = applicationArguments;
+    public Builder arguments(List<String> arguments) {
+      this.arguments = arguments;
       return this;
     }
 
@@ -141,7 +140,7 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
   protected ApplicationRequestApplicationDetails(Builder builder) {
     application = builder.application;
     xClass = builder.xClass;
-    applicationArguments = builder.applicationArguments;
+    arguments = builder.arguments;
     conf = builder.conf;
     env = builder.env;
   }
@@ -158,7 +157,7 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
   /**
    * Gets the application.
    *
-   * Application name.
+   * Path of the application to run.
    *
    * @return the application
    */
@@ -169,7 +168,8 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
   /**
    * Gets the xClass.
    *
-   * The entry point for your application.
+   * Entry point for a Spark application bundled as a '.jar' file. This is applicable only for Java or Scala
+   * applications.
    *
    * @return the xClass
    */
@@ -178,20 +178,20 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
   }
 
   /**
-   * Gets the applicationArguments.
+   * Gets the arguments.
    *
-   * Application arguments.
+   * An array of arguments to be passed to the application.
    *
-   * @return the applicationArguments
+   * @return the arguments
    */
-  public List<String> applicationArguments() {
-    return applicationArguments;
+  public List<String> arguments() {
+    return arguments;
   }
 
   /**
    * Gets the conf.
    *
-   * Application configurations to override. See [Spark environment variables](
+   * Application configurations to override the value specified at instance level. See [Spark environment variables](
    * https://spark.apache.org/docs/latest/configuration.html#available-properties) for a list of the supported
    * variables.
    *
@@ -204,7 +204,7 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
   /**
    * Gets the env.
    *
-   * Application environment configurations to override. See [Spark environment
+   * Application environment configurations to use. See [Spark environment
    * variables](https://spark.apache.org/docs/latest/configuration.html#environment-variables) for a list of the
    * supported variables.
    *

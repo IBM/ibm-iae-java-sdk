@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/IBM/ibm-iae-java-sdk.svg?branch=master)](https://travis-ci.org/IBM/ibm-iae-java-sdk)
+[![Build Status](https://api.travis-ci.com/IBM/ibm-iae-java-sdk.svg?branch=master)](https://travis-ci.org/IBM/ibm-iae-java-sdk)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 # IBM Cloud Analytics Engine SDK Version 0.4.1
@@ -59,6 +59,17 @@ IBM Analytics Engine v3 is for the Standard Serverless Spark plan
 
 ## Installation
 The current version of this SDK is: 0.4.1
+
+Each service's artifact coordinates are listed in the table above.
+
+The project artifacts are published on the public [Maven Central](https://repo1.maven.org/maven2/)
+artifact repository.  This is the default public repository used by maven when searching for dependencies.
+To use this repository within a gradle build, please see
+[this link](https://docs.gradle.org/current/userguide/declaring_repositories.html).
+
+To use a particular service in your application, define a dependency that contains the
+artifact coordinates (group id, artifact id and version) for the service.
+Here are examples for maven and gradle:
 
 #### All the services
 To define a dependency on the entire set of services contained in the project, use a dependency like these:

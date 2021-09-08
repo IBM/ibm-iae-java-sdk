@@ -34,10 +34,10 @@ Java client library to interact with various [IBM Analytics Engine APIs](https:/
 
 The IBM Cloud Analytics Engine Services Java SDK allows developers to programmatically interact with the following IBM Cloud services:
 
-Service Name | Artifact Id 
+Service Name | Artifact Coordinates 
 --- | --- 
-[IBM Analytics Engine APIs v2](https://cloud.ibm.com/apidocs/ibm-analytics-engine/ibm-analytics-engine-v2) | ibm-analytics-engine-api
-[IBM Analytics Engine APIs v3](https://cloud.ibm.com/apidocs/ibm-analytics-engine/ibm-analytics-engine-v3) | ibm-analytics-engine-api
+[IBM Analytics Engine APIs v2](https://cloud.ibm.com/apidocs/ibm-analytics-engine/ibm-analytics-engine-v2) | ibm-analytics-engine-api:0.4.1
+[IBM Analytics Engine APIs v3](https://cloud.ibm.com/apidocs/ibm-analytics-engine/ibm-analytics-engine-v3) | ibm-analytics-engine-api:0.4.1
 
 The module name for both the versions are same : `ibm-analytics-engine-api`
 The two versions are differntiated by the version number in the Java package structure. Example : `com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v2` vs `com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3`

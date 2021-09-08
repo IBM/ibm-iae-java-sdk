@@ -82,7 +82,7 @@ public class IbmAnalyticsEngineApiExamples {
 
       CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
          .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-         .applicationDetails(applicationRequestApplicationDetailsModel),
+         .applicationDetails(applicationRequestApplicationDetailsModel)
          .build();
 
       Response<ApplicationResponse> response = ibmAnalyticsEngineApiService.createApplication(createApplicationOptions).execute();

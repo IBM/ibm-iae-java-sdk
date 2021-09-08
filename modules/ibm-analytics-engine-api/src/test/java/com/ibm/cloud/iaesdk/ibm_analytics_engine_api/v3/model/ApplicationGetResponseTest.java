@@ -37,8 +37,7 @@ public class ApplicationGetResponseTest {
   public void testApplicationGetResponse() throws Throwable {
     ApplicationGetResponse applicationGetResponseModel = new ApplicationGetResponse();
     assertNull(applicationGetResponseModel.getApplicationDetails());
-    assertNull(applicationGetResponseModel.getMode());
-    assertNull(applicationGetResponseModel.getApplicationId());
+    assertNull(applicationGetResponseModel.getId());
     assertNull(applicationGetResponseModel.getState());
     assertNull(applicationGetResponseModel.getStartTime());
     assertNull(applicationGetResponseModel.getFinishTime());

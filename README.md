@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/IBM/ibm-iae-java-sdk.svg?branch=master)](https://travis-ci.org/IBM/ibm-iae-java-sdk)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-# IBM Cloud Analytics Engine SDK Version 0.4.0
+# IBM Cloud Analytics Engine SDK Version 0.4.1
 Java client library to interact with various [IBM Analytics Engine APIs](https://cloud.ibm.com/apidocs/ibm-analytics-engine).
 
 <!--
@@ -58,7 +58,7 @@ IBM Analytics Engine v3 is for the Standard Serverless Spark plan
 * Java 8 or above.
 
 ## Installation
-The current version of this SDK is: 0.4.0
+The current version of this SDK is: 0.4.1
 
 #### All the services
 To define a dependency on the entire set of services contained in the project, use a dependency like these:
@@ -69,14 +69,14 @@ To define a dependency on the entire set of services contained in the project, u
 <dependency>
 	<groupId>com.ibm.cloud</groupId>
 	<artifactId>iaesdk</artifactId>
-	<version>0.4.0</version>
+	<version>0.4.1</version>
 </dependency>
 ```
 
 ##### Gradle
 
 ```gradle
-'com.ibm.cloud:iaesdk:0.4.0'
+'com.ibm.cloud:iaesdk:0.4.1'
 ```
 
 #### A single service
@@ -88,13 +88,13 @@ To define a dependency on a single service, use a dependency that contains the a
 <dependency>
     <groupId>com.ibm.cloud</groupId>
     <artifactId>ibm-analytics-engine-api</artifactId>
-    <version>0.4.0</version>
+    <version>0.4.1</version>
 </dependency>
 ```
 
 ##### Gradle
 ```gradle
-'com.ibm.cloud:ibm-analytics-engine-api:0.4.0'
+'com.ibm.cloud:ibm-analytics-engine-api:0.4.1'
 ```
 Each service's artifact id is listed in the table of services above.
 

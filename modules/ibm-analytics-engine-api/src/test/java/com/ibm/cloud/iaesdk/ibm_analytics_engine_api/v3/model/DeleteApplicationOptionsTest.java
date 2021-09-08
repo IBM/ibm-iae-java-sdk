@@ -13,7 +13,7 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -23,18 +23,25 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the ApplicationGetStateResponse model.
+ * Unit test class for the DeleteApplicationOptions model.
  */
-public class ApplicationGetStateResponseTest {
+public class DeleteApplicationOptionsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testApplicationGetStateResponse() throws Throwable {
-    ApplicationGetStateResponse applicationGetStateResponseModel = new ApplicationGetStateResponse();
-    assertNull(applicationGetStateResponseModel.getId());
-    assertNull(applicationGetStateResponseModel.getState());
-    assertNull(applicationGetStateResponseModel.getStartTime());
-    assertNull(applicationGetStateResponseModel.getFinishTime());
+  public void testDeleteApplicationOptions() throws Throwable {
+    DeleteApplicationOptions deleteApplicationOptionsModel = new DeleteApplicationOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
+      .build();
+    assertEquals(deleteApplicationOptionsModel.instanceId(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
+    assertEquals(deleteApplicationOptionsModel.applicationId(), "ff48cc19-0e7e-4627-aac6-0b4ad080397b");
   }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testDeleteApplicationOptionsError() throws Throwable {
+    new DeleteApplicationOptions.Builder().build();
+  }
+
 }

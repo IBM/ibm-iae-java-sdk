@@ -12,26 +12,24 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import java.util.List;
-
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * An array of application details.
+ * Instance level default configuration for Spark workloads.
  */
-public class ApplicationCollection extends GenericModel {
+public class InstanceDefaultConfig extends GenericModel {
 
-  protected List<Application> applications;
+  protected String key;
 
   /**
-   * Gets the applications.
+   * Gets the key.
    *
-   * List of applications.
+   * Value of the Spark configuration key.
    *
-   * @return the applications
+   * @return the key
    */
-  public List<Application> getApplications() {
-    return applications;
+  public String getKey() {
+    return key;
   }
 }
 

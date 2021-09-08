@@ -12,7 +12,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 3.37.0-a85661cd-20210802-190136
+ * IBM OpenAPI SDK Code Generator Version: 3.38.0-07189efd-20210827-205025
  */
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
@@ -24,12 +24,12 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResp
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationByIdOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationByIdOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationsOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceByIdOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDetails;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
 import com.ibm.cloud.sdk.core.http.RequestBuilder;
 import com.ibm.cloud.sdk.core.http.ResponseConverter;
 import com.ibm.cloud.sdk.core.http.ServiceCall;
@@ -42,9 +42,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * Create and manage serverless Spark instances and run applications.
+ * Manage serverless Spark instances and run applications.
  *
- * @version v3
+ * API Version: 3.0.0
  */
 public class IbmAnalyticsEngineApi extends BaseService {
 
@@ -89,33 +89,33 @@ public class IbmAnalyticsEngineApi extends BaseService {
   }
 
   /**
-   * Find instance by id.
+   * Find Analytics Engine by id.
    *
-   * Retrieve the details of a single instance.
+   * Retrieve the details of a single Analytics Engine instance.
    *
-   * @param getInstanceByIdOptions the {@link GetInstanceByIdOptions} containing the options for the call
-   * @return a {@link ServiceCall} with a result of type {@link InstanceDetails}
+   * @param getInstanceOptions the {@link GetInstanceOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link Instance}
    */
-  public ServiceCall<InstanceDetails> getInstanceById(GetInstanceByIdOptions getInstanceByIdOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(getInstanceByIdOptions,
-      "getInstanceByIdOptions cannot be null");
+  public ServiceCall<Instance> getInstance(GetInstanceOptions getInstanceOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(getInstanceOptions,
+      "getInstanceOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();
-    pathParamsMap.put("instance_id", getInstanceByIdOptions.instanceId());
+    pathParamsMap.put("instance_id", getInstanceOptions.instanceId());
     RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}", pathParamsMap));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "getInstanceById");
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "getInstance");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
     builder.header("Accept", "application/json");
-    ResponseConverter<InstanceDetails> responseConverter =
-      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<InstanceDetails>() { }.getType());
+    ResponseConverter<Instance> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<Instance>() { }.getType());
     return createServiceCall(builder.build(), responseConverter);
   }
 
   /**
-   * Deploys a Spark application in the Analytics Engine instance.
+   * Deploy a Spark application.
    *
-   * Deploy a Spark application on a given serverless Spark instance.
+   * Deploys a Spark application on a given serverless Spark instance.
    *
    * @param createApplicationOptions the {@link CreateApplicationOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link ApplicationResponse}
@@ -125,7 +125,7 @@ public class IbmAnalyticsEngineApi extends BaseService {
       "createApplicationOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();
     pathParamsMap.put("instance_id", createApplicationOptions.instanceId());
-    RequestBuilder builder = RequestBuilder.post(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/spark/applications", pathParamsMap));
+    RequestBuilder builder = RequestBuilder.post(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/spark_applications", pathParamsMap));
     Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "createApplication");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
@@ -142,20 +142,20 @@ public class IbmAnalyticsEngineApi extends BaseService {
   }
 
   /**
+   * Retrieve all Spark applications.
+   *
    * Gets all applications submitted in an instance with a specified inst_id.
    *
-   * Retrieve all Spark applications run on a given instance.
-   *
-   * @param getApplicationsOptions the {@link GetApplicationsOptions} containing the options for the call
+   * @param listApplicationsOptions the {@link ListApplicationsOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link ApplicationCollection}
    */
-  public ServiceCall<ApplicationCollection> getApplications(GetApplicationsOptions getApplicationsOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(getApplicationsOptions,
-      "getApplicationsOptions cannot be null");
+  public ServiceCall<ApplicationCollection> listApplications(ListApplicationsOptions listApplicationsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(listApplicationsOptions,
+      "listApplicationsOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();
-    pathParamsMap.put("instance_id", getApplicationsOptions.instanceId());
-    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/spark/applications", pathParamsMap));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "getApplications");
+    pathParamsMap.put("instance_id", listApplicationsOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/spark_applications", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "listApplications");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
@@ -166,21 +166,21 @@ public class IbmAnalyticsEngineApi extends BaseService {
   }
 
   /**
-   * Gets the details of the application identified by the app_id identifier.
-   *
    * Retrieve the details of a given Spark application.
    *
-   * @param getApplicationByIdOptions the {@link GetApplicationByIdOptions} containing the options for the call
+   * Gets the details of the given Spark application.
+   *
+   * @param getApplicationOptions the {@link GetApplicationOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link ApplicationGetResponse}
    */
-  public ServiceCall<ApplicationGetResponse> getApplicationById(GetApplicationByIdOptions getApplicationByIdOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(getApplicationByIdOptions,
-      "getApplicationByIdOptions cannot be null");
+  public ServiceCall<ApplicationGetResponse> getApplication(GetApplicationOptions getApplicationOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(getApplicationOptions,
+      "getApplicationOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();
-    pathParamsMap.put("instance_id", getApplicationByIdOptions.instanceId());
-    pathParamsMap.put("application_id", getApplicationByIdOptions.applicationId());
-    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/spark/applications/{application_id}", pathParamsMap));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "getApplicationById");
+    pathParamsMap.put("instance_id", getApplicationOptions.instanceId());
+    pathParamsMap.put("application_id", getApplicationOptions.applicationId());
+    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/spark_applications/{application_id}", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "getApplication");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
@@ -191,22 +191,22 @@ public class IbmAnalyticsEngineApi extends BaseService {
   }
 
   /**
-   * Stops the specified application.
+   * Stop application.
    *
    * Stops a running application identified by the app_id identifier. This is an idempotent operation. Performs no
    * action if the requested application is already stopped or completed.
    *
-   * @param deleteApplicationByIdOptions the {@link DeleteApplicationByIdOptions} containing the options for the call
+   * @param deleteApplicationOptions the {@link DeleteApplicationOptions} containing the options for the call
    * @return a {@link ServiceCall} with a void result
    */
-  public ServiceCall<Void> deleteApplicationById(DeleteApplicationByIdOptions deleteApplicationByIdOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(deleteApplicationByIdOptions,
-      "deleteApplicationByIdOptions cannot be null");
+  public ServiceCall<Void> deleteApplication(DeleteApplicationOptions deleteApplicationOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(deleteApplicationOptions,
+      "deleteApplicationOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();
-    pathParamsMap.put("instance_id", deleteApplicationByIdOptions.instanceId());
-    pathParamsMap.put("application_id", deleteApplicationByIdOptions.applicationId());
-    RequestBuilder builder = RequestBuilder.delete(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/spark/applications/{application_id}", pathParamsMap));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "deleteApplicationById");
+    pathParamsMap.put("instance_id", deleteApplicationOptions.instanceId());
+    pathParamsMap.put("application_id", deleteApplicationOptions.applicationId());
+    RequestBuilder builder = RequestBuilder.delete(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/spark_applications/{application_id}", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "deleteApplication");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
@@ -215,9 +215,9 @@ public class IbmAnalyticsEngineApi extends BaseService {
   }
 
   /**
-   * Gets the status of the application identified by the app_id identifier.
+   * Get the status of the application.
    *
-   * Returns the status of the application identified by the app_id identifier.
+   * Returns the status of the given Spark application.
    *
    * @param getApplicationStateOptions the {@link GetApplicationStateOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link ApplicationGetStateResponse}
@@ -228,7 +228,7 @@ public class IbmAnalyticsEngineApi extends BaseService {
     Map<String, String> pathParamsMap = new HashMap<String, String>();
     pathParamsMap.put("instance_id", getApplicationStateOptions.instanceId());
     pathParamsMap.put("application_id", getApplicationStateOptions.applicationId());
-    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/spark/applications/{application_id}/state", pathParamsMap));
+    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/spark_applications/{application_id}/state", pathParamsMap));
     Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "getApplicationState");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());

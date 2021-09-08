@@ -12,40 +12,28 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import java.util.Date;
-
 import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * Response of the Application Get API.
+ * Details of a Spark application.
  */
-public class ApplicationGetResponse extends GenericModel {
+public class Application extends GenericModel {
 
-  @SerializedName("application_details")
-  protected ApplicationRequest applicationDetails;
   protected String id;
+  protected String href;
+  @SerializedName("spark_application_id")
+  protected String sparkApplicationId;
   protected String state;
   @SerializedName("start_time")
-  protected Date startTime;
+  protected String startTime;
   @SerializedName("finish_time")
-  protected Date finishTime;
-
-  /**
-   * Gets the applicationDetails.
-   *
-   * Application request details.
-   *
-   * @return the applicationDetails
-   */
-  public ApplicationRequest getApplicationDetails() {
-    return applicationDetails;
-  }
+  protected String finishTime;
 
   /**
    * Gets the id.
    *
-   * Application ID.
+   * Identifier provided by Analytics Engine service for the Spark application.
    *
    * @return the id
    */
@@ -54,9 +42,31 @@ public class ApplicationGetResponse extends GenericModel {
   }
 
   /**
+   * Gets the href.
+   *
+   * Full URL of the resource.
+   *
+   * @return the href
+   */
+  public String getHref() {
+    return href;
+  }
+
+  /**
+   * Gets the sparkApplicationId.
+   *
+   * Identifier provided by Apache Spark for the application.
+   *
+   * @return the sparkApplicationId
+   */
+  public String getSparkApplicationId() {
+    return sparkApplicationId;
+  }
+
+  /**
    * Gets the state.
    *
-   * Application state.
+   * Status of the application.
    *
    * @return the state
    */
@@ -67,22 +77,22 @@ public class ApplicationGetResponse extends GenericModel {
   /**
    * Gets the startTime.
    *
-   * Application start time in the format YYYY-MM-DDTHH:mm:ssZ.
+   * Time when the application was started.
    *
    * @return the startTime
    */
-  public Date getStartTime() {
+  public String getStartTime() {
     return startTime;
   }
 
   /**
    * Gets the finishTime.
    *
-   * Application end time in the format YYYY-MM-DDTHH:mm:ssZ.
+   * Time when the application was completed.
    *
    * @return the finishTime
    */
-  public Date getFinishTime() {
+  public String getFinishTime() {
     return finishTime;
   }
 }

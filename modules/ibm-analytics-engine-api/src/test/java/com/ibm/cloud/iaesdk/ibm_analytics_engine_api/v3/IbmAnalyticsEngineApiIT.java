@@ -83,7 +83,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     assertNotNull(config);
     assertFalse(config.isEmpty());
     assertEquals(service.getServiceUrl(), config.get("URL"));
-    instanceId = System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_ID");
+    instanceId = System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_GUID");
 
     System.out.println("Setup complete.");
   }

@@ -16,6 +16,7 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollection;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequestApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
@@ -75,9 +76,15 @@ public class IbmAnalyticsEngineApiExamples {
     try {
       System.out.println("createApplication() result:");
       // begin-create_application
+      ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
+         .application("/opt/ibm/spark/examples/src/main/python/wordcount.py")
+         .arguments(new java.util.ArrayList<String>(java.util.Arrays.asList("/opt/ibm/spark/examples/src/main/resources/people.txt")))
+         .build();
+
       CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-        .build();
+         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+         .applicationDetails(applicationRequestApplicationDetailsModel)
+         .build();
 
       Response<ApplicationResponse> response = ibmAnalyticsEngineApiService.createApplication(createApplicationOptions).execute();
       ApplicationResponse applicationResponse = response.getResult();

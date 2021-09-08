@@ -35,23 +35,23 @@ public class CreateApplicationOptionsTest {
   @Test
   public void testCreateApplicationOptions() throws Throwable {
     ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
-      .application("testString")
-      .xClass("testString")
-      .applicationArguments(new java.util.ArrayList<String>(java.util.Arrays.asList("testString")))
+      .application("cos://bucket_name.my_cos/my_spark_app.py")
+      .xClass("com.company.path.ClassName")
+      .arguments(new java.util.ArrayList<String>(java.util.Arrays.asList("[arg1, arg2, arg3]")))
       .conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       .env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       .build();
-    assertEquals(applicationRequestApplicationDetailsModel.application(), "testString");
-    assertEquals(applicationRequestApplicationDetailsModel.xClass(), "testString");
-    assertEquals(applicationRequestApplicationDetailsModel.applicationArguments(), new java.util.ArrayList<String>(java.util.Arrays.asList("testString")));
+    assertEquals(applicationRequestApplicationDetailsModel.application(), "cos://bucket_name.my_cos/my_spark_app.py");
+    assertEquals(applicationRequestApplicationDetailsModel.xClass(), "com.company.path.ClassName");
+    assertEquals(applicationRequestApplicationDetailsModel.arguments(), new java.util.ArrayList<String>(java.util.Arrays.asList("[arg1, arg2, arg3]")));
     assertEquals(applicationRequestApplicationDetailsModel.conf(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } });
     assertEquals(applicationRequestApplicationDetailsModel.env(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } });
 
     CreateApplicationOptions createApplicationOptionsModel = new CreateApplicationOptions.Builder()
-      .instanceId("testString")
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
       .applicationDetails(applicationRequestApplicationDetailsModel)
       .build();
-    assertEquals(createApplicationOptionsModel.instanceId(), "testString");
+    assertEquals(createApplicationOptionsModel.instanceId(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
     assertEquals(createApplicationOptionsModel.applicationDetails(), applicationRequestApplicationDetailsModel);
   }
 

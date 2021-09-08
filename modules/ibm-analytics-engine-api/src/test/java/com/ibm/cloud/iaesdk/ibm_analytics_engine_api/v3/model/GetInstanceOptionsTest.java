@@ -13,7 +13,7 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -23,18 +23,23 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the ApplicationGetStateResponse model.
+ * Unit test class for the GetInstanceOptions model.
  */
-public class ApplicationGetStateResponseTest {
+public class GetInstanceOptionsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testApplicationGetStateResponse() throws Throwable {
-    ApplicationGetStateResponse applicationGetStateResponseModel = new ApplicationGetStateResponse();
-    assertNull(applicationGetStateResponseModel.getId());
-    assertNull(applicationGetStateResponseModel.getState());
-    assertNull(applicationGetStateResponseModel.getStartTime());
-    assertNull(applicationGetStateResponseModel.getFinishTime());
+  public void testGetInstanceOptions() throws Throwable {
+    GetInstanceOptions getInstanceOptionsModel = new GetInstanceOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .build();
+    assertEquals(getInstanceOptionsModel.instanceId(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
   }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetInstanceOptionsError() throws Throwable {
+    new GetInstanceOptions.Builder().build();
+  }
+
 }

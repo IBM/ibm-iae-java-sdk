@@ -12,26 +12,26 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import java.util.List;
-
+import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * An array of application details.
+ * Specifies the default runtime to use for all workloads that run in this instance.
  */
-public class ApplicationCollection extends GenericModel {
+public class InstanceDefaultRuntime extends GenericModel {
 
-  protected List<Application> applications;
+  @SerializedName("spark_version")
+  protected String sparkVersion;
 
   /**
-   * Gets the applications.
+   * Gets the sparkVersion.
    *
-   * List of applications.
+   * Version of Spark runtime to use. Currently, only 3.1 is supported.
    *
-   * @return the applications
+   * @return the sparkVersion
    */
-  public List<Application> getApplications() {
-    return applications;
+  public String getSparkVersion() {
+    return sparkVersion;
   }
 }
 

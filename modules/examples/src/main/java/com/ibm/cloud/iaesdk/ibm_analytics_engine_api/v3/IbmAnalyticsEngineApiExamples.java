@@ -18,12 +18,12 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResp
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationByIdOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationByIdOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationsOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceByIdOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDetails;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
 import com.ibm.cloud.sdk.core.util.CredentialUtils;
@@ -56,17 +56,17 @@ public class IbmAnalyticsEngineApiExamples {
     Map<String, String> config = CredentialUtils.getServiceProperties(IbmAnalyticsEngineApi.DEFAULT_SERVICE_NAME);
 
     try {
-      System.out.println("getInstanceById() result:");
-      // begin-get_instance_by_id
-      GetInstanceByIdOptions getInstanceByIdOptions = new GetInstanceByIdOptions.Builder()
-        .instanceId("testString")
+      System.out.println("getInstance() result:");
+      // begin-get_instance
+      GetInstanceOptions getInstanceOptions = new GetInstanceOptions.Builder()
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
-      Response<InstanceDetails> response = ibmAnalyticsEngineApiService.getInstanceById(getInstanceByIdOptions).execute();
-      InstanceDetails instanceDetails = response.getResult();
+      Response<Instance> response = ibmAnalyticsEngineApiService.getInstance(getInstanceOptions).execute();
+      Instance instance = response.getResult();
 
-      System.out.println(instanceDetails);
-      // end-get_instance_by_id
+      System.out.println(instance);
+      // end-get_instance
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
@@ -75,9 +75,15 @@ public class IbmAnalyticsEngineApiExamples {
     try {
       System.out.println("createApplication() result:");
       // begin-create_application
+      ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
+         .application("/opt/ibm/spark/examples/src/main/python/wordcount.py")
+         .arguments(new java.util.ArrayList<String>(java.util.Arrays.asList("/opt/ibm/spark/examples/src/main/resources/people.txt")))
+         .build();
+
       CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
-        .instanceId("testString")
-        .build();
+         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+         .applicationDetails(applicationRequestApplicationDetailsModel),
+         .build();
 
       Response<ApplicationResponse> response = ibmAnalyticsEngineApiService.createApplication(createApplicationOptions).execute();
       ApplicationResponse applicationResponse = response.getResult();
@@ -90,35 +96,35 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
-      System.out.println("getApplications() result:");
-      // begin-get_applications
-      GetApplicationsOptions getApplicationsOptions = new GetApplicationsOptions.Builder()
-        .instanceId("testString")
+      System.out.println("listApplications() result:");
+      // begin-list_applications
+      ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
-      Response<ApplicationCollection> response = ibmAnalyticsEngineApiService.getApplications(getApplicationsOptions).execute();
+      Response<ApplicationCollection> response = ibmAnalyticsEngineApiService.listApplications(listApplicationsOptions).execute();
       ApplicationCollection applicationCollection = response.getResult();
 
       System.out.println(applicationCollection);
-      // end-get_applications
+      // end-list_applications
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
     }
 
     try {
-      System.out.println("getApplicationById() result:");
-      // begin-get_application_by_id
-      GetApplicationByIdOptions getApplicationByIdOptions = new GetApplicationByIdOptions.Builder()
-        .instanceId("testString")
-        .applicationId("testString")
+      System.out.println("getApplication() result:");
+      // begin-get_application
+      GetApplicationOptions getApplicationOptions = new GetApplicationOptions.Builder()
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
         .build();
 
-      Response<ApplicationGetResponse> response = ibmAnalyticsEngineApiService.getApplicationById(getApplicationByIdOptions).execute();
+      Response<ApplicationGetResponse> response = ibmAnalyticsEngineApiService.getApplication(getApplicationOptions).execute();
       ApplicationGetResponse applicationGetResponse = response.getResult();
 
       System.out.println(applicationGetResponse);
-      // end-get_application_by_id
+      // end-get_application
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
@@ -128,8 +134,8 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("getApplicationState() result:");
       // begin-get_application_state
       GetApplicationStateOptions getApplicationStateOptions = new GetApplicationStateOptions.Builder()
-        .instanceId("testString")
-        .applicationId("testString")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
         .build();
 
       Response<ApplicationGetStateResponse> response = ibmAnalyticsEngineApiService.getApplicationState(getApplicationStateOptions).execute();
@@ -143,15 +149,15 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
-      // begin-delete_application_by_id
-      DeleteApplicationByIdOptions deleteApplicationByIdOptions = new DeleteApplicationByIdOptions.Builder()
-        .instanceId("testString")
-        .applicationId("testString")
+      // begin-delete_application
+      DeleteApplicationOptions deleteApplicationOptions = new DeleteApplicationOptions.Builder()
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
         .build();
 
-      Response<Void> response = ibmAnalyticsEngineApiService.deleteApplicationById(deleteApplicationByIdOptions).execute();
-      // end-delete_application_by_id
-      System.out.printf("deleteApplicationById() response status code: %d%n", response.getStatusCode());
+      Response<Void> response = ibmAnalyticsEngineApiService.deleteApplication(deleteApplicationOptions).execute();
+      // end-delete_application
+      System.out.printf("deleteApplication() response status code: %d%n", response.getStatusCode());
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);

@@ -1,3 +1,10 @@
+## [0.4.2](https://github.com/IBM/ibm-iae-java-sdk/compare/0.4.1...0.4.2) (2021-09-08)
+
+
+### Bug Fixes
+
+* **analytics engine:** fixed request payload for Java Examples ([#7](https://github.com/IBM/ibm-iae-java-sdk/issues/7)) ([22b8c65](https://github.com/IBM/ibm-iae-java-sdk/commit/22b8c65f6384428d6e0eecbc339cdf0567b77879))
+
 ## [0.4.1](https://github.com/IBM/ibm-iae-java-sdk/compare/0.4.0...0.4.1) (2021-09-07)
 
 

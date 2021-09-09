@@ -32,10 +32,10 @@ public class ApplicationDetailsTest {
   @Test
   public void testApplicationDetails() throws Throwable {
     ApplicationDetails applicationDetailsModel = new ApplicationDetails();
-    assertNull(applicationDetailsModel.getApplicationId());
-    assertNull(applicationDetailsModel.getSparkApplicationId());
-    assertNull(applicationDetailsModel.getState());
-    assertNull(applicationDetailsModel.getStartTime());
-    assertNull(applicationDetailsModel.getFinishTime());
+    assertNull(applicationDetailsModel.getApplication());
+    assertNull(applicationDetailsModel.getXClass());
+    assertNull(applicationDetailsModel.getArguments());
+    assertNull(applicationDetailsModel.getConf());
+    assertNull(applicationDetailsModel.getEnv());
   }
 }

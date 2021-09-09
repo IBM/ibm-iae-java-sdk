@@ -144,7 +144,7 @@ public class IbmAnalyticsEngineApi extends BaseService {
   /**
    * Retrieve all Spark applications.
    *
-   * Gets all applications submitted in an instance with a specified inst_id.
+   * Gets all applications submitted in an instance with a specified instance-id.
    *
    * @param listApplicationsOptions the {@link ListApplicationsOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link ApplicationCollection}

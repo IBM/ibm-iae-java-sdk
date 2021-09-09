@@ -23,7 +23,7 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
 public class ApplicationGetResponse extends GenericModel {
 
   @SerializedName("application_details")
-  protected ApplicationRequest applicationDetails;
+  protected ApplicationDetails applicationDetails;
   protected String id;
   protected String state;
   @SerializedName("start_time")
@@ -34,11 +34,11 @@ public class ApplicationGetResponse extends GenericModel {
   /**
    * Gets the applicationDetails.
    *
-   * Application request details.
+   * Application details.
    *
    * @return the applicationDetails
    */
-  public ApplicationRequest getApplicationDetails() {
+  public ApplicationDetails getApplicationDetails() {
     return applicationDetails;
   }
 

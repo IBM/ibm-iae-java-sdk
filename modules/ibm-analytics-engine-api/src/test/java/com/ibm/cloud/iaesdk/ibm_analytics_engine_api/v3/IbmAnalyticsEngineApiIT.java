@@ -15,9 +15,9 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
 
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Application;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollection;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequest;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequestApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
@@ -42,8 +42,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -57,8 +55,6 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public static Map<String, String> config = null;
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
-  public String instanceId = null;
-  public String applicationId = null;
   /**
    * This method provides our config filename to the base class.
    */
@@ -83,7 +79,6 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     assertNotNull(config);
     assertFalse(config.isEmpty());
     assertEquals(service.getServiceUrl(), config.get("URL"));
-    instanceId = System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_GUID");
 
     System.out.println("Setup complete.");
   }
@@ -92,7 +87,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetInstance() throws Exception {
     try {
       GetInstanceOptions getInstanceOptions = new GetInstanceOptions.Builder()
-      .instanceId(instanceId)
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
       .build();
 
       // Invoke operation
@@ -127,15 +122,15 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testCreateApplication() throws Exception {
     try {
       ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
-      .application("/opt/ibm/spark/examples/src/main/python/wordcount.py")
-      //.xClass("com.company.path.ClassName")
-      .arguments(new java.util.ArrayList<String>(java.util.Arrays.asList("/opt/ibm/spark/examples/src/main/resources/people.txt")))
-      //.conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-      //.env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      .application("cos://bucket_name.my_cos/my_spark_app.py")
+      .xClass("com.company.path.ClassName")
+      .arguments(new java.util.ArrayList<String>(java.util.Arrays.asList("[arg1, arg2, arg3]")))
+      .conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      .env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       .build();
 
       CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
-      .instanceId(instanceId)
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
       .applicationDetails(applicationRequestApplicationDetailsModel)
       .build();
 
@@ -148,9 +143,6 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       ApplicationResponse applicationResponseResult = response.getResult();
 
       assertNotNull(applicationResponseResult);
-      String jsonString = String.valueOf(response.getResult());
-      JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonString);
-      applicationId = jsonObject.get("id").toString();
 
       //
       // The following status codes aren't covered by tests.
@@ -174,7 +166,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testListApplications() throws Exception {
     try {
       ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
-      .instanceId(instanceId)
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
       .build();
 
       // Invoke operation
@@ -209,8 +201,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetApplication() throws Exception {
     try {
       GetApplicationOptions getApplicationOptions = new GetApplicationOptions.Builder()
-      .instanceId(instanceId)
-      .applicationId(applicationId)
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
       .build();
 
       // Invoke operation
@@ -245,8 +237,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetApplicationState() throws Exception {
     try {
       GetApplicationStateOptions getApplicationStateOptions = new GetApplicationStateOptions.Builder()
-      .instanceId(instanceId)
-      .applicationId(applicationId)
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
       .build();
 
       // Invoke operation
@@ -280,10 +272,9 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   @Test
   public void testDeleteApplication() throws Exception {
     try {
-      Thread.sleep(20000);
       DeleteApplicationOptions deleteApplicationOptions = new DeleteApplicationOptions.Builder()
-      .instanceId(instanceId)
-      .applicationId(applicationId)
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
       .build();
 
       // Invoke operation

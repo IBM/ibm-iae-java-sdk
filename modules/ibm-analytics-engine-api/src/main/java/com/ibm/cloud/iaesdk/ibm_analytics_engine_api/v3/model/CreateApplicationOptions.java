@@ -79,17 +79,6 @@ public class CreateApplicationOptions extends GenericModel {
       this.applicationDetails = applicationDetails;
       return this;
     }
-
-    /**
-     * Set the applicationRequest.
-     *
-     * @param applicationRequest the applicationRequest
-     * @return the CreateApplicationOptions builder
-     */
-    public Builder applicationRequest(ApplicationRequest applicationRequest) {
-      this.applicationDetails = applicationRequest.applicationDetails();
-      return this;
-    }
   }
 
   protected CreateApplicationOptions(Builder builder) {

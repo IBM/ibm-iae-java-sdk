@@ -15,21 +15,31 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
 
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Application;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollection;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequest;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequestApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteLoggingConfigurationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DisablePlatformLoggingOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.EnablePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultConfig;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultRuntime;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHome;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponseLogServer;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingDisableResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingDisableResponseLogServer;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.iaesdk.test.SdkIntegrationTestBase;
 import com.ibm.cloud.sdk.core.http.Response;
@@ -58,7 +68,10 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
   public String instanceId = null;
+  public String instanceIdInstanceHome = null;
   public String applicationId = null;
+  public String hmacAccessKey = null;
+  public String hmacSecretKey = null;
   /**
    * This method provides our config filename to the base class.
    */
@@ -84,6 +97,10 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     assertFalse(config.isEmpty());
     assertEquals(service.getServiceUrl(), config.get("URL"));
     instanceId = System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_GUID");
+    instanceIdInstanceHome = System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_GUID_INSTANCE_HOME");
+    hmacAccessKey = System.getenv("HMAC_ACCESS_KEY");
+    hmacSecretKey = System.getenv("HMAC_SECRET_KEY");
+
 
     System.out.println("Setup complete.");
   }
@@ -278,6 +295,185 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   }
 
   @Test
+  public void testCreateInstanceHome() throws Exception {
+    try {
+      CreateInstanceHomeOptions createInstanceHomeOptions = new CreateInstanceHomeOptions.Builder()
+      .instanceId(instanceIdInstanceHome)
+      .newInstanceId("testString")
+      .newProvider("ibm-cos")
+      .newType("objectstore")
+      .newRegion("us-south")
+      .newEndpoint("s3.direct.us-south.cloud-object-storage.appdomain.cloud")
+      .newHmacAccessKey(hmacAccessKey)
+      .newHmacSecretKey(hmacSecretKey)
+      .build();
+      // Invoke operation
+      Response<InstanceHomeResponse> response = service.createInstanceHome(createInstanceHomeOptions).execute();
+
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      InstanceHomeResponse instanceHomeResponseResult = response.getResult();
+
+      assertNotNull(instanceHomeResponseResult);
+
+      //
+      // The following status codes aren't covered by tests.
+      // Please provide integration tests for these too.
+      //
+      // 400
+      // 401
+      // 403
+      // 404
+      // 500
+      //
+      //
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test()
+  public void testEnablePlatformLogging() throws Exception {
+    try {
+      EnablePlatformLoggingOptions enablePlatformLoggingOptions = new EnablePlatformLoggingOptions.Builder()
+      .instanceGuid(instanceId)
+      .enable(true)
+      .build();
+
+      // Invoke operation
+      Response<LoggingConfigurationResponse> response = service.enablePlatformLogging(enablePlatformLoggingOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      LoggingConfigurationResponse loggingConfigurationResponseResult = response.getResult();
+
+      assertNotNull(loggingConfigurationResponseResult);
+
+      //
+      // The following status codes aren't covered by tests.
+      // Please provide integration tests for these too.
+      //
+      // 400
+      // 401
+      // 403
+      // 404
+      // 500
+      //
+      //
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods={"testEnablePlatformLogging"})
+  public void testDisablePlatformLogging() throws Exception {
+    try {
+      DisablePlatformLoggingOptions disablePlatformLoggingOptions = new DisablePlatformLoggingOptions.Builder()
+      .instanceGuid(instanceId)
+      .enable(false)
+      .build();
+      // Invoke operation
+      Response<LoggingDisableResponse> response = service.disablePlatformLogging(disablePlatformLoggingOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      LoggingDisableResponse loggingDisableResponseResult = response.getResult();
+
+      assertNotNull(loggingDisableResponseResult);
+
+      //
+      // The following status codes aren't covered by tests.
+      // Please provide integration tests for these too.
+      //
+      // 400
+      // 401
+      // 403
+      // 404
+      // 500
+      //
+      //
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods={"testDisablePlatformLogging"})
+  public void testGetLoggingConfiguration() throws Exception {
+    try {
+      GetLoggingConfigurationOptions getLoggingConfigurationOptions = new GetLoggingConfigurationOptions.Builder()
+      .instanceGuid(instanceId)
+      .build();
+
+      // Invoke operation
+      Response<LoggingConfigurationResponse> response = service.getLoggingConfiguration(getLoggingConfigurationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      LoggingConfigurationResponse loggingConfigurationResponseResult = response.getResult();
+
+      assertNotNull(loggingConfigurationResponseResult);
+
+      //
+      // The following status codes aren't covered by tests.
+      // Please provide integration tests for these too.
+      //
+      // 400
+      // 401
+      // 403
+      // 404
+      // 500
+      //
+      //
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods={"testGetLoggingConfiguration"})
+  public void testDeleteLoggingConfiguration() throws Exception {
+    try {
+      Thread.sleep(2000);
+      DeleteLoggingConfigurationOptions deleteLoggingConfigurationOptions = new DeleteLoggingConfigurationOptions.Builder()
+      .instanceGuid(instanceId)
+      .build();
+      // Invoke operation
+      Response<Void> response = service.deleteLoggingConfiguration(deleteLoggingConfigurationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 204);
+
+      //
+      // The following status codes aren't covered by tests.
+      // Please provide integration tests for these too.
+      //
+      // 400
+      // 401
+      // 403
+      // 404
+      // 500
+      //
+      //
+
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods={"testCreateApplication"})
   public void testDeleteApplication() throws Exception {
     try {
       Thread.sleep(20000);

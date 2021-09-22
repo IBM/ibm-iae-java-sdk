@@ -12,77 +12,82 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * Details of an application.
+ * Application details.
  */
 public class ApplicationDetails extends GenericModel {
 
-  @SerializedName("application_id")
-  protected String applicationId;
-  @SerializedName("spark_application_id")
-  protected String sparkApplicationId;
-  protected String state;
-  @SerializedName("start_time")
-  protected String startTime;
-  @SerializedName("finish_time")
-  protected String finishTime;
+  protected String application;
+  @SerializedName("class")
+  protected String xClass;
+  protected List<String> arguments;
+  protected Map<String, Object> conf;
+  protected Map<String, Object> env;
 
   /**
-   * Gets the applicationId.
+   * Gets the application.
    *
-   * Identifier of the application.
+   * Path of the application to run.
    *
-   * @return the applicationId
+   * @return the application
    */
-  public String getApplicationId() {
-    return applicationId;
+  public String getApplication() {
+    return application;
   }
 
   /**
-   * Gets the sparkApplicationId.
+   * Gets the xClass.
    *
-   * Identifier of the Spark application.
+   * Entry point for a Spark application bundled as a '.jar' file. This is applicable only for Java or Scala
+   * applications.
    *
-   * @return the sparkApplicationId
+   * @return the xClass
    */
-  public String getSparkApplicationId() {
-    return sparkApplicationId;
+  public String getXClass() {
+    return xClass;
   }
 
   /**
-   * Gets the state.
+   * Gets the arguments.
    *
-   * Status of the application.
+   * An array of arguments to be passed to the application.
    *
-   * @return the state
+   * @return the arguments
    */
-  public String getState() {
-    return state;
+  public List<String> getArguments() {
+    return arguments;
   }
 
   /**
-   * Gets the startTime.
+   * Gets the conf.
    *
-   * Time when the application was started.
+   * Application configurations to override the value specified at instance level. See [Spark environment variables](
+   * https://spark.apache.org/docs/latest/configuration.html#available-properties) for a list of the supported
+   * variables.
    *
-   * @return the startTime
+   * @return the conf
    */
-  public String getStartTime() {
-    return startTime;
+  public Map<String, Object> getConf() {
+    return conf;
   }
 
   /**
-   * Gets the finishTime.
+   * Gets the env.
    *
-   * Time when the application was completed.
+   * Application environment configurations to use. See [Spark environment
+   * variables](https://spark.apache.org/docs/latest/configuration.html#environment-variables) for a list of the
+   * supported variables.
    *
-   * @return the finishTime
+   * @return the env
    */
-  public String getFinishTime() {
-    return finishTime;
+  public Map<String, Object> getEnv() {
+    return env;
   }
 }
 

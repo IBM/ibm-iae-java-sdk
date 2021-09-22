@@ -16,15 +16,22 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollection;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequestApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteLoggingConfigurationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DisablePlatformLoggingOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.EnablePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingDisableResponse;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
 import com.ibm.cloud.sdk.core.util.CredentialUtils;
@@ -76,15 +83,9 @@ public class IbmAnalyticsEngineApiExamples {
     try {
       System.out.println("createApplication() result:");
       // begin-create_application
-      ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
-         .application("/opt/ibm/spark/examples/src/main/python/wordcount.py")
-         .arguments(new java.util.ArrayList<String>(java.util.Arrays.asList("/opt/ibm/spark/examples/src/main/resources/people.txt")))
-         .build();
-
       CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
-         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-         .applicationDetails(applicationRequestApplicationDetailsModel)
-         .build();
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
 
       Response<ApplicationResponse> response = ibmAnalyticsEngineApiService.createApplication(createApplicationOptions).execute();
       ApplicationResponse applicationResponse = response.getResult();
@@ -144,6 +145,88 @@ public class IbmAnalyticsEngineApiExamples {
 
       System.out.println(applicationGetStateResponse);
       // end-get_application_state
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      System.out.println("createInstanceHome() result:");
+      // begin-create_instance_home
+      CreateInstanceHomeOptions createInstanceHomeOptions = new CreateInstanceHomeOptions.Builder()
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
+
+      Response<InstanceHomeResponse> response = ibmAnalyticsEngineApiService.createInstanceHome(createInstanceHomeOptions).execute();
+      InstanceHomeResponse instanceHomeResponse = response.getResult();
+
+      System.out.println(instanceHomeResponse);
+      // end-create_instance_home
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      System.out.println("enablePlatformLogging() result:");
+      // begin-enable_platform_logging
+      EnablePlatformLoggingOptions enablePlatformLoggingOptions = new EnablePlatformLoggingOptions.Builder()
+        .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
+
+      Response<LoggingConfigurationResponse> response = ibmAnalyticsEngineApiService.enablePlatformLogging(enablePlatformLoggingOptions).execute();
+      LoggingConfigurationResponse loggingConfigurationResponse = response.getResult();
+
+      System.out.println(loggingConfigurationResponse);
+      // end-enable_platform_logging
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      System.out.println("disablePlatformLogging() result:");
+      // begin-disable_platform_logging
+      DisablePlatformLoggingOptions disablePlatformLoggingOptions = new DisablePlatformLoggingOptions.Builder()
+        .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
+
+      Response<LoggingDisableResponse> response = ibmAnalyticsEngineApiService.disablePlatformLogging(disablePlatformLoggingOptions).execute();
+      LoggingDisableResponse loggingDisableResponse = response.getResult();
+
+      System.out.println(loggingDisableResponse);
+      // end-disable_platform_logging
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      System.out.println("getLoggingConfiguration() result:");
+      // begin-get_logging_configuration
+      GetLoggingConfigurationOptions getLoggingConfigurationOptions = new GetLoggingConfigurationOptions.Builder()
+        .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
+
+      Response<LoggingConfigurationResponse> response = ibmAnalyticsEngineApiService.getLoggingConfiguration(getLoggingConfigurationOptions).execute();
+      LoggingConfigurationResponse loggingConfigurationResponse = response.getResult();
+
+      System.out.println(loggingConfigurationResponse);
+      // end-get_logging_configuration
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      // begin-delete_logging_configuration
+      DeleteLoggingConfigurationOptions deleteLoggingConfigurationOptions = new DeleteLoggingConfigurationOptions.Builder()
+        .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
+
+      Response<Void> response = ibmAnalyticsEngineApiService.deleteLoggingConfiguration(deleteLoggingConfigurationOptions).execute();
+      // end-delete_logging_configuration
+      System.out.printf("deleteLoggingConfiguration() response status code: %d%n", response.getStatusCode());
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);

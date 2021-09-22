@@ -15,20 +15,23 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * The deleteLoggingConfiguration options.
+ * The enablePlatformLogging options.
  */
-public class DeleteLoggingConfigurationOptions extends GenericModel {
+public class EnablePlatformLoggingOptions extends GenericModel {
 
   protected String instanceGuid;
+  protected Boolean enable;
 
   /**
    * Builder.
    */
   public static class Builder {
     private String instanceGuid;
+    private Boolean enable;
 
-    private Builder(DeleteLoggingConfigurationOptions deleteLoggingConfigurationOptions) {
-      this.instanceGuid = deleteLoggingConfigurationOptions.instanceGuid;
+    private Builder(EnablePlatformLoggingOptions enablePlatformLoggingOptions) {
+      this.instanceGuid = enablePlatformLoggingOptions.instanceGuid;
+      this.enable = enablePlatformLoggingOptions.enable;
     }
 
     /**
@@ -47,36 +50,48 @@ public class DeleteLoggingConfigurationOptions extends GenericModel {
     }
 
     /**
-     * Builds a DeleteLoggingConfigurationOptions.
+     * Builds a EnablePlatformLoggingOptions.
      *
-     * @return the new DeleteLoggingConfigurationOptions instance
+     * @return the new EnablePlatformLoggingOptions instance
      */
-    public DeleteLoggingConfigurationOptions build() {
-      return new DeleteLoggingConfigurationOptions(this);
+    public EnablePlatformLoggingOptions build() {
+      return new EnablePlatformLoggingOptions(this);
     }
 
     /**
      * Set the instanceGuid.
      *
      * @param instanceGuid the instanceGuid
-     * @return the DeleteLoggingConfigurationOptions builder
+     * @return the EnablePlatformLoggingOptions builder
      */
     public Builder instanceGuid(String instanceGuid) {
       this.instanceGuid = instanceGuid;
       return this;
     }
+
+    /**
+     * Set the enable.
+     *
+     * @param enable the enable
+     * @return the EnablePlatformLoggingOptions builder
+     */
+    public Builder enable(Boolean enable) {
+      this.enable = enable;
+      return this;
+    }
   }
 
-  protected DeleteLoggingConfigurationOptions(Builder builder) {
+  protected EnablePlatformLoggingOptions(Builder builder) {
     com.ibm.cloud.sdk.core.util.Validator.notEmpty(builder.instanceGuid,
       "instanceGuid cannot be empty");
     instanceGuid = builder.instanceGuid;
+    enable = builder.enable;
   }
 
   /**
    * New builder.
    *
-   * @return a DeleteLoggingConfigurationOptions builder
+   * @return a EnablePlatformLoggingOptions builder
    */
   public Builder newBuilder() {
     return new Builder(this);
@@ -85,12 +100,23 @@ public class DeleteLoggingConfigurationOptions extends GenericModel {
   /**
    * Gets the instanceGuid.
    *
-   * Identifier of the instance to which the application belongs.
+   * The identifier of the instance details to be added.
    *
    * @return the instanceGuid
    */
   public String instanceGuid() {
     return instanceGuid;
+  }
+
+  /**
+   * Gets the enable.
+   *
+   * enable platform logging.
+   *
+   * @return the enable
+   */
+  public Boolean enable() {
+    return enable;
   }
 }
 

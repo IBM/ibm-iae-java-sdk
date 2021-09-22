@@ -15,9 +15,9 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * The deleteLoggingConfiguration options.
+ * The getLoggingConfiguration options.
  */
-public class DeleteLoggingConfigurationOptions extends GenericModel {
+public class GetLoggingConfigurationOptions extends GenericModel {
 
   protected String instanceGuid;
 
@@ -27,8 +27,8 @@ public class DeleteLoggingConfigurationOptions extends GenericModel {
   public static class Builder {
     private String instanceGuid;
 
-    private Builder(DeleteLoggingConfigurationOptions deleteLoggingConfigurationOptions) {
-      this.instanceGuid = deleteLoggingConfigurationOptions.instanceGuid;
+    private Builder(GetLoggingConfigurationOptions getLoggingConfigurationOptions) {
+      this.instanceGuid = getLoggingConfigurationOptions.instanceGuid;
     }
 
     /**
@@ -47,19 +47,19 @@ public class DeleteLoggingConfigurationOptions extends GenericModel {
     }
 
     /**
-     * Builds a DeleteLoggingConfigurationOptions.
+     * Builds a GetLoggingConfigurationOptions.
      *
-     * @return the new DeleteLoggingConfigurationOptions instance
+     * @return the new GetLoggingConfigurationOptions instance
      */
-    public DeleteLoggingConfigurationOptions build() {
-      return new DeleteLoggingConfigurationOptions(this);
+    public GetLoggingConfigurationOptions build() {
+      return new GetLoggingConfigurationOptions(this);
     }
 
     /**
      * Set the instanceGuid.
      *
      * @param instanceGuid the instanceGuid
-     * @return the DeleteLoggingConfigurationOptions builder
+     * @return the GetLoggingConfigurationOptions builder
      */
     public Builder instanceGuid(String instanceGuid) {
       this.instanceGuid = instanceGuid;
@@ -67,7 +67,7 @@ public class DeleteLoggingConfigurationOptions extends GenericModel {
     }
   }
 
-  protected DeleteLoggingConfigurationOptions(Builder builder) {
+  protected GetLoggingConfigurationOptions(Builder builder) {
     com.ibm.cloud.sdk.core.util.Validator.notEmpty(builder.instanceGuid,
       "instanceGuid cannot be empty");
     instanceGuid = builder.instanceGuid;
@@ -76,7 +76,7 @@ public class DeleteLoggingConfigurationOptions extends GenericModel {
   /**
    * New builder.
    *
-   * @return a DeleteLoggingConfigurationOptions builder
+   * @return a GetLoggingConfigurationOptions builder
    */
   public Builder newBuilder() {
     return new Builder(this);
@@ -85,7 +85,7 @@ public class DeleteLoggingConfigurationOptions extends GenericModel {
   /**
    * Gets the instanceGuid.
    *
-   * Identifier of the instance to which the application belongs.
+   * GUID of the Analytics Engine service instance to retrieve.
    *
    * @return the instanceGuid
    */

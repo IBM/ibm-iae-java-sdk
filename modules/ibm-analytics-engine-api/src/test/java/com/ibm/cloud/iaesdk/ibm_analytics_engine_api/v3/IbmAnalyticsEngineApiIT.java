@@ -15,21 +15,31 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
 
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Application;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollection;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequest;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequestApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteLoggingConfigurationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DisablePlatformLoggingOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.EnablePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceStateOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultConfig;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultRuntime;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceGetStateResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHome;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponseLogServer;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.iaesdk.test.SdkIntegrationTestBase;
 import com.ibm.cloud.sdk.core.http.Response;
@@ -58,6 +68,12 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
   public String instanceId = null;
+  public String instanceHomeId = null;
+  
+  public String hmacId = null;
+  public String hmacKey = null;
+  
+  
   public String applicationId = null;
   /**
    * This method provides our config filename to the base class.
@@ -83,8 +99,16 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     assertNotNull(config);
     assertFalse(config.isEmpty());
     assertEquals(service.getServiceUrl(), config.get("URL"));
-    instanceId = System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_GUID");
-
+    instanceId=System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_GUID");
+    instanceHomeId=System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_HOME_GUID");
+    hmacId=System.getenv("IBM_ANALYTICS_ENGINE_HMAC_ID");
+    hmacKey=System.getenv("IBM_ANALYTICS_ENGINE_HMAC_KEY");
+    		
+    System.out.println("Setup complete. IBM_ANALYTICS_ENGINE_INSTANCE_GUID "+instanceId);
+    System.out.println("Setup complete. instanceHomeId "+instanceHomeId);
+    
+    System.out.println("Setup complete. IBM_ANALYTICS_ENGINE_HMAC_ID "+hmacId);
+    System.out.println("Setup complete. IBM_ANALYTICS_ENGINE_HMAC_KEY "+hmacKey);
     System.out.println("Setup complete.");
   }
 
@@ -104,21 +128,59 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       Instance instanceResult = response.getResult();
 
       assertNotNull(instanceResult);
-
-      //
-      // The following status codes aren't covered by tests.
-      // Please provide integration tests for these too.
-      //
-      // 400
-      // 401
-      // 403
-      // 404
-      // 500
-      //
-      //
-
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s%nError details: %s",
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test
+  public void testGetInstanceState() throws Exception {
+    try {
+      GetInstanceStateOptions getInstanceStateOptions = new GetInstanceStateOptions.Builder()
+      .instanceId(instanceId)
+      .build();
+
+      // Invoke operation
+      Response<InstanceGetStateResponse> response = service.getInstanceState(getInstanceStateOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      InstanceGetStateResponse instanceGetStateResponseResult = response.getResult();
+
+      assertNotNull(instanceGetStateResponseResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test
+  public void testCreateInstanceHome() throws Exception {
+    try {
+      CreateInstanceHomeOptions createInstanceHomeOptions = new CreateInstanceHomeOptions.Builder()
+      .instanceId(instanceHomeId)
+      .newInstanceId("testString")
+      .newProvider("ibm-cos")
+      .newType("objectstore")
+      .newRegion("us-south")
+      .newEndpoint("s3.direct.us-south.cloud-object-storage.appdomain.cloud")
+      .newHmacAccessKey(hmacId)
+      .newHmacSecretKey(hmacKey)
+      .build();
+
+      // Invoke operation
+      Response<InstanceHomeResponse> response = service.createInstanceHome(createInstanceHomeOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      InstanceHomeResponse instanceHomeResponseResult = response.getResult();
+
+      assertNotNull(instanceHomeResponseResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
@@ -129,7 +191,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
       .application("/opt/ibm/spark/examples/src/main/python/wordcount.py")
       //.xClass("com.company.path.ClassName")
-      .arguments(new java.util.ArrayList<String>(java.util.Arrays.asList("/opt/ibm/spark/examples/src/main/resources/people.txt")))
+      .arguments(new java.util.ArrayList<String>(java.util.Arrays.asList("[arg1, arg2, arg3]")))
       //.conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       //.env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       .build();
@@ -165,7 +227,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       //
 
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s%nError details: %s",
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
@@ -186,21 +248,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       ApplicationCollection applicationCollectionResult = response.getResult();
 
       assertNotNull(applicationCollectionResult);
-
-      //
-      // The following status codes aren't covered by tests.
-      // Please provide integration tests for these too.
-      //
-      // 400
-      // 401
-      // 403
-      // 404
-      // 500
-      //
-      //
-
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s%nError details: %s",
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
@@ -222,21 +271,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       ApplicationGetResponse applicationGetResponseResult = response.getResult();
 
       assertNotNull(applicationGetResponseResult);
-
-      //
-      // The following status codes aren't covered by tests.
-      // Please provide integration tests for these too.
-      //
-      // 400
-      // 401
-      // 403
-      // 404
-      // 500
-      //
-      //
-
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s%nError details: %s",
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
@@ -258,29 +294,101 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       ApplicationGetStateResponse applicationGetStateResponseResult = response.getResult();
 
       assertNotNull(applicationGetStateResponseResult);
-
-      //
-      // The following status codes aren't covered by tests.
-      // Please provide integration tests for these too.
-      //
-      // 400
-      // 401
-      // 403
-      // 404
-      // 500
-      //
-      //
-
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s%nError details: %s",
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }
 
   @Test
+  public void testEnablePlatformLogging() throws Exception {
+    try {
+      EnablePlatformLoggingOptions enablePlatformLoggingOptions = new EnablePlatformLoggingOptions.Builder()
+      .instanceGuid(instanceId)
+      .enable(true)
+      .build();
+
+      // Invoke operation
+      Response<LoggingConfigurationResponse> response = service.enablePlatformLogging(enablePlatformLoggingOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 201);
+
+      LoggingConfigurationResponse loggingConfigurationResponseResult = response.getResult();
+
+      assertNotNull(loggingConfigurationResponseResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods= {"testEnablePlatformLogging"})
+  public void testDisablePlatformLogging() throws Exception {
+    try {
+      DisablePlatformLoggingOptions disablePlatformLoggingOptions = new DisablePlatformLoggingOptions.Builder()
+      .instanceGuid(instanceId)
+      .enable(true)
+      .build();
+
+      // Invoke operation
+      Response<LoggingConfigurationResponse> response = service.disablePlatformLogging(disablePlatformLoggingOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      LoggingConfigurationResponse loggingConfigurationResponseResult = response.getResult();
+
+      assertNotNull(loggingConfigurationResponseResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods= {"testDisablePlatformLogging"})
+  public void testGetLoggingConfiguration() throws Exception {
+    try {
+      GetLoggingConfigurationOptions getLoggingConfigurationOptions = new GetLoggingConfigurationOptions.Builder()
+      .instanceGuid(instanceId)
+      .build();
+
+      // Invoke operation
+      Response<LoggingConfigurationResponse> response = service.getLoggingConfiguration(getLoggingConfigurationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      LoggingConfigurationResponse loggingConfigurationResponseResult = response.getResult();
+
+      assertNotNull(loggingConfigurationResponseResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods= {"testGetLoggingConfiguration"})
+  public void testDeleteLoggingConfiguration() throws Exception {
+    try {
+      DeleteLoggingConfigurationOptions deleteLoggingConfigurationOptions = new DeleteLoggingConfigurationOptions.Builder()
+      .instanceGuid(instanceId)
+      .build();
+
+      // Invoke operation
+      Response<Void> response = service.deleteLoggingConfiguration(deleteLoggingConfigurationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 204);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods= {"testCreateApplication"})
   public void testDeleteApplication() throws Exception {
     try {
-      Thread.sleep(20000);
       DeleteApplicationOptions deleteApplicationOptions = new DeleteApplicationOptions.Builder()
       .instanceId(instanceId)
       .applicationId(applicationId)
@@ -291,21 +399,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 204);
-
-      //
-      // The following status codes aren't covered by tests.
-      // Please provide integration tests for these too.
-      //
-      // 400
-      // 401
-      // 403
-      // 404
-      // 500
-      //
-      //
-
     } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s%nError details: %s",
+        fail(String.format("Service returned status code %d: %s\nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
     }
   }

@@ -15,21 +15,31 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.IbmAnalyticsEngineApi;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Application;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollection;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequest;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequestApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteLoggingConfigurationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DisablePlatformLoggingOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.EnablePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceStateOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultConfig;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultRuntime;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceGetStateResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHome;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponseLogServer;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.security.Authenticator;
@@ -146,6 +156,113 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   }
 
   @Test
+  public void testGetInstanceStateWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"id\": \"id\", \"state\": \"created\"}";
+    String getInstanceStatePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/state";
+
+    server.enqueue(new MockResponse()
+    .setHeader("Content-type", "application/json")
+    .setResponseCode(200)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the GetInstanceStateOptions model
+    GetInstanceStateOptions getInstanceStateOptionsModel = new GetInstanceStateOptions.Builder()
+    .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<InstanceGetStateResponse> response = ibmAnalyticsEngineApiService.getInstanceState(getInstanceStateOptionsModel).execute();
+    assertNotNull(response);
+    InstanceGetStateResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getInstanceStatePath);
+  }
+
+  // Test the getInstanceState operation with null options model parameter
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetInstanceStateNoOptions() throws Throwable {
+    // construct the service
+    constructClientService();
+
+    server.enqueue(new MockResponse());
+
+    // Invoke operation with null options model (negative test)
+    ibmAnalyticsEngineApiService.getInstanceState(null).execute();
+  }
+
+  @Test
+  public void testCreateInstanceHomeWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"instance_id\": \"instanceId\", \"provider\": \"provider\", \"type\": \"type\", \"region\": \"region\", \"endpoint\": \"endpoint\", \"hmac_access_key\": \"hmacAccessKey\", \"hmac_secret_key\": \"hmacSecretKey\"}";
+    String createInstanceHomePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/instance_home";
+
+    server.enqueue(new MockResponse()
+    .setHeader("Content-type", "application/json")
+    .setResponseCode(200)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the CreateInstanceHomeOptions model
+    CreateInstanceHomeOptions createInstanceHomeOptionsModel = new CreateInstanceHomeOptions.Builder()
+    .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+    .newInstanceId("testString")
+    .newProvider("ibm-cos")
+    .newType("objectstore")
+    .newRegion("us-south")
+    .newEndpoint("s3.direct.us-south.cloud-object-storage.appdomain.cloud")
+    .newHmacAccessKey("821**********0ae")
+    .newHmacSecretKey("03e****************4fc3")
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<InstanceHomeResponse> response = ibmAnalyticsEngineApiService.createInstanceHome(createInstanceHomeOptionsModel).execute();
+    assertNotNull(response);
+    InstanceHomeResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "PUT");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createInstanceHomePath);
+  }
+
+  // Test the createInstanceHome operation with null options model parameter
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreateInstanceHomeNoOptions() throws Throwable {
+    // construct the service
+    constructClientService();
+
+    server.enqueue(new MockResponse());
+
+    // Invoke operation with null options model (negative test)
+    ibmAnalyticsEngineApiService.createInstanceHome(null).execute();
+  }
+
+  @Test
   public void testCreateApplicationWOptions() throws Throwable {
     // Schedule some responses.
     String mockResponseBody = "{\"id\": \"id\", \"state\": \"accepted\"}";
@@ -258,7 +375,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   @Test
   public void testGetApplicationWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"application_details\": {\"application_details\": {\"application\": \"cos://bucket_name.my_cos/my_spark_app.py\", \"class\": \"com.company.path.ClassName\", \"arguments\": [\"[arg1, arg2, arg3]\"], \"conf\": {\"mapKey\": \"anyValue\"}, \"env\": {\"mapKey\": \"anyValue\"}}}, \"id\": \"2b83d31c-397b-48ad-ad76-b83347c982db\", \"state\": \"accepted\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\"}";
+    String mockResponseBody = "{\"application_details\": {\"application\": \"cos://bucket_name.my_cos/my_spark_app.py\", \"class\": \"com.company.path.ClassName\", \"arguments\": [\"[arg1, arg2, arg3]\"], \"conf\": {\"mapKey\": \"anyValue\"}, \"env\": {\"mapKey\": \"anyValue\"}}, \"id\": \"2b83d31c-397b-48ad-ad76-b83347c982db\", \"state\": \"accepted\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\"}";
     String getApplicationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications/ff48cc19-0e7e-4627-aac6-0b4ad080397b";
 
     server.enqueue(new MockResponse()
@@ -406,6 +523,208 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
     // Invoke operation with null options model (negative test)
     ibmAnalyticsEngineApiService.getApplicationState(null).execute();
+  }
+
+  @Test
+  public void testEnablePlatformLoggingWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"components\": [\"components\"], \"log_server\": {\"type\": \"ibm-log-analysis\"}, \"enable\": true}";
+    String enablePlatformLoggingPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/logging";
+
+    server.enqueue(new MockResponse()
+    .setHeader("Content-type", "application/json")
+    .setResponseCode(201)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the EnablePlatformLoggingOptions model
+    EnablePlatformLoggingOptions enablePlatformLoggingOptionsModel = new EnablePlatformLoggingOptions.Builder()
+    .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+    .enable(true)
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<LoggingConfigurationResponse> response = ibmAnalyticsEngineApiService.enablePlatformLogging(enablePlatformLoggingOptionsModel).execute();
+    assertNotNull(response);
+    LoggingConfigurationResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "PUT");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, enablePlatformLoggingPath);
+  }
+
+  // Test the enablePlatformLogging operation with null options model parameter
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testEnablePlatformLoggingNoOptions() throws Throwable {
+    // construct the service
+    constructClientService();
+
+    server.enqueue(new MockResponse());
+
+    // Invoke operation with null options model (negative test)
+    ibmAnalyticsEngineApiService.enablePlatformLogging(null).execute();
+  }
+
+  @Test
+  public void testDisablePlatformLoggingWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"components\": [\"components\"], \"log_server\": {\"type\": \"ibm-log-analysis\"}, \"enable\": true}";
+    String disablePlatformLoggingPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/logging";
+
+    server.enqueue(new MockResponse()
+    .setHeader("Content-type", "application/json")
+    .setResponseCode(200)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the DisablePlatformLoggingOptions model
+    DisablePlatformLoggingOptions disablePlatformLoggingOptionsModel = new DisablePlatformLoggingOptions.Builder()
+    .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+    .enable(true)
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<LoggingConfigurationResponse> response = ibmAnalyticsEngineApiService.disablePlatformLogging(disablePlatformLoggingOptionsModel).execute();
+    assertNotNull(response);
+    LoggingConfigurationResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "PATCH");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, disablePlatformLoggingPath);
+  }
+
+  // Test the disablePlatformLogging operation with null options model parameter
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testDisablePlatformLoggingNoOptions() throws Throwable {
+    // construct the service
+    constructClientService();
+
+    server.enqueue(new MockResponse());
+
+    // Invoke operation with null options model (negative test)
+    ibmAnalyticsEngineApiService.disablePlatformLogging(null).execute();
+  }
+
+  @Test
+  public void testGetLoggingConfigurationWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "{\"components\": [\"components\"], \"log_server\": {\"type\": \"ibm-log-analysis\"}, \"enable\": true}";
+    String getLoggingConfigurationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/logging";
+
+    server.enqueue(new MockResponse()
+    .setHeader("Content-type", "application/json")
+    .setResponseCode(200)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the GetLoggingConfigurationOptions model
+    GetLoggingConfigurationOptions getLoggingConfigurationOptionsModel = new GetLoggingConfigurationOptions.Builder()
+    .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<LoggingConfigurationResponse> response = ibmAnalyticsEngineApiService.getLoggingConfiguration(getLoggingConfigurationOptionsModel).execute();
+    assertNotNull(response);
+    LoggingConfigurationResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getLoggingConfigurationPath);
+  }
+
+  // Test the getLoggingConfiguration operation with null options model parameter
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetLoggingConfigurationNoOptions() throws Throwable {
+    // construct the service
+    constructClientService();
+
+    server.enqueue(new MockResponse());
+
+    // Invoke operation with null options model (negative test)
+    ibmAnalyticsEngineApiService.getLoggingConfiguration(null).execute();
+  }
+
+  @Test
+  public void testDeleteLoggingConfigurationWOptions() throws Throwable {
+    // Schedule some responses.
+    String mockResponseBody = "";
+    String deleteLoggingConfigurationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/logging";
+
+    server.enqueue(new MockResponse()
+    .setResponseCode(204)
+    .setBody(mockResponseBody));
+
+    constructClientService();
+
+    // Construct an instance of the DeleteLoggingConfigurationOptions model
+    DeleteLoggingConfigurationOptions deleteLoggingConfigurationOptionsModel = new DeleteLoggingConfigurationOptions.Builder()
+    .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+    .build();
+
+    // Invoke operation with valid options model (positive test)
+    Response<Void> response = ibmAnalyticsEngineApiService.deleteLoggingConfiguration(deleteLoggingConfigurationOptionsModel).execute();
+    assertNotNull(response);
+    Void responseObj = response.getResult();
+    // Response does not have a return type. Check that the result is null.
+    assertNull(responseObj);
+
+    // Verify the contents of the request
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "DELETE");
+
+    // Check query
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+
+    // Check request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, deleteLoggingConfigurationPath);
+  }
+
+  // Test the deleteLoggingConfiguration operation with null options model parameter
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testDeleteLoggingConfigurationNoOptions() throws Throwable {
+    // construct the service
+    constructClientService();
+
+    server.enqueue(new MockResponse());
+
+    // Invoke operation with null options model (negative test)
+    ibmAnalyticsEngineApiService.deleteLoggingConfiguration(null).execute();
   }
 
   /** Initialize the server */

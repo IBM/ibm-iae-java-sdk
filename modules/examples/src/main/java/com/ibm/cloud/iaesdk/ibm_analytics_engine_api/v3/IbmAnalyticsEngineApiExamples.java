@@ -65,6 +65,7 @@ public class IbmAnalyticsEngineApiExamples {
     Map<String, String> config = CredentialUtils.getServiceProperties(IbmAnalyticsEngineApi.DEFAULT_SERVICE_NAME);
 
     try {
+      System.out.println("getInstance() result:");
       // begin-get_instance
       GetInstanceOptions getInstanceOptions = new GetInstanceOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
@@ -72,6 +73,8 @@ public class IbmAnalyticsEngineApiExamples {
 
       Response<Instance> response = service.getInstance(getInstanceOptions).execute();
       Instance instance = response.getResult();
+
+      System.out.println(instance);
       // end-get_instance
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s\nError details: %s",
@@ -79,6 +82,7 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
+      System.out.println("getInstanceState() result:");
       // begin-get_instance_state
       GetInstanceStateOptions getInstanceStateOptions = new GetInstanceStateOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
@@ -86,6 +90,8 @@ public class IbmAnalyticsEngineApiExamples {
 
       Response<InstanceGetStateResponse> response = service.getInstanceState(getInstanceStateOptions).execute();
       InstanceGetStateResponse instanceGetStateResponse = response.getResult();
+
+      System.out.println(instanceGetStateResponse);
       // end-get_instance_state
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s\nError details: %s",
@@ -93,6 +99,7 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
+      System.out.println("createInstanceHome() result:");
       // begin-create_instance_home
       CreateInstanceHomeOptions createInstanceHomeOptions = new CreateInstanceHomeOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
@@ -101,6 +108,7 @@ public class IbmAnalyticsEngineApiExamples {
       Response<InstanceHomeResponse> response = service.createInstanceHome(createInstanceHomeOptions).execute();
       InstanceHomeResponse instanceHomeResponse = response.getResult();
 
+      System.out.println(instanceHomeResponse);
       // end-create_instance_home
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s\nError details: %s",
@@ -108,6 +116,7 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
+      System.out.println("createApplication() result:");
       // begin-create_application
       CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
@@ -116,6 +125,7 @@ public class IbmAnalyticsEngineApiExamples {
       Response<ApplicationResponse> response = service.createApplication(createApplicationOptions).execute();
       ApplicationResponse applicationResponse = response.getResult();
 
+      System.out.println(applicationResponse);
       // end-create_application
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s\nError details: %s",
@@ -123,6 +133,7 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
+      System.out.println("listApplications() result:");
       // begin-list_applications
       ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
@@ -131,6 +142,7 @@ public class IbmAnalyticsEngineApiExamples {
       Response<ApplicationCollection> response = service.listApplications(listApplicationsOptions).execute();
       ApplicationCollection applicationCollection = response.getResult();
 
+      System.out.println(applicationCollection);
       // end-list_applications
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s\nError details: %s",
@@ -138,6 +150,7 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
+      System.out.println("getApplication() result:");
       // begin-get_application
       GetApplicationOptions getApplicationOptions = new GetApplicationOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
@@ -147,6 +160,7 @@ public class IbmAnalyticsEngineApiExamples {
       Response<ApplicationGetResponse> response = service.getApplication(getApplicationOptions).execute();
       ApplicationGetResponse applicationGetResponse = response.getResult();
 
+      System.out.println(applicationGetResponse);
       // end-get_application
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s\nError details: %s",
@@ -154,6 +168,7 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
+      System.out.println("getApplicationState() result:");
       // begin-get_application_state
       GetApplicationStateOptions getApplicationStateOptions = new GetApplicationStateOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
@@ -163,6 +178,7 @@ public class IbmAnalyticsEngineApiExamples {
       Response<ApplicationGetStateResponse> response = service.getApplicationState(getApplicationStateOptions).execute();
       ApplicationGetStateResponse applicationGetStateResponse = response.getResult();
 
+      System.out.println(applicationGetStateResponse);
       // end-get_application_state
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s\nError details: %s",
@@ -170,6 +186,7 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
+      System.out.println("enablePlatformLogging() result:");
       // begin-enable_platform_logging
       EnablePlatformLoggingOptions enablePlatformLoggingOptions = new EnablePlatformLoggingOptions.Builder()
         .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
@@ -178,6 +195,7 @@ public class IbmAnalyticsEngineApiExamples {
       Response<LoggingConfigurationResponse> response = service.enablePlatformLogging(enablePlatformLoggingOptions).execute();
       LoggingConfigurationResponse loggingConfigurationResponse = response.getResult();
 
+      System.out.println(loggingConfigurationResponse);
       // end-enable_platform_logging
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s\nError details: %s",
@@ -185,6 +203,7 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
+      System.out.println("disablePlatformLogging() result:");
       // begin-disable_platform_logging
       DisablePlatformLoggingOptions disablePlatformLoggingOptions = new DisablePlatformLoggingOptions.Builder()
         .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
@@ -193,6 +212,7 @@ public class IbmAnalyticsEngineApiExamples {
       Response<LoggingConfigurationResponse> response = service.disablePlatformLogging(disablePlatformLoggingOptions).execute();
       LoggingConfigurationResponse loggingConfigurationResponse = response.getResult();
 
+      System.out.println(loggingConfigurationResponse);
       // end-disable_platform_logging
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s\nError details: %s",
@@ -200,6 +220,7 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
+      System.out.println("getLoggingConfiguration() result:");
       // begin-get_logging_configuration
       GetLoggingConfigurationOptions getLoggingConfigurationOptions = new GetLoggingConfigurationOptions.Builder()
         .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
@@ -208,6 +229,7 @@ public class IbmAnalyticsEngineApiExamples {
       Response<LoggingConfigurationResponse> response = service.getLoggingConfiguration(getLoggingConfigurationOptions).execute();
       LoggingConfigurationResponse loggingConfigurationResponse = response.getResult();
 
+      System.out.println(loggingConfigurationResponse);
       // end-get_logging_configuration
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s\nError details: %s",

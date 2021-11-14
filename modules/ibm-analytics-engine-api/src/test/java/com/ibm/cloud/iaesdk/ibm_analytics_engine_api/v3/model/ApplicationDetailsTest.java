@@ -33,6 +33,12 @@ public class ApplicationDetailsTest {
   public void testApplicationDetails() throws Throwable {
     ApplicationDetails applicationDetailsModel = new ApplicationDetails();
     assertNull(applicationDetailsModel.getApplication());
+    assertNull(applicationDetailsModel.getJars());
+    assertNull(applicationDetailsModel.getPackages());
+    assertNull(applicationDetailsModel.getRepositories());
+    assertNull(applicationDetailsModel.getFiles());
+    assertNull(applicationDetailsModel.getArchives());
+    assertNull(applicationDetailsModel.getName());
     assertNull(applicationDetailsModel.getXClass());
     assertNull(applicationDetailsModel.getArguments());
     assertNull(applicationDetailsModel.getConf());

@@ -35,12 +35,24 @@ public class ApplicationRequestApplicationDetailsTest {
   public void testApplicationRequestApplicationDetails() throws Throwable {
     ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
       .application("cos://bucket_name.my_cos/my_spark_app.py")
+      .jars("cos://cloud-object-storage/jars/tests.jar")
+      .packages("testString")
+      .repositories("testString")
+      .files("testString")
+      .archives("testString")
+      .name("spark-app")
       .xClass("com.company.path.ClassName")
       .arguments(new java.util.ArrayList<String>(java.util.Arrays.asList("[arg1, arg2, arg3]")))
       .conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       .env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       .build();
     assertEquals(applicationRequestApplicationDetailsModel.application(), "cos://bucket_name.my_cos/my_spark_app.py");
+    assertEquals(applicationRequestApplicationDetailsModel.jars(), "cos://cloud-object-storage/jars/tests.jar");
+    assertEquals(applicationRequestApplicationDetailsModel.packages(), "testString");
+    assertEquals(applicationRequestApplicationDetailsModel.repositories(), "testString");
+    assertEquals(applicationRequestApplicationDetailsModel.files(), "testString");
+    assertEquals(applicationRequestApplicationDetailsModel.archives(), "testString");
+    assertEquals(applicationRequestApplicationDetailsModel.name(), "spark-app");
     assertEquals(applicationRequestApplicationDetailsModel.xClass(), "com.company.path.ClassName");
     assertEquals(applicationRequestApplicationDetailsModel.arguments(), new java.util.ArrayList<String>(java.util.Arrays.asList("[arg1, arg2, arg3]")));
     assertEquals(applicationRequestApplicationDetailsModel.conf(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } });
@@ -51,6 +63,12 @@ public class ApplicationRequestApplicationDetailsTest {
     ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModelNew = TestUtilities.deserialize(json, ApplicationRequestApplicationDetails.class);
     assertTrue(applicationRequestApplicationDetailsModelNew instanceof ApplicationRequestApplicationDetails);
     assertEquals(applicationRequestApplicationDetailsModelNew.application(), "cos://bucket_name.my_cos/my_spark_app.py");
+    assertEquals(applicationRequestApplicationDetailsModelNew.jars(), "cos://cloud-object-storage/jars/tests.jar");
+    assertEquals(applicationRequestApplicationDetailsModelNew.packages(), "testString");
+    assertEquals(applicationRequestApplicationDetailsModelNew.repositories(), "testString");
+    assertEquals(applicationRequestApplicationDetailsModelNew.files(), "testString");
+    assertEquals(applicationRequestApplicationDetailsModelNew.archives(), "testString");
+    assertEquals(applicationRequestApplicationDetailsModelNew.name(), "spark-app");
     assertEquals(applicationRequestApplicationDetailsModelNew.xClass(), "com.company.path.ClassName");
   }
 }

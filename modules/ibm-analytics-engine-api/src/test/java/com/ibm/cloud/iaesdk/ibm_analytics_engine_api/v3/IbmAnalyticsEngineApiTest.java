@@ -278,6 +278,12 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     // Construct an instance of the ApplicationRequestApplicationDetails model
     ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
     .application("cos://bucket_name.my_cos/my_spark_app.py")
+    .jars("cos://cloud-object-storage/jars/tests.jar")
+    .packages("testString")
+    .repositories("testString")
+    .files("testString")
+    .archives("testString")
+    .name("spark-app")
     .xClass("com.company.path.ClassName")
     .arguments(new java.util.ArrayList<String>(java.util.Arrays.asList("[arg1, arg2, arg3]")))
     .conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
@@ -375,7 +381,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   @Test
   public void testGetApplicationWOptions() throws Throwable {
     // Schedule some responses.
-    String mockResponseBody = "{\"application_details\": {\"application\": \"cos://bucket_name.my_cos/my_spark_app.py\", \"class\": \"com.company.path.ClassName\", \"arguments\": [\"[arg1, arg2, arg3]\"], \"conf\": {\"mapKey\": \"anyValue\"}, \"env\": {\"mapKey\": \"anyValue\"}}, \"id\": \"2b83d31c-397b-48ad-ad76-b83347c982db\", \"state\": \"accepted\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\"}";
+    String mockResponseBody = "{\"application_details\": {\"application\": \"cos://bucket_name.my_cos/my_spark_app.py\", \"jars\": \"cos://cloud-object-storage/jars/tests.jar\", \"packages\": \"packages\", \"repositories\": \"repositories\", \"files\": \"files\", \"archives\": \"archives\", \"name\": \"spark-app\", \"class\": \"com.company.path.ClassName\", \"arguments\": [\"[arg1, arg2, arg3]\"], \"conf\": {\"mapKey\": \"anyValue\"}, \"env\": {\"mapKey\": \"anyValue\"}}, \"id\": \"2b83d31c-397b-48ad-ad76-b83347c982db\", \"state\": \"accepted\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\"}";
     String getApplicationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications/ff48cc19-0e7e-4627-aac6-0b4ad080397b";
 
     server.enqueue(new MockResponse()

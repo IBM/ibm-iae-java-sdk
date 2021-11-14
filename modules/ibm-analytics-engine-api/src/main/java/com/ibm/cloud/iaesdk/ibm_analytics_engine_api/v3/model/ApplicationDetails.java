@@ -24,6 +24,12 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
 public class ApplicationDetails extends GenericModel {
 
   protected String application;
+  protected String jars;
+  protected String packages;
+  protected String repositories;
+  protected String files;
+  protected String archives;
+  protected String name;
   @SerializedName("class")
   protected String xClass;
   protected List<String> arguments;
@@ -39,6 +45,72 @@ public class ApplicationDetails extends GenericModel {
    */
   public String getApplication() {
     return application;
+  }
+
+  /**
+   * Gets the jars.
+   *
+   * Path of the jar files containing the application.
+   *
+   * @return the jars
+   */
+  public String getJars() {
+    return jars;
+  }
+
+  /**
+   * Gets the packages.
+   *
+   * Package names.
+   *
+   * @return the packages
+   */
+  public String getPackages() {
+    return packages;
+  }
+
+  /**
+   * Gets the repositories.
+   *
+   * Repositories names.
+   *
+   * @return the repositories
+   */
+  public String getRepositories() {
+    return repositories;
+  }
+
+  /**
+   * Gets the files.
+   *
+   * File names.
+   *
+   * @return the files
+   */
+  public String getFiles() {
+    return files;
+  }
+
+  /**
+   * Gets the archives.
+   *
+   * Archive Names.
+   *
+   * @return the archives
+   */
+  public String getArchives() {
+    return archives;
+  }
+
+  /**
+   * Gets the name.
+   *
+   * Name of the application.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
   }
 
   /**

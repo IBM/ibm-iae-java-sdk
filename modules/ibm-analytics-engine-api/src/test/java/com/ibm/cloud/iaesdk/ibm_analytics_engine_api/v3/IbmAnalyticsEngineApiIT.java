@@ -481,6 +481,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       assertEquals(response.getStatusCode(), 201);
 
       SparkHistoryServerStartResponse sparkHistoryServerStartResponseResult = response.getResult();
+      System.out.println("testStartSparkHistoryServer");
       System.out.println(sparkHistoryServerStartResponseResult);
       assertNotNull(sparkHistoryServerStartResponseResult);
 
@@ -516,6 +517,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       assertEquals(response.getStatusCode(), 200);
 
       SparkHistoryServerResponse sparkHistoryServerResponseResult = response.getResult();
+      System.out.println("testGetSparkHistoryServer");
       System.out.println(sparkHistoryServerResponseResult);
       assertNotNull(sparkHistoryServerResponseResult);
 
@@ -547,6 +549,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       // Invoke operation
       Response<Void> response = service.stopSparkHistoryServer(stopSparkHistoryServerOptions).execute();
       // Validate response
+      System.out.println("testStopSparkHistoryServer");
+      System.out.println(response.getStatusCode());
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 204);
       

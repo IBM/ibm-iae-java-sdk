@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -25,6 +25,12 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
 public class ApplicationRequestApplicationDetails extends GenericModel {
 
   protected String application;
+  protected String jars;
+  protected String packages;
+  protected String repositories;
+  protected String files;
+  protected String archives;
+  protected String name;
   @SerializedName("class")
   protected String xClass;
   protected List<String> arguments;
@@ -36,6 +42,12 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
    */
   public static class Builder {
     private String application;
+    private String jars;
+    private String packages;
+    private String repositories;
+    private String files;
+    private String archives;
+    private String name;
     private String xClass;
     private List<String> arguments;
     private Map<String, Object> conf;
@@ -43,6 +55,12 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
 
     private Builder(ApplicationRequestApplicationDetails applicationRequestApplicationDetails) {
       this.application = applicationRequestApplicationDetails.application;
+      this.jars = applicationRequestApplicationDetails.jars;
+      this.packages = applicationRequestApplicationDetails.packages;
+      this.repositories = applicationRequestApplicationDetails.repositories;
+      this.files = applicationRequestApplicationDetails.files;
+      this.archives = applicationRequestApplicationDetails.archives;
+      this.name = applicationRequestApplicationDetails.name;
       this.xClass = applicationRequestApplicationDetails.xClass;
       this.arguments = applicationRequestApplicationDetails.arguments;
       this.conf = applicationRequestApplicationDetails.conf;
@@ -88,6 +106,72 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
      */
     public Builder application(String application) {
       this.application = application;
+      return this;
+    }
+
+    /**
+     * Set the jars.
+     *
+     * @param jars the jars
+     * @return the ApplicationRequestApplicationDetails builder
+     */
+    public Builder jars(String jars) {
+      this.jars = jars;
+      return this;
+    }
+
+    /**
+     * Set the packages.
+     *
+     * @param packages the packages
+     * @return the ApplicationRequestApplicationDetails builder
+     */
+    public Builder packages(String packages) {
+      this.packages = packages;
+      return this;
+    }
+
+    /**
+     * Set the repositories.
+     *
+     * @param repositories the repositories
+     * @return the ApplicationRequestApplicationDetails builder
+     */
+    public Builder repositories(String repositories) {
+      this.repositories = repositories;
+      return this;
+    }
+
+    /**
+     * Set the files.
+     *
+     * @param files the files
+     * @return the ApplicationRequestApplicationDetails builder
+     */
+    public Builder files(String files) {
+      this.files = files;
+      return this;
+    }
+
+    /**
+     * Set the archives.
+     *
+     * @param archives the archives
+     * @return the ApplicationRequestApplicationDetails builder
+     */
+    public Builder archives(String archives) {
+      this.archives = archives;
+      return this;
+    }
+
+    /**
+     * Set the name.
+     *
+     * @param name the name
+     * @return the ApplicationRequestApplicationDetails builder
+     */
+    public Builder name(String name) {
+      this.name = name;
       return this;
     }
 
@@ -139,6 +223,12 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
 
   protected ApplicationRequestApplicationDetails(Builder builder) {
     application = builder.application;
+    jars = builder.jars;
+    packages = builder.packages;
+    repositories = builder.repositories;
+    files = builder.files;
+    archives = builder.archives;
+    name = builder.name;
     xClass = builder.xClass;
     arguments = builder.arguments;
     conf = builder.conf;
@@ -163,6 +253,72 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
    */
   public String application() {
     return application;
+  }
+
+  /**
+   * Gets the jars.
+   *
+   * Path of the jar files containing the application.
+   *
+   * @return the jars
+   */
+  public String jars() {
+    return jars;
+  }
+
+  /**
+   * Gets the packages.
+   *
+   * Package names.
+   *
+   * @return the packages
+   */
+  public String packages() {
+    return packages;
+  }
+
+  /**
+   * Gets the repositories.
+   *
+   * Repositories names.
+   *
+   * @return the repositories
+   */
+  public String repositories() {
+    return repositories;
+  }
+
+  /**
+   * Gets the files.
+   *
+   * File names.
+   *
+   * @return the files
+   */
+  public String files() {
+    return files;
+  }
+
+  /**
+   * Gets the archives.
+   *
+   * Archive Names.
+   *
+   * @return the archives
+   */
+  public String archives() {
+    return archives;
+  }
+
+  /**
+   * Gets the name.
+   *
+   * Name of the application.
+   *
+   * @return the name
+   */
+  public String name() {
+    return name;
   }
 
   /**

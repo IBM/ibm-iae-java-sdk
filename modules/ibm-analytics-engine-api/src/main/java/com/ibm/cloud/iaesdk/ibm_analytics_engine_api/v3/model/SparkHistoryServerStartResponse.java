@@ -16,32 +16,20 @@ import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * State of a given application.
+ * Spark history server started response.
  */
-public class ApplicationGetStateResponse extends GenericModel {
+public class SparkHistoryServerStartResponse extends GenericModel {
 
-  protected String id;
   protected String state;
+  protected String cores;
+  protected String memory;
   @SerializedName("start_time")
   protected String startTime;
-  @SerializedName("finish_time")
-  protected String finishTime;
-
-  /**
-   * Gets the id.
-   *
-   * Identifier of the application.
-   *
-   * @return the id
-   */
-  public String getId() {
-    return id;
-  }
 
   /**
    * Gets the state.
    *
-   * Status of the application.
+   * State of Spark history server.
    *
    * @return the state
    */
@@ -50,25 +38,36 @@ public class ApplicationGetStateResponse extends GenericModel {
   }
 
   /**
+   * Gets the cores.
+   *
+   * Number of cores used for the Spark history server.
+   *
+   * @return the cores
+   */
+  public String getCores() {
+    return cores;
+  }
+
+  /**
+   * Gets the memory.
+   *
+   * Memory used for the Spark history server.
+   *
+   * @return the memory
+   */
+  public String getMemory() {
+    return memory;
+  }
+
+  /**
    * Gets the startTime.
    *
-   * Time when the application was started.
+   * Time when the Spark history server was started.
    *
    * @return the startTime
    */
   public String getStartTime() {
     return startTime;
-  }
-
-  /**
-   * Gets the finishTime.
-   *
-   * Time when the application was completed.
-   *
-   * @return the finishTime
-   */
-  public String getFinishTime() {
-    return finishTime;
   }
 }
 

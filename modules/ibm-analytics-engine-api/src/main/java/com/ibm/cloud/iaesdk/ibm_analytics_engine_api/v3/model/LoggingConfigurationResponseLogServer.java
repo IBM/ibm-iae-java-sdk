@@ -10,7 +10,26 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
+
+import com.ibm.cloud.sdk.core.service.model.GenericModel;
+
 /**
- * IBM Analytics Engine API v3.
+ * log server properties.
  */
-package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
+public class LoggingConfigurationResponseLogServer extends GenericModel {
+
+  protected String type;
+
+  /**
+   * Gets the type.
+   *
+   * type of log server.
+   *
+   * @return the type
+   */
+  public String getType() {
+    return type;
+  }
+}
+

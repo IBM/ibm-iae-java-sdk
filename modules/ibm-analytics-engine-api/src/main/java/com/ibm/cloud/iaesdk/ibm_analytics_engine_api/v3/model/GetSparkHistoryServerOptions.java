@@ -15,23 +15,20 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * The createApplication options.
+ * The getSparkHistoryServer options.
  */
-public class CreateApplicationOptions extends GenericModel {
+public class GetSparkHistoryServerOptions extends GenericModel {
 
   protected String instanceId;
-  protected ApplicationRequestApplicationDetails applicationDetails;
 
   /**
    * Builder.
    */
   public static class Builder {
     private String instanceId;
-    private ApplicationRequestApplicationDetails applicationDetails;
 
-    private Builder(CreateApplicationOptions createApplicationOptions) {
-      this.instanceId = createApplicationOptions.instanceId;
-      this.applicationDetails = createApplicationOptions.applicationDetails;
+    private Builder(GetSparkHistoryServerOptions getSparkHistoryServerOptions) {
+      this.instanceId = getSparkHistoryServerOptions.instanceId;
     }
 
     /**
@@ -50,48 +47,36 @@ public class CreateApplicationOptions extends GenericModel {
     }
 
     /**
-     * Builds a CreateApplicationOptions.
+     * Builds a GetSparkHistoryServerOptions.
      *
-     * @return the new CreateApplicationOptions instance
+     * @return the new GetSparkHistoryServerOptions instance
      */
-    public CreateApplicationOptions build() {
-      return new CreateApplicationOptions(this);
+    public GetSparkHistoryServerOptions build() {
+      return new GetSparkHistoryServerOptions(this);
     }
 
     /**
      * Set the instanceId.
      *
      * @param instanceId the instanceId
-     * @return the CreateApplicationOptions builder
+     * @return the GetSparkHistoryServerOptions builder
      */
     public Builder instanceId(String instanceId) {
       this.instanceId = instanceId;
       return this;
     }
-
-    /**
-     * Set the applicationDetails.
-     *
-     * @param applicationDetails the applicationDetails
-     * @return the CreateApplicationOptions builder
-     */
-    public Builder applicationDetails(ApplicationRequestApplicationDetails applicationDetails) {
-      this.applicationDetails = applicationDetails;
-      return this;
-    }
   }
 
-  protected CreateApplicationOptions(Builder builder) {
+  protected GetSparkHistoryServerOptions(Builder builder) {
     com.ibm.cloud.sdk.core.util.Validator.notEmpty(builder.instanceId,
       "instanceId cannot be empty");
     instanceId = builder.instanceId;
-    applicationDetails = builder.applicationDetails;
   }
 
   /**
    * New builder.
    *
-   * @return a CreateApplicationOptions builder
+   * @return a GetSparkHistoryServerOptions builder
    */
   public Builder newBuilder() {
     return new Builder(this);
@@ -100,23 +85,12 @@ public class CreateApplicationOptions extends GenericModel {
   /**
    * Gets the instanceId.
    *
-   * The identifier of the instance where the Spark application is submitted.
+   * The identifier of the instance for which the Spark history server is started.
    *
    * @return the instanceId
    */
   public String instanceId() {
     return instanceId;
-  }
-
-  /**
-   * Gets the applicationDetails.
-   *
-   * Application details.
-   *
-   * @return the applicationDetails
-   */
-  public ApplicationRequestApplicationDetails applicationDetails() {
-    return applicationDetails;
   }
 }
 

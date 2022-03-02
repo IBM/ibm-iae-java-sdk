@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -13,7 +13,7 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDetailsInstanceHome;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServerStartResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -23,22 +23,18 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the InstanceDetailsInstanceHome model.
+ * Unit test class for the SparkHistoryServerStartResponse model.
  */
-public class InstanceDetailsInstanceHomeTest {
+public class SparkHistoryServerStartResponseTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testInstanceDetailsInstanceHome() throws Throwable {
-    InstanceDetailsInstanceHome instanceDetailsInstanceHomeModel = new InstanceDetailsInstanceHome();
-    assertNull(instanceDetailsInstanceHomeModel.getGuid());
-    assertNull(instanceDetailsInstanceHomeModel.getProvider());
-    assertNull(instanceDetailsInstanceHomeModel.getType());
-    assertNull(instanceDetailsInstanceHomeModel.getRegion());
-    assertNull(instanceDetailsInstanceHomeModel.getEndpoint());
-    assertNull(instanceDetailsInstanceHomeModel.getBucket());
-    assertNull(instanceDetailsInstanceHomeModel.getHmacAccessKey());
-    assertNull(instanceDetailsInstanceHomeModel.getHmacSecretKey());
+  public void testSparkHistoryServerStartResponse() throws Throwable {
+    SparkHistoryServerStartResponse sparkHistoryServerStartResponseModel = new SparkHistoryServerStartResponse();
+    assertNull(sparkHistoryServerStartResponseModel.getState());
+    assertNull(sparkHistoryServerStartResponseModel.getCores());
+    assertNull(sparkHistoryServerStartResponseModel.getMemory());
+    assertNull(sparkHistoryServerStartResponseModel.getStartTime());
   }
 }

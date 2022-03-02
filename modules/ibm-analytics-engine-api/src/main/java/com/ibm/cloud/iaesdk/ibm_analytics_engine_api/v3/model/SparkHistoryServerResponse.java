@@ -12,51 +12,26 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import java.util.Date;
-
 import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * Response of the Application Get API.
+ * State of Spark history server.
  */
-public class ApplicationGetResponse extends GenericModel {
+public class SparkHistoryServerResponse extends GenericModel {
 
-  @SerializedName("application_details")
-  protected ApplicationDetails applicationDetails;
-  protected String id;
   protected String state;
+  protected String cores;
+  protected String memory;
   @SerializedName("start_time")
-  protected Date startTime;
-  @SerializedName("finish_time")
-  protected Date finishTime;
-
-  /**
-   * Gets the applicationDetails.
-   *
-   * Application details.
-   *
-   * @return the applicationDetails
-   */
-  public ApplicationDetails getApplicationDetails() {
-    return applicationDetails;
-  }
-
-  /**
-   * Gets the id.
-   *
-   * Application ID.
-   *
-   * @return the id
-   */
-  public String getId() {
-    return id;
-  }
+  protected String startTime;
+  @SerializedName("stop_time")
+  protected String stopTime;
 
   /**
    * Gets the state.
    *
-   * Application state.
+   * State of Spark history server.
    *
    * @return the state
    */
@@ -65,25 +40,47 @@ public class ApplicationGetResponse extends GenericModel {
   }
 
   /**
+   * Gets the cores.
+   *
+   * Number of cores used for the Spark history server.
+   *
+   * @return the cores
+   */
+  public String getCores() {
+    return cores;
+  }
+
+  /**
+   * Gets the memory.
+   *
+   * Memory used for the Spark history server.
+   *
+   * @return the memory
+   */
+  public String getMemory() {
+    return memory;
+  }
+
+  /**
    * Gets the startTime.
    *
-   * Application start time in the format YYYY-MM-DDTHH:mm:ssZ.
+   * Time when the Spark history server was started.
    *
    * @return the startTime
    */
-  public Date getStartTime() {
+  public String getStartTime() {
     return startTime;
   }
 
   /**
-   * Gets the finishTime.
+   * Gets the stopTime.
    *
-   * Application end time in the format YYYY-MM-DDTHH:mm:ssZ.
+   * Time when the Spark history server was stopped.
    *
-   * @return the finishTime
+   * @return the stopTime
    */
-  public Date getFinishTime() {
-    return finishTime;
+  public String getStopTime() {
+    return stopTime;
   }
 }
 

@@ -16,30 +16,30 @@ import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * Object storage instance that acts as the home for custom libraries and Spark events.
+ * Response of Instance home API.
  */
-public class InstanceHome extends GenericModel {
+public class InstanceHomeResponse extends GenericModel {
 
-  protected String id;
+  @SerializedName("instance_id")
+  protected String instanceId;
   protected String provider;
   protected String type;
   protected String region;
   protected String endpoint;
-  protected String bucket;
   @SerializedName("hmac_access_key")
   protected String hmacAccessKey;
   @SerializedName("hmac_secret_key")
   protected String hmacSecretKey;
 
   /**
-   * Gets the id.
+   * Gets the instanceId.
    *
    * UUID of the instance home storage instance.
    *
-   * @return the id
+   * @return the instanceId
    */
-  public String getId() {
-    return id;
+  public String getInstanceId() {
+    return instanceId;
   }
 
   /**
@@ -87,20 +87,9 @@ public class InstanceHome extends GenericModel {
   }
 
   /**
-   * Gets the bucket.
-   *
-   * Cloud Object Storage bucket used as instance home.
-   *
-   * @return the bucket
-   */
-  public String getBucket() {
-    return bucket;
-  }
-
-  /**
    * Gets the hmacAccessKey.
    *
-   * Cloud Object Storage access key. Masked for security reasons.
+   * Cloud Object Storage access key.
    *
    * @return the hmacAccessKey
    */
@@ -111,7 +100,7 @@ public class InstanceHome extends GenericModel {
   /**
    * Gets the hmacSecretKey.
    *
-   * Cloud Object Storage secret key. Masked for security reasons.
+   * Cloud Object Storage secret key.
    *
    * @return the hmacSecretKey
    */

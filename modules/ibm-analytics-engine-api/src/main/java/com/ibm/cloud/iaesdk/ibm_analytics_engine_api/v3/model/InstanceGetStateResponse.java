@@ -12,25 +12,32 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * State of a given application.
+ * State details of Analytics Engine instance.
  */
-public class ApplicationGetStateResponse extends GenericModel {
+public class InstanceGetStateResponse extends GenericModel {
+
+  /**
+   * Instance state.
+   */
+  public interface State {
+    /** created. */
+    String CREATED = "created";
+    /** deleted. */
+    String DELETED = "deleted";
+    /** failed. */
+    String FAILED = "failed";
+  }
 
   protected String id;
   protected String state;
-  @SerializedName("start_time")
-  protected String startTime;
-  @SerializedName("finish_time")
-  protected String finishTime;
 
   /**
    * Gets the id.
    *
-   * Identifier of the application.
+   * GUID of the Analytics Engine instance.
    *
    * @return the id
    */
@@ -41,34 +48,12 @@ public class ApplicationGetStateResponse extends GenericModel {
   /**
    * Gets the state.
    *
-   * Status of the application.
+   * Instance state.
    *
    * @return the state
    */
   public String getState() {
     return state;
-  }
-
-  /**
-   * Gets the startTime.
-   *
-   * Time when the application was started.
-   *
-   * @return the startTime
-   */
-  public String getStartTime() {
-    return startTime;
-  }
-
-  /**
-   * Gets the finishTime.
-   *
-   * Time when the application was completed.
-   *
-   * @return the finishTime
-   */
-  public String getFinishTime() {
-    return finishTime;
   }
 }
 

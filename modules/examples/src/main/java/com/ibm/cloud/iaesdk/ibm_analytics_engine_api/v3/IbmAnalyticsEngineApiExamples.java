@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -16,15 +16,27 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollection;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequestApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ConfigurePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceStateOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLoggingConfigurationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceGetStateResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServerResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServerStartResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StartSparkHistoryServerOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StopSparkHistoryServerOptions;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
 import com.ibm.cloud.sdk.core.util.CredentialUtils;
@@ -48,6 +60,10 @@ import org.slf4j.LoggerFactory;
 public class IbmAnalyticsEngineApiExamples {
   private static final Logger logger = LoggerFactory.getLogger(IbmAnalyticsEngineApiExamples.class);
   protected IbmAnalyticsEngineApiExamples() { }
+
+  static {
+    System.setProperty("IBM_CREDENTIALS_FILE", "../../ibm_analytics_engine_api_v3.env");
+  }
 
   @SuppressWarnings("checkstyle:methodlength")
   public static void main(String[] args) throws Exception {
@@ -74,17 +90,45 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
+      System.out.println("getInstanceState() result:");
+      // begin-get_instance_state
+      GetInstanceStateOptions getInstanceStateOptions = new GetInstanceStateOptions.Builder()
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
+
+      Response<InstanceGetStateResponse> response = ibmAnalyticsEngineApiService.getInstanceState(getInstanceStateOptions).execute();
+      InstanceGetStateResponse instanceGetStateResponse = response.getResult();
+
+      System.out.println(instanceGetStateResponse);
+      // end-get_instance_state
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      System.out.println("createInstanceHome() result:");
+      // begin-create_instance_home
+      CreateInstanceHomeOptions createInstanceHomeOptions = new CreateInstanceHomeOptions.Builder()
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
+
+      Response<InstanceHomeResponse> response = ibmAnalyticsEngineApiService.createInstanceHome(createInstanceHomeOptions).execute();
+      InstanceHomeResponse instanceHomeResponse = response.getResult();
+
+      System.out.println(instanceHomeResponse);
+      // end-create_instance_home
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
       System.out.println("createApplication() result:");
       // begin-create_application
-      ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
-         .application("/opt/ibm/spark/examples/src/main/python/wordcount.py")
-         .arguments(new java.util.ArrayList<String>(java.util.Arrays.asList("/opt/ibm/spark/examples/src/main/resources/people.txt")))
-         .build();
-
       CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
-         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-         .applicationDetails(applicationRequestApplicationDetailsModel)
-         .build();
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
 
       Response<ApplicationResponse> response = ibmAnalyticsEngineApiService.createApplication(createApplicationOptions).execute();
       ApplicationResponse applicationResponse = response.getResult();
@@ -144,6 +188,102 @@ public class IbmAnalyticsEngineApiExamples {
 
       System.out.println(applicationGetStateResponse);
       // end-get_application_state
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      System.out.println("configurePlatformLogging() result:");
+      // begin-configure_platform_logging
+      ConfigurePlatformLoggingOptions configurePlatformLoggingOptions = new ConfigurePlatformLoggingOptions.Builder()
+        .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
+
+      Response<LoggingConfigurationResponse> response = ibmAnalyticsEngineApiService.configurePlatformLogging(configurePlatformLoggingOptions).execute();
+      LoggingConfigurationResponse loggingConfigurationResponse = response.getResult();
+
+      System.out.println(loggingConfigurationResponse);
+      // end-configure_platform_logging
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      System.out.println("getLoggingConfiguration() result:");
+      // begin-get_logging_configuration
+      GetLoggingConfigurationOptions getLoggingConfigurationOptions = new GetLoggingConfigurationOptions.Builder()
+        .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
+
+      Response<LoggingConfigurationResponse> response = ibmAnalyticsEngineApiService.getLoggingConfiguration(getLoggingConfigurationOptions).execute();
+      LoggingConfigurationResponse loggingConfigurationResponse = response.getResult();
+
+      System.out.println(loggingConfigurationResponse);
+      // end-get_logging_configuration
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      System.out.println("startSparkHistoryServer() result:");
+      // begin-start_spark_history_server
+      StartSparkHistoryServerOptions startSparkHistoryServerOptions = new StartSparkHistoryServerOptions.Builder()
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
+
+      Response<SparkHistoryServerStartResponse> response = ibmAnalyticsEngineApiService.startSparkHistoryServer(startSparkHistoryServerOptions).execute();
+      SparkHistoryServerStartResponse sparkHistoryServerStartResponse = response.getResult();
+
+      System.out.println(sparkHistoryServerStartResponse);
+      // end-start_spark_history_server
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      System.out.println("getSparkHistoryServer() result:");
+      // begin-get_spark_history_server
+      GetSparkHistoryServerOptions getSparkHistoryServerOptions = new GetSparkHistoryServerOptions.Builder()
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
+
+      Response<SparkHistoryServerResponse> response = ibmAnalyticsEngineApiService.getSparkHistoryServer(getSparkHistoryServerOptions).execute();
+      SparkHistoryServerResponse sparkHistoryServerResponse = response.getResult();
+
+      System.out.println(sparkHistoryServerResponse);
+      // end-get_spark_history_server
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      // begin-stop_spark_history_server
+      StopSparkHistoryServerOptions stopSparkHistoryServerOptions = new StopSparkHistoryServerOptions.Builder()
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
+
+      Response<Void> response = ibmAnalyticsEngineApiService.stopSparkHistoryServer(stopSparkHistoryServerOptions).execute();
+      // end-stop_spark_history_server
+      System.out.printf("stopSparkHistoryServer() response status code: %d%n", response.getStatusCode());
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      // begin-delete_logging_configuration
+      DeleteLoggingConfigurationOptions deleteLoggingConfigurationOptions = new DeleteLoggingConfigurationOptions.Builder()
+        .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .build();
+
+      Response<Void> response = ibmAnalyticsEngineApiService.deleteLoggingConfiguration(deleteLoggingConfigurationOptions).execute();
+      // end-delete_logging_configuration
+      System.out.printf("deleteLoggingConfiguration() response status code: %d%n", response.getStatusCode());
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);

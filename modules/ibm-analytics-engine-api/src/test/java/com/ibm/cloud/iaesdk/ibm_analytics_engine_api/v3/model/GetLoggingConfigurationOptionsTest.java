@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -13,7 +13,7 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationByIdOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -23,25 +23,23 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the DeleteApplicationByIdOptions model.
+ * Unit test class for the GetLoggingConfigurationOptions model.
  */
-public class DeleteApplicationByIdOptionsTest {
+public class GetLoggingConfigurationOptionsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testDeleteApplicationByIdOptions() throws Throwable {
-    DeleteApplicationByIdOptions deleteApplicationByIdOptionsModel = new DeleteApplicationByIdOptions.Builder()
-      .instanceId("testString")
-      .applicationId("testString")
+  public void testGetLoggingConfigurationOptions() throws Throwable {
+    GetLoggingConfigurationOptions getLoggingConfigurationOptionsModel = new GetLoggingConfigurationOptions.Builder()
+      .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
       .build();
-    assertEquals(deleteApplicationByIdOptionsModel.instanceId(), "testString");
-    assertEquals(deleteApplicationByIdOptionsModel.applicationId(), "testString");
+    assertEquals(getLoggingConfigurationOptionsModel.instanceGuid(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testDeleteApplicationByIdOptionsError() throws Throwable {
-    new DeleteApplicationByIdOptions.Builder().build();
+  public void testGetLoggingConfigurationOptionsError() throws Throwable {
+    new GetLoggingConfigurationOptions.Builder().build();
   }
 
 }

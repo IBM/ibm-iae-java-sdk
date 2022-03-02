@@ -13,7 +13,7 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Application;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -23,20 +23,21 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the Application model.
+ * Unit test class for the InstanceHomeResponse model.
  */
-public class ApplicationTest {
+public class InstanceHomeResponseTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testApplication() throws Throwable {
-    Application applicationModel = new Application();
-    assertNull(applicationModel.getId());
-    assertNull(applicationModel.getHref());
-    assertNull(applicationModel.getSparkApplicationId());
-    assertNull(applicationModel.getState());
-    assertNull(applicationModel.getStartTime());
-    assertNull(applicationModel.getFinishTime());
+  public void testInstanceHomeResponse() throws Throwable {
+    InstanceHomeResponse instanceHomeResponseModel = new InstanceHomeResponse();
+    assertNull(instanceHomeResponseModel.getInstanceId());
+    assertNull(instanceHomeResponseModel.getProvider());
+    assertNull(instanceHomeResponseModel.getType());
+    assertNull(instanceHomeResponseModel.getRegion());
+    assertNull(instanceHomeResponseModel.getEndpoint());
+    assertNull(instanceHomeResponseModel.getHmacAccessKey());
+    assertNull(instanceHomeResponseModel.getHmacSecretKey());
   }
 }

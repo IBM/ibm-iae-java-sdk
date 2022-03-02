@@ -12,63 +12,52 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
+import java.util.List;
+
 import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * State of a given application.
+ * Response of logging API.
  */
-public class ApplicationGetStateResponse extends GenericModel {
+public class LoggingConfigurationResponse extends GenericModel {
 
-  protected String id;
-  protected String state;
-  @SerializedName("start_time")
-  protected String startTime;
-  @SerializedName("finish_time")
-  protected String finishTime;
+  protected List<String> components;
+  @SerializedName("log_server")
+  protected LoggingConfigurationResponseLogServer logServer;
+  protected Boolean enable;
 
   /**
-   * Gets the id.
+   * Gets the components.
    *
-   * Identifier of the application.
+   * component array.
    *
-   * @return the id
+   * @return the components
    */
-  public String getId() {
-    return id;
+  public List<String> getComponents() {
+    return components;
   }
 
   /**
-   * Gets the state.
+   * Gets the logServer.
    *
-   * Status of the application.
+   * log server properties.
    *
-   * @return the state
+   * @return the logServer
    */
-  public String getState() {
-    return state;
+  public LoggingConfigurationResponseLogServer getLogServer() {
+    return logServer;
   }
 
   /**
-   * Gets the startTime.
+   * Gets the enable.
    *
-   * Time when the application was started.
+   * enable.
    *
-   * @return the startTime
+   * @return the enable
    */
-  public String getStartTime() {
-    return startTime;
-  }
-
-  /**
-   * Gets the finishTime.
-   *
-   * Time when the application was completed.
-   *
-   * @return the finishTime
-   */
-  public String getFinishTime() {
-    return finishTime;
+  public Boolean isEnable() {
+    return enable;
   }
 }
 

@@ -72,6 +72,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 // !!!! Start of custom content to be copied !!! 
+// Declaration of configuration variables
   public String instanceGuid = null;
   public String instanceGuidInstanceHome = null;
   public String hmacAccessKey = null;
@@ -105,6 +106,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     assertEquals(service.getServiceUrl(), config.get("URL"));
 
   // !!!! Start of custom content to be copied !!! 
+  // Assignment of configuration variables from environment
     instanceGuid=System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_GUID");
     instanceGuidInstanceHome=System.getenv("IBM_ANALYTICS_ENGINE_INSTANCE_GUID_INSTANCE_HOME");
     hmacAccessKey=System.getenv("IBM_ANALYTICS_ENGINE_HMAC_ACCESS_KEY");

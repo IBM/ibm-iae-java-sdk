@@ -12,7 +12,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 3.45.1-632ec580-20220210-190638
+ * IBM OpenAPI SDK Code Generator Version: 3.49.0-be9b22fb-20220504-154308
  */
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
@@ -25,9 +25,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStat
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ConfigurePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
@@ -39,6 +37,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceGetStateRe
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SetInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServerResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServerStartResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StartSparkHistoryServerOptions;
@@ -169,45 +168,46 @@ public class IbmAnalyticsEngineApi extends BaseService {
   }
 
   /**
-   * Edit instance home details.
+   * Set instance home.
    *
-   * Update details of the Object Storage associated as 'instance home' for an Analytics Engine instance.
+   * Provide the details of the Cloud Object Storage instance to associate with the Analytics Engine instance and use as
+   * 'instance home' if 'instance home' has not already been set.
    *
-   * @param createInstanceHomeOptions the {@link CreateInstanceHomeOptions} containing the options for the call
+   * @param setInstanceHomeOptions the {@link SetInstanceHomeOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link InstanceHomeResponse}
    */
-  public ServiceCall<InstanceHomeResponse> createInstanceHome(CreateInstanceHomeOptions createInstanceHomeOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(createInstanceHomeOptions,
-      "createInstanceHomeOptions cannot be null");
+  public ServiceCall<InstanceHomeResponse> setInstanceHome(SetInstanceHomeOptions setInstanceHomeOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(setInstanceHomeOptions,
+      "setInstanceHomeOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();
-    pathParamsMap.put("instance_id", createInstanceHomeOptions.instanceId());
+    pathParamsMap.put("instance_id", setInstanceHomeOptions.instanceId());
     RequestBuilder builder = RequestBuilder.put(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/instance_home", pathParamsMap));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "createInstanceHome");
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "setInstanceHome");
     for (Entry<String, String> header : sdkHeaders.entrySet()) {
       builder.header(header.getKey(), header.getValue());
     }
     builder.header("Accept", "application/json");
     final JsonObject contentJson = new JsonObject();
-    if (createInstanceHomeOptions.newInstanceId() != null) {
-      contentJson.addProperty("instance_id", createInstanceHomeOptions.newInstanceId());
+    if (setInstanceHomeOptions.newInstanceId() != null) {
+      contentJson.addProperty("instance_id", setInstanceHomeOptions.newInstanceId());
     }
-    if (createInstanceHomeOptions.newProvider() != null) {
-      contentJson.addProperty("provider", createInstanceHomeOptions.newProvider());
+    if (setInstanceHomeOptions.newProvider() != null) {
+      contentJson.addProperty("provider", setInstanceHomeOptions.newProvider());
     }
-    if (createInstanceHomeOptions.newType() != null) {
-      contentJson.addProperty("type", createInstanceHomeOptions.newType());
+    if (setInstanceHomeOptions.newType() != null) {
+      contentJson.addProperty("type", setInstanceHomeOptions.newType());
     }
-    if (createInstanceHomeOptions.newRegion() != null) {
-      contentJson.addProperty("region", createInstanceHomeOptions.newRegion());
+    if (setInstanceHomeOptions.newRegion() != null) {
+      contentJson.addProperty("region", setInstanceHomeOptions.newRegion());
     }
-    if (createInstanceHomeOptions.newEndpoint() != null) {
-      contentJson.addProperty("endpoint", createInstanceHomeOptions.newEndpoint());
+    if (setInstanceHomeOptions.newEndpoint() != null) {
+      contentJson.addProperty("endpoint", setInstanceHomeOptions.newEndpoint());
     }
-    if (createInstanceHomeOptions.newHmacAccessKey() != null) {
-      contentJson.addProperty("hmac_access_key", createInstanceHomeOptions.newHmacAccessKey());
+    if (setInstanceHomeOptions.newHmacAccessKey() != null) {
+      contentJson.addProperty("hmac_access_key", setInstanceHomeOptions.newHmacAccessKey());
     }
-    if (createInstanceHomeOptions.newHmacSecretKey() != null) {
-      contentJson.addProperty("hmac_secret_key", createInstanceHomeOptions.newHmacSecretKey());
+    if (setInstanceHomeOptions.newHmacSecretKey() != null) {
+      contentJson.addProperty("hmac_secret_key", setInstanceHomeOptions.newHmacSecretKey());
     }
     builder.bodyJson(contentJson);
     ResponseConverter<InstanceHomeResponse> responseConverter =
@@ -343,7 +343,7 @@ public class IbmAnalyticsEngineApi extends BaseService {
   }
 
   /**
-   * Enable or disable log fowarding.
+   * Enable or disable log forwarding.
    *
    * Enable or disable log forwarding from IBM Analytics Engine to IBM Log Analysis server.
    *
@@ -396,31 +396,9 @@ public class IbmAnalyticsEngineApi extends BaseService {
   }
 
   /**
-   * Delete logging configuration of a given instance id.
-   *
-   * Delete the logging configuration of a given Analytics Engine instance.
-   *
-   * @param deleteLoggingConfigurationOptions the {@link DeleteLoggingConfigurationOptions} containing the options for the call
-   * @return a {@link ServiceCall} with a void result
-   */
-  public ServiceCall<Void> deleteLoggingConfiguration(DeleteLoggingConfigurationOptions deleteLoggingConfigurationOptions) {
-    com.ibm.cloud.sdk.core.util.Validator.notNull(deleteLoggingConfigurationOptions,
-      "deleteLoggingConfigurationOptions cannot be null");
-    Map<String, String> pathParamsMap = new HashMap<String, String>();
-    pathParamsMap.put("instance_guid", deleteLoggingConfigurationOptions.instanceGuid());
-    RequestBuilder builder = RequestBuilder.delete(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_guid}/logging", pathParamsMap));
-    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "deleteLoggingConfiguration");
-    for (Entry<String, String> header : sdkHeaders.entrySet()) {
-      builder.header(header.getKey(), header.getValue());
-    }
-    ResponseConverter<Void> responseConverter = ResponseConverterUtils.getVoid();
-    return createServiceCall(builder.build(), responseConverter);
-  }
-
-  /**
    * Start Spark history server.
    *
-   * Start the Spark history server for a given serverless Spark instance.
+   * Start the Spark history server for the given Analytics Engine instance.
    *
    * @param startSparkHistoryServerOptions the {@link StartSparkHistoryServerOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link SparkHistoryServerStartResponse}
@@ -442,9 +420,9 @@ public class IbmAnalyticsEngineApi extends BaseService {
   }
 
   /**
-   * Retrieve Spark history server details by ID.
+   * Retrieve Spark history server details.
    *
-   * Retrieve the Spark history server details for an Analytics Engine instance by the instance ID.
+   * Get the details of the Spark history server of the given Analytics Engine instance.
    *
    * @param getSparkHistoryServerOptions the {@link GetSparkHistoryServerOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link SparkHistoryServerResponse}
@@ -468,7 +446,7 @@ public class IbmAnalyticsEngineApi extends BaseService {
   /**
    * Stop Spark history server.
    *
-   * Stop the Spark history server for a given serverless Spark instance.
+   * Stop the Spark history server of the given Analytics Engine instance.
    *
    * @param stopSparkHistoryServerOptions the {@link StopSparkHistoryServerOptions} containing the options for the call
    * @return a {@link ServiceCall} with a void result

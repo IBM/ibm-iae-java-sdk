@@ -22,9 +22,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequest
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ConfigurePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
@@ -40,6 +38,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeRespon
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponseLogServer;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SetInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServerResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServerStartResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StartSparkHistoryServerOptions;
@@ -56,6 +55,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.testng.annotations.AfterClass;
@@ -79,11 +79,10 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public String hmacSecretKey = null;
   public String applicationId = null;
 // !!! End of custom content to be copied !!!	
-
   /**
    * This method provides our config filename to the base class.
    */
-  
+
   public String getConfigFilename() {
     return "../../ibm_analytics_engine_api_v3.env";
   }
@@ -112,12 +111,13 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     hmacAccessKey=System.getenv("IBM_ANALYTICS_ENGINE_HMAC_ACCESS_KEY");
     hmacSecretKey=System.getenv("IBM_ANALYTICS_ENGINE_HMAC_SECRET_KEY");
   // !!! End of custom content to be copied !!!	  
-    //service.enableRetries(4, 30);
+  //service.enableRetries(4, 30);
+
 
     System.out.println("Setup complete.");
   }
 
-  @Test(timeOut = 200000)
+  @Test
   public void testGetInstance() throws Exception {
     try {
       GetInstanceOptions getInstanceOptions = new GetInstanceOptions.Builder()
@@ -134,12 +134,11 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       System.out.println("testGetInstance");
       System.out.println(instanceResult);
       assertNotNull(instanceResult);
-      
+
       //
       // The following status codes aren't covered by tests.
       // Please provide integration tests for these too.
       //
-      // 400
       // 401
       // 403
       // 404
@@ -175,7 +174,6 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       // The following status codes aren't covered by tests.
       // Please provide integration tests for these too.
       //
-      // 400
       // 401
       // 403
       // 404
@@ -190,9 +188,9 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   }
 
   @Test(timeOut = 200000)
-  public void testCreateInstanceHome() throws Exception {
+  public void testSetInstanceHome() throws Exception {
     try {
-      CreateInstanceHomeOptions createInstanceHomeOptions = new CreateInstanceHomeOptions.Builder()
+      SetInstanceHomeOptions setInstanceHomeOptions = new SetInstanceHomeOptions.Builder()
       .instanceId(instanceGuidInstanceHome)
       .newInstanceId("testString")
       .newProvider("ibm-cos")
@@ -204,13 +202,13 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       .build();
 
       // Invoke operation
-      Response<InstanceHomeResponse> response = service.createInstanceHome(createInstanceHomeOptions).execute();
+      Response<InstanceHomeResponse> response = service.setInstanceHome(setInstanceHomeOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 200);
 
       InstanceHomeResponse instanceHomeResponseResult = response.getResult();
-      System.out.println("testCreateInstanceHome");
+      System.out.println("testSetInstanceHome");
       System.out.println(instanceHomeResponseResult);
       assertNotNull(instanceHomeResponseResult);
 
@@ -222,6 +220,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       // 401
       // 403
       // 404
+      // 409
       // 500
       //
       //
@@ -263,11 +262,14 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       ApplicationResponse applicationResponseResult = response.getResult();
       System.out.println("testCreateApplication");
       System.out.println(applicationResponseResult);
-      assertNotNull("applicationResponseResult");
+      assertNotNull(applicationResponseResult);
+      
+   // !!!! Start of custom content to be copied !!! 
       String jsonString = String.valueOf(response.getResult());
       JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonString);
       applicationId = jsonObject.get("id").toString();
-
+   // !!! End of custom content to be copied !!!	 
+      
       //
       // The following status codes aren't covered by tests.
       // Please provide integration tests for these too.
@@ -308,7 +310,6 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       // The following status codes aren't covered by tests.
       // Please provide integration tests for these too.
       //
-      // 400
       // 401
       // 403
       // 404
@@ -345,7 +346,6 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       // The following status codes aren't covered by tests.
       // Please provide integration tests for these too.
       //
-      // 400
       // 401
       // 403
       // 404
@@ -382,7 +382,6 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       // The following status codes aren't covered by tests.
       // Please provide integration tests for these too.
       //
-      // 400
       // 401
       // 403
       // 404
@@ -450,12 +449,11 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       System.out.println("testGetLoggingConfiguration");
       System.out.println(loggingConfigurationResponseResult);
       assertNotNull(loggingConfigurationResponseResult);
-      
+
       //
       // The following status codes aren't covered by tests.
       // Please provide integration tests for these too.
       //
-      // 400
       // 401
       // 403
       // 404
@@ -551,41 +549,6 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       // Invoke operation
       Response<Void> response = service.stopSparkHistoryServer(stopSparkHistoryServerOptions).execute();
       // Validate response
-      System.out.println("testStopSparkHistoryServer");
-      System.out.println(response.getStatusCode());
-      assertNotNull(response);
-      assertEquals(response.getStatusCode(), 204);
-      
-      //
-      // The following status codes aren't covered by tests.
-      // Please provide integration tests for these too.
-      //
-      // 400
-      // 401
-      // 403
-      // 404
-      // 500
-      //
-      //
-
-    } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s%nError details: %s",
-          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
-    }
-  }
-
-  @Test(dependsOnMethods={"testGetLoggingConfiguration"})
-  public void testDeleteLoggingConfiguration() throws Exception {
-    try {
-      DeleteLoggingConfigurationOptions deleteLoggingConfigurationOptions = new DeleteLoggingConfigurationOptions.Builder()
-      .instanceGuid(instanceGuid)
-      .build();
-
-      // Invoke operation
-      Response<Void> response = service.deleteLoggingConfiguration(deleteLoggingConfigurationOptions).execute();
-      // Validate response
-      System.out.println("testDeleteLoggingConfiguration");
-      System.out.println(response.getStatusCode());
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 204);
 
@@ -607,7 +570,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-   @Test(dependsOnMethods={"testCreateApplication"})
+  @Test(dependsOnMethods={"testCreateApplication"})
   public void testDeleteApplication() throws Exception {
     try {
       DeleteApplicationOptions deleteApplicationOptions = new DeleteApplicationOptions.Builder()

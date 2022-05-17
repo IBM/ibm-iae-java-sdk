@@ -85,7 +85,7 @@ public class StartSparkHistoryServerOptions extends GenericModel {
   /**
    * Gets the instanceId.
    *
-   * The identifier of the instance for which the Spark history server is started.
+   * The ID of the Analytics Engine instance whose Spark history server is to be started.
    *
    * @return the instanceId
    */

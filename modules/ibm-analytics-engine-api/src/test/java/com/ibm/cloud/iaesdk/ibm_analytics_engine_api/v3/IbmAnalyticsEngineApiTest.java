@@ -22,9 +22,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequest
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ConfigurePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
@@ -40,6 +38,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeRespon
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponseLogServer;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SetInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServerResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServerStartResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StartSparkHistoryServerOptions;
@@ -134,10 +133,10 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   // Test the getInstance operation with and without retries enabled
   @Test
   public void testGetInstanceWRetries() throws Throwable {
-   // // ibmAnalyticsEngineApiService.enableRetries(4, 30);
+//    ibmAnalyticsEngineApiService.enableRetries(4, 30);
     testGetInstanceWOptions();
 
-   // // ibmAnalyticsEngineApiService.disableRetries();
+//    ibmAnalyticsEngineApiService.disableRetries();
     testGetInstanceWOptions();
   }
 
@@ -185,10 +184,10 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   // Test the getInstanceState operation with and without retries enabled
   @Test
   public void testGetInstanceStateWRetries() throws Throwable {
-    // // ibmAnalyticsEngineApiService.enableRetries(4, 30);
+//    ibmAnalyticsEngineApiService.enableRetries(4, 30);
     testGetInstanceStateWOptions();
 
-    // ibmAnalyticsEngineApiService.disableRetries();
+//    ibmAnalyticsEngineApiService.disableRetries();
     testGetInstanceStateWOptions();
   }
 
@@ -199,19 +198,19 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     ibmAnalyticsEngineApiService.getInstanceState(null).execute();
   }
 
-  // Test the createInstanceHome operation with a valid options model parameter
+  // Test the setInstanceHome operation with a valid options model parameter
   @Test
-  public void testCreateInstanceHomeWOptions() throws Throwable {
+  public void testSetInstanceHomeWOptions() throws Throwable {
     // Register a mock response
     String mockResponseBody = "{\"instance_id\": \"instanceId\", \"provider\": \"provider\", \"type\": \"type\", \"region\": \"region\", \"endpoint\": \"endpoint\", \"hmac_access_key\": \"hmacAccessKey\", \"hmac_secret_key\": \"hmacSecretKey\"}";
-    String createInstanceHomePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/instance_home";
+    String setInstanceHomePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/instance_home";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
       .setResponseCode(200)
       .setBody(mockResponseBody));
 
-    // Construct an instance of the CreateInstanceHomeOptions model
-    CreateInstanceHomeOptions createInstanceHomeOptionsModel = new CreateInstanceHomeOptions.Builder()
+    // Construct an instance of the SetInstanceHomeOptions model
+    SetInstanceHomeOptions setInstanceHomeOptionsModel = new SetInstanceHomeOptions.Builder()
       .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
       .newInstanceId("testString")
       .newProvider("ibm-cos")
@@ -222,8 +221,8 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
       .newHmacSecretKey("03e****************4fc3")
       .build();
 
-    // Invoke createInstanceHome() with a valid options model and verify the result
-    Response<InstanceHomeResponse> response = ibmAnalyticsEngineApiService.createInstanceHome(createInstanceHomeOptionsModel).execute();
+    // Invoke setInstanceHome() with a valid options model and verify the result
+    Response<InstanceHomeResponse> response = ibmAnalyticsEngineApiService.setInstanceHome(setInstanceHomeOptionsModel).execute();
     assertNotNull(response);
     InstanceHomeResponse responseObj = response.getResult();
     assertNotNull(responseObj);
@@ -234,27 +233,27 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     assertEquals(request.getMethod(), "PUT");
     // Verify request path
     String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, createInstanceHomePath);
+    assertEquals(parsedPath, setInstanceHomePath);
     // Verify that there is no query string
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNull(query);
   }
 
-  // Test the createInstanceHome operation with and without retries enabled
+  // Test the setInstanceHome operation with and without retries enabled
   @Test
-  public void testCreateInstanceHomeWRetries() throws Throwable {
-    // ibmAnalyticsEngineApiService.enableRetries(4, 30);
-    testCreateInstanceHomeWOptions();
+  public void testSetInstanceHomeWRetries() throws Throwable {
+//    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testSetInstanceHomeWOptions();
 
-    // ibmAnalyticsEngineApiService.disableRetries();
-    testCreateInstanceHomeWOptions();
+//    ibmAnalyticsEngineApiService.disableRetries();
+    testSetInstanceHomeWOptions();
   }
 
-  // Test the createInstanceHome operation with a null options model (negative test)
+  // Test the setInstanceHome operation with a null options model (negative test)
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testCreateInstanceHomeNoOptions() throws Throwable {
+  public void testSetInstanceHomeNoOptions() throws Throwable {
     server.enqueue(new MockResponse());
-    ibmAnalyticsEngineApiService.createInstanceHome(null).execute();
+    ibmAnalyticsEngineApiService.setInstanceHome(null).execute();
   }
 
   // Test the createApplication operation with a valid options model parameter
@@ -310,10 +309,10 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   // Test the createApplication operation with and without retries enabled
   @Test
   public void testCreateApplicationWRetries() throws Throwable {
-    // ibmAnalyticsEngineApiService.enableRetries(4, 30);
+//    ibmAnalyticsEngineApiService.enableRetries(4, 30);
     testCreateApplicationWOptions();
 
-    // ibmAnalyticsEngineApiService.disableRetries();
+//    ibmAnalyticsEngineApiService.disableRetries();
     testCreateApplicationWOptions();
   }
 
@@ -361,10 +360,10 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   // Test the listApplications operation with and without retries enabled
   @Test
   public void testListApplicationsWRetries() throws Throwable {
-    // ibmAnalyticsEngineApiService.enableRetries(4, 30);
+//    ibmAnalyticsEngineApiService.enableRetries(4, 30);
     testListApplicationsWOptions();
 
-    // ibmAnalyticsEngineApiService.disableRetries();
+//    ibmAnalyticsEngineApiService.disableRetries();
     testListApplicationsWOptions();
   }
 
@@ -413,10 +412,10 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   // Test the getApplication operation with and without retries enabled
   @Test
   public void testGetApplicationWRetries() throws Throwable {
-    // ibmAnalyticsEngineApiService.enableRetries(4, 30);
+//    ibmAnalyticsEngineApiService.enableRetries(4, 30);
     testGetApplicationWOptions();
 
-    // ibmAnalyticsEngineApiService.disableRetries();
+//    ibmAnalyticsEngineApiService.disableRetries();
     testGetApplicationWOptions();
   }
 
@@ -464,10 +463,10 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   // Test the deleteApplication operation with and without retries enabled
   @Test
   public void testDeleteApplicationWRetries() throws Throwable {
-    // ibmAnalyticsEngineApiService.enableRetries(4, 30);
+//    ibmAnalyticsEngineApiService.enableRetries(4, 30);
     testDeleteApplicationWOptions();
 
-    // ibmAnalyticsEngineApiService.disableRetries();
+//    ibmAnalyticsEngineApiService.disableRetries();
     testDeleteApplicationWOptions();
   }
 
@@ -516,10 +515,10 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   // Test the getApplicationState operation with and without retries enabled
   @Test
   public void testGetApplicationStateWRetries() throws Throwable {
-    // ibmAnalyticsEngineApiService.enableRetries(4, 30);
+//    ibmAnalyticsEngineApiService.enableRetries(4, 30);
     testGetApplicationStateWOptions();
 
-    // ibmAnalyticsEngineApiService.disableRetries();
+//    ibmAnalyticsEngineApiService.disableRetries();
     testGetApplicationStateWOptions();
   }
 
@@ -568,10 +567,10 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   // Test the configurePlatformLogging operation with and without retries enabled
   @Test
   public void testConfigurePlatformLoggingWRetries() throws Throwable {
-    // ibmAnalyticsEngineApiService.enableRetries(4, 30);
+//    ibmAnalyticsEngineApiService.enableRetries(4, 30);
     testConfigurePlatformLoggingWOptions();
 
-    // ibmAnalyticsEngineApiService.disableRetries();
+//    ibmAnalyticsEngineApiService.disableRetries();
     testConfigurePlatformLoggingWOptions();
   }
 
@@ -619,10 +618,10 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   // Test the getLoggingConfiguration operation with and without retries enabled
   @Test
   public void testGetLoggingConfigurationWRetries() throws Throwable {
-    // ibmAnalyticsEngineApiService.enableRetries(4, 30);
+//    ibmAnalyticsEngineApiService.enableRetries(4, 30);
     testGetLoggingConfigurationWOptions();
 
-    // ibmAnalyticsEngineApiService.disableRetries();
+//    ibmAnalyticsEngineApiService.disableRetries();
     testGetLoggingConfigurationWOptions();
   }
 
@@ -633,56 +632,6 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     ibmAnalyticsEngineApiService.getLoggingConfiguration(null).execute();
   }
 
-  // Test the deleteLoggingConfiguration operation with a valid options model parameter
-  @Test
-  public void testDeleteLoggingConfigurationWOptions() throws Throwable {
-    // Register a mock response
-    String mockResponseBody = "";
-    String deleteLoggingConfigurationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/logging";
-    server.enqueue(new MockResponse()
-      .setResponseCode(204)
-      .setBody(mockResponseBody));
-
-    // Construct an instance of the DeleteLoggingConfigurationOptions model
-    DeleteLoggingConfigurationOptions deleteLoggingConfigurationOptionsModel = new DeleteLoggingConfigurationOptions.Builder()
-      .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-      .build();
-
-    // Invoke deleteLoggingConfiguration() with a valid options model and verify the result
-    Response<Void> response = ibmAnalyticsEngineApiService.deleteLoggingConfiguration(deleteLoggingConfigurationOptionsModel).execute();
-    assertNotNull(response);
-    Void responseObj = response.getResult();
-    assertNull(responseObj);
-
-    // Verify the contents of the request sent to the mock server
-    RecordedRequest request = server.takeRequest();
-    assertNotNull(request);
-    assertEquals(request.getMethod(), "DELETE");
-    // Verify request path
-    String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, deleteLoggingConfigurationPath);
-    // Verify that there is no query string
-    Map<String, String> query = TestUtilities.parseQueryString(request);
-    assertNull(query);
-  }
-
-  // Test the deleteLoggingConfiguration operation with and without retries enabled
-  @Test
-  public void testDeleteLoggingConfigurationWRetries() throws Throwable {
-    // ibmAnalyticsEngineApiService.enableRetries(4, 30);
-    testDeleteLoggingConfigurationWOptions();
-
-    // ibmAnalyticsEngineApiService.disableRetries();
-    testDeleteLoggingConfigurationWOptions();
-  }
-
-  // Test the deleteLoggingConfiguration operation with a null options model (negative test)
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testDeleteLoggingConfigurationNoOptions() throws Throwable {
-    server.enqueue(new MockResponse());
-    ibmAnalyticsEngineApiService.deleteLoggingConfiguration(null).execute();
-  }
-
   // Test the startSparkHistoryServer operation with a valid options model parameter
   @Test
   public void testStartSparkHistoryServerWOptions() throws Throwable {
@@ -691,7 +640,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     String startSparkHistoryServerPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_history_server";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
-      .setResponseCode(200)
+      .setResponseCode(201)
       .setBody(mockResponseBody));
 
     // Construct an instance of the StartSparkHistoryServerOptions model
@@ -720,10 +669,10 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   // Test the startSparkHistoryServer operation with and without retries enabled
   @Test
   public void testStartSparkHistoryServerWRetries() throws Throwable {
-    // ibmAnalyticsEngineApiService.enableRetries(4, 30);
+//    ibmAnalyticsEngineApiService.enableRetries(4, 30);
     testStartSparkHistoryServerWOptions();
 
-    // ibmAnalyticsEngineApiService.disableRetries();
+//    ibmAnalyticsEngineApiService.disableRetries();
     testStartSparkHistoryServerWOptions();
   }
 
@@ -771,10 +720,10 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   // Test the getSparkHistoryServer operation with and without retries enabled
   @Test
   public void testGetSparkHistoryServerWRetries() throws Throwable {
-    // ibmAnalyticsEngineApiService.enableRetries(4, 30);
+//    ibmAnalyticsEngineApiService.enableRetries(4, 30);
     testGetSparkHistoryServerWOptions();
 
-    // ibmAnalyticsEngineApiService.disableRetries();
+//    ibmAnalyticsEngineApiService.disableRetries();
     testGetSparkHistoryServerWOptions();
   }
 
@@ -821,10 +770,10 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   // Test the stopSparkHistoryServer operation with and without retries enabled
   @Test
   public void testStopSparkHistoryServerWRetries() throws Throwable {
-    // ibmAnalyticsEngineApiService.enableRetries(4, 30);
+//    ibmAnalyticsEngineApiService.enableRetries(4, 30);
     testStopSparkHistoryServerWOptions();
 
-    // ibmAnalyticsEngineApiService.disableRetries();
+//    ibmAnalyticsEngineApiService.disableRetries();
     testStopSparkHistoryServerWOptions();
   }
 

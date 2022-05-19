@@ -16,7 +16,7 @@ import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * Spark history server started response.
+ * Response of the request to start the Spark history server.
  */
 public class SparkHistoryServerStartResponse extends GenericModel {
 
@@ -29,7 +29,7 @@ public class SparkHistoryServerStartResponse extends GenericModel {
   /**
    * Gets the state.
    *
-   * State of Spark history server.
+   * State of the Spark history server.
    *
    * @return the state
    */
@@ -40,7 +40,7 @@ public class SparkHistoryServerStartResponse extends GenericModel {
   /**
    * Gets the cores.
    *
-   * Number of cores used for the Spark history server.
+   * Number of cpu cores used by the Spark history server.
    *
    * @return the cores
    */
@@ -51,7 +51,7 @@ public class SparkHistoryServerStartResponse extends GenericModel {
   /**
    * Gets the memory.
    *
-   * Memory used for the Spark history server.
+   * Amount of memory used by the Spark history server.
    *
    * @return the memory
    */

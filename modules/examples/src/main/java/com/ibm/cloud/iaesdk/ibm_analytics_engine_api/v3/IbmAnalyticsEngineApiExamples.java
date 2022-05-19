@@ -19,9 +19,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStat
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ConfigurePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
@@ -33,6 +31,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceGetStateRe
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SetInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServerResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServerStartResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StartSparkHistoryServerOptions;
@@ -107,17 +106,17 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
-      System.out.println("createInstanceHome() result:");
-      // begin-create_instance_home
-      CreateInstanceHomeOptions createInstanceHomeOptions = new CreateInstanceHomeOptions.Builder()
+      System.out.println("setInstanceHome() result:");
+      // begin-set_instance_home
+      SetInstanceHomeOptions setInstanceHomeOptions = new SetInstanceHomeOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
-      Response<InstanceHomeResponse> response = ibmAnalyticsEngineApiService.createInstanceHome(createInstanceHomeOptions).execute();
+      Response<InstanceHomeResponse> response = ibmAnalyticsEngineApiService.setInstanceHome(setInstanceHomeOptions).execute();
       InstanceHomeResponse instanceHomeResponse = response.getResult();
 
       System.out.println(instanceHomeResponse);
-      // end-create_instance_home
+      // end-set_instance_home
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
@@ -270,20 +269,6 @@ public class IbmAnalyticsEngineApiExamples {
       Response<Void> response = ibmAnalyticsEngineApiService.stopSparkHistoryServer(stopSparkHistoryServerOptions).execute();
       // end-stop_spark_history_server
       System.out.printf("stopSparkHistoryServer() response status code: %d%n", response.getStatusCode());
-    } catch (ServiceResponseException e) {
-        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
-          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
-    }
-
-    try {
-      // begin-delete_logging_configuration
-      DeleteLoggingConfigurationOptions deleteLoggingConfigurationOptions = new DeleteLoggingConfigurationOptions.Builder()
-        .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-        .build();
-
-      Response<Void> response = ibmAnalyticsEngineApiService.deleteLoggingConfiguration(deleteLoggingConfigurationOptions).execute();
-      // end-delete_logging_configuration
-      System.out.printf("deleteLoggingConfiguration() response status code: %d%n", response.getStatusCode());
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);

@@ -85,7 +85,7 @@ public class StopSparkHistoryServerOptions extends GenericModel {
   /**
    * Gets the instanceId.
    *
-   * The identifier of the instance for which the Spark history server is stopped.
+   * The ID of the Analytics Engine instance whose Spark history server is to be stopped.
    *
    * @return the instanceId
    */

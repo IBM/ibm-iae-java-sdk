@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -15,9 +15,9 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * The getApplications options.
+ * The getCurrentResourceConsumption options.
  */
-public class GetApplicationsOptions extends GenericModel {
+public class GetCurrentResourceConsumptionOptions extends GenericModel {
 
   protected String instanceId;
 
@@ -27,8 +27,8 @@ public class GetApplicationsOptions extends GenericModel {
   public static class Builder {
     private String instanceId;
 
-    private Builder(GetApplicationsOptions getApplicationsOptions) {
-      this.instanceId = getApplicationsOptions.instanceId;
+    private Builder(GetCurrentResourceConsumptionOptions getCurrentResourceConsumptionOptions) {
+      this.instanceId = getCurrentResourceConsumptionOptions.instanceId;
     }
 
     /**
@@ -47,19 +47,19 @@ public class GetApplicationsOptions extends GenericModel {
     }
 
     /**
-     * Builds a GetApplicationsOptions.
+     * Builds a GetCurrentResourceConsumptionOptions.
      *
-     * @return the new GetApplicationsOptions instance
+     * @return the new GetCurrentResourceConsumptionOptions instance
      */
-    public GetApplicationsOptions build() {
-      return new GetApplicationsOptions(this);
+    public GetCurrentResourceConsumptionOptions build() {
+      return new GetCurrentResourceConsumptionOptions(this);
     }
 
     /**
      * Set the instanceId.
      *
      * @param instanceId the instanceId
-     * @return the GetApplicationsOptions builder
+     * @return the GetCurrentResourceConsumptionOptions builder
      */
     public Builder instanceId(String instanceId) {
       this.instanceId = instanceId;
@@ -67,7 +67,9 @@ public class GetApplicationsOptions extends GenericModel {
     }
   }
 
-  protected GetApplicationsOptions(Builder builder) {
+  protected GetCurrentResourceConsumptionOptions() { }
+
+  protected GetCurrentResourceConsumptionOptions(Builder builder) {
     com.ibm.cloud.sdk.core.util.Validator.notEmpty(builder.instanceId,
       "instanceId cannot be empty");
     instanceId = builder.instanceId;
@@ -76,7 +78,7 @@ public class GetApplicationsOptions extends GenericModel {
   /**
    * New builder.
    *
-   * @return a GetApplicationsOptions builder
+   * @return a GetCurrentResourceConsumptionOptions builder
    */
   public Builder newBuilder() {
     return new Builder(this);
@@ -85,7 +87,7 @@ public class GetApplicationsOptions extends GenericModel {
   /**
    * Gets the instanceId.
    *
-   * Identifier of the instance where the applications run.
+   * ID of the Analytics Engine instance.
    *
    * @return the instanceId
    */

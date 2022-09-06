@@ -4,17 +4,15 @@
 
   <!--
       Checkstyle configuration based on the Google coding conventions from:
-
       -  Google Java Style
          https://google.github.io/styleguide/javaguide.html
-
   -->
 
   <module name="Checker">
 
   <module name="NewlineAtEndOfFile"/>
   <module name="FileLength">
-    <property name="max" value="2500"/>
+    <property name="max" value="10000"/>
   </module>
   <module name="FileTabCharacter"/>
 
@@ -126,5 +124,11 @@
     <!-- See http://checkstyle.sf.net/config_misc.html -->
     <module name="ArrayTypeStyle"/>
     <module name="UpperEll"/>
+
+    <!-- Make the @SuppressWarnings annotations available to Checkstyle -->
+    <module name="SuppressWarningsHolder" />
   </module>
+
+  <!-- Filter out Checkstyle warnings that have been suppressed with the @SuppressWarnings annotation -->
+  <module name="SuppressWarningsFilter" />
 </module>

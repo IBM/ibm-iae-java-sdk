@@ -24,31 +24,34 @@
             of the SDK generator used to generate your SDK code.
             See this link for details: https://github.ibm.com/CloudEngineering/openapi-sdkgen/wiki/Compatibility-Chart
         -->
-        <sdk-core-version>9.11.0</sdk-core-version>
+        <sdk-core-version>9.17.3</sdk-core-version>
 
         <!-- >>> Replace this with the name of your SDK's github repository -->
         <git-repository-name>ibm-iae-java-sdk</git-repository-name>
 
-        <testng-version>7.1.0</testng-version>
-        <okhttp3-version>3.13.1</okhttp3-version>
-        <okhttp3-logging-interceptor-version>3.13.1</okhttp3-logging-interceptor-version>
-        <surefire-version>3.0.0-M3</surefire-version>
-        <jacoco-plugin-version>0.8.6</jacoco-plugin-version>
-        <maven-deploy-plugin-version>3.0.0-M1</maven-deploy-plugin-version>
-        <maven-shade-plugin-version>3.2.2</maven-shade-plugin-version>       
-        <maven-source-plugin-version>3.1.0</maven-source-plugin-version>
-        <maven-jar-plugin-version>3.2.0</maven-jar-plugin-version>
-        <maven-javadoc-plugin-version>3.1.1</maven-javadoc-plugin-version>
-        <maven-compiler-plugin-version>3.8.1</maven-compiler-plugin-version>
-        <maven-site-plugin-version>3.7.1</maven-site-plugin-version>
-        <maven-checkstyle-plugin-version>3.1.0</maven-checkstyle-plugin-version>
-        <maven-reports-plugin-version>3.0.0</maven-reports-plugin-version>
-        <maven-failsafe-plugin-version>3.0.0-M4</maven-failsafe-plugin-version>
-        <maven-buildnumber-plugin-version>1.4</maven-buildnumber-plugin-version>
-        <powermock-version>2.0.5</powermock-version>
-        <mockito-version>3.2.4</mockito-version>
-        <maven-gpg-plugin-version>1.6</maven-gpg-plugin-version>
-        <nexus-staging-plugin-version>1.6.8</nexus-staging-plugin-version>
+        <testng-version>7.4.0</testng-version>
+        <okhttp3-version>4.10.0</okhttp3-version>
+        <surefire-version>3.0.0-M7</surefire-version>
+        <jacoco-plugin-version>0.8.8</jacoco-plugin-version>
+        <maven-deploy-plugin-version>3.0.0</maven-deploy-plugin-version>
+        <nexus-staging-plugin-version>1.6.13</nexus-staging-plugin-version>
+        <maven-gpg-plugin-version>3.0.1</maven-gpg-plugin-version>
+        <maven-source-plugin-version>3.2.1</maven-source-plugin-version>
+        <maven-shade-plugin-version>3.3.0</maven-shade-plugin-version>
+        <maven-jar-plugin-version>3.2.2</maven-jar-plugin-version>
+        <maven-javadoc-plugin-version>3.4.1</maven-javadoc-plugin-version>
+        <maven-compiler-plugin-version>3.10.1</maven-compiler-plugin-version>
+        <maven-site-plugin-version>3.12.1</maven-site-plugin-version>
+        <maven-checkstyle-plugin-version>3.2.0</maven-checkstyle-plugin-version>
+        <checkstyle-version>8.41</checkstyle-version>
+        <maven-reports-plugin-version>3.4.1</maven-reports-plugin-version>
+        <maven-failsafe-plugin-version>3.0.0-M7</maven-failsafe-plugin-version>
+        <maven-buildnumber-plugin-version>3.0.0</maven-buildnumber-plugin-version>
+        <powermock-version>2.0.9</powermock-version>
+        <slf4j-version>2.0.0</slf4j-version>
+
+        <!-- versions of transitive dependencies we need to override to avoid vulnerability alerts -->
+        <junit-version>4.13.2</junit-version>
 
     </properties>
 
@@ -165,12 +168,12 @@
                 <version>${powermock-version}</version>
                 <scope>test</scope>
             </dependency>
+            <!-- Dependency needed to build examples -->
             <dependency>
-    			<groupId>com.googlecode.json-simple</groupId>
-				<artifactId>json-simple</artifactId>
-				<version>1.1.1</version>
-    			<scope>test</scope>
-			</dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jdk14</artifactId>
+                <version>${slf4j-version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -181,6 +184,16 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>${maven-deploy-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>${nexus-staging-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>${maven-gpg-plugin-version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -201,6 +214,8 @@
                     <version>${maven-javadoc-plugin-version}</version>
                     <configuration>
                         <quiet>true</quiet>
+                        <source>8</source>
+                        <detectJavaApiLink>false</detectJavaApiLink>
                     </configuration>
                     <executions>
                         <execution>
@@ -243,6 +258,13 @@
                         <configLocation>checkstyle.xml</configLocation>
                         <consoleOutput>true</consoleOutput>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>${checkstyle-version}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.jacoco</groupId>
@@ -300,7 +322,7 @@
                     <configuration>
                         <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
                         <shortRevisionLength>8</shortRevisionLength>
-                        <timestampFormat>{0,date,yyyyMMdd-HHmmss}</timestampFormat>
+                        <timestampFormat>yyyyMMdd-HHmmss</timestampFormat>
                         <attach>true</attach>
                         <addOutputDirectoryToResources>true</addOutputDirectoryToResources>
                         <doCheck>false</doCheck>
@@ -331,6 +353,19 @@
                         </archive>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>${maven-shade-plugin-version}</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -342,24 +377,12 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
-			<plugin>
-			    <groupId>org.sonatype.plugins</groupId>
-			    <artifactId>nexus-staging-maven-plugin</artifactId>
-			    <version>${nexus-staging-plugin-version}</version>
-			</plugin>
-			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-gpg-plugin</artifactId>
-			    <version>${maven-gpg-plugin-version}</version>
-			</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
-                    <aggregate>true</aggregate>
                     <show>public</show>
                     <doctitle>${project.name}, version ${project.version}</doctitle>
-                    <footer>IBM Corporation</footer>
                 </configuration>
                 <executions>
                     <execution>
@@ -378,6 +401,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <version>${surefire-version}</version>
+              <configuration>
+                <skipTests>${skip.unit.tests}</skipTests>
+              </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -431,7 +462,28 @@
             <url>https://www.ibm.com/</url>
         </developer>
     </developers>
-        <profiles>
+
+    <profiles>
+        <profile>
+            <!-- When using java 9+ we need to use the "add-opens" jvm option to allow powermock to do its thing -->
+            <id>java9plus</id>
+            <activation>
+                <jdk>[9,)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${surefire-version}</version>
+                        <configuration>
+                            <skipTests>${skip.unit.tests}</skipTests>
+                            <argLine>--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED</argLine>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
         <!-- "central" is used to deploy artifacts on maven central -->
         <profile>
@@ -478,9 +530,9 @@
                         </executions>
                         <configuration>
                             <gpgArguments>
-                                <gpgArgument>--batch</gpgArgument>
-                                <gpgArgument>--yes</gpgArgument>
-                                <gpgArgument>--no-tty</gpgArgument>
+                                <arg>--batch</arg>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
                             </gpgArguments>
                         </configuration>
                     </plugin>

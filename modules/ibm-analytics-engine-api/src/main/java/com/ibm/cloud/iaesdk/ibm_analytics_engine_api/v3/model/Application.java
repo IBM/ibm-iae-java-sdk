@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -24,9 +24,13 @@ public class Application extends GenericModel {
   protected String href;
   @SerializedName("spark_application_id")
   protected String sparkApplicationId;
+  @SerializedName("spark_application_name")
+  protected String sparkApplicationName;
   protected String state;
   @SerializedName("start_time")
   protected String startTime;
+  @SerializedName("end_time")
+  protected String endTime;
   @SerializedName("finish_time")
   protected String finishTime;
 
@@ -64,6 +68,17 @@ public class Application extends GenericModel {
   }
 
   /**
+   * Gets the sparkApplicationName.
+   *
+   * Name of the Spark application.
+   *
+   * @return the sparkApplicationName
+   */
+  public String getSparkApplicationName() {
+    return sparkApplicationName;
+  }
+
+  /**
    * Gets the state.
    *
    * Status of the application.
@@ -83,6 +98,17 @@ public class Application extends GenericModel {
    */
   public String getStartTime() {
     return startTime;
+  }
+
+  /**
+   * Gets the endTime.
+   *
+   * Time when the application run ended in success, failure or was stopped.
+   *
+   * @return the endTime
+   */
+  public String getEndTime() {
+    return endTime;
   }
 
   /**

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -15,21 +15,21 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * Instance level default configuration for Spark workloads.
+ * log server properties.
  */
-public class InstanceDetailsDefaultConfig extends GenericModel {
+public class LoggingConfigurationResponseLogServer extends GenericModel {
 
-  protected String key;
+  protected String type;
 
   /**
-   * Gets the key.
+   * Gets the type.
    *
-   * Value of the Spark configuration key.
+   * type of log server.
    *
-   * @return the key
+   * @return the type
    */
-  public String getKey() {
-    return key;
+  public String getType() {
+    return type;
   }
 }
 

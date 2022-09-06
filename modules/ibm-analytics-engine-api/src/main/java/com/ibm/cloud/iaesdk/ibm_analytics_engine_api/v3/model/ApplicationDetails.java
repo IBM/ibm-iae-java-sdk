@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -12,77 +12,154 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * Details of an application.
+ * Application details.
  */
 public class ApplicationDetails extends GenericModel {
 
-  @SerializedName("application_id")
-  protected String applicationId;
-  @SerializedName("spark_application_id")
-  protected String sparkApplicationId;
-  protected String state;
-  @SerializedName("start_time")
-  protected String startTime;
-  @SerializedName("finish_time")
-  protected String finishTime;
+  protected String application;
+  protected String jars;
+  protected String packages;
+  protected String repositories;
+  protected String files;
+  protected String archives;
+  protected String name;
+  @SerializedName("class")
+  protected String xClass;
+  protected List<String> arguments;
+  protected Map<String, Object> conf;
+  protected Map<String, Object> env;
 
   /**
-   * Gets the applicationId.
+   * Gets the application.
    *
-   * Identifier of the application.
+   * Path of the application to run.
    *
-   * @return the applicationId
+   * @return the application
    */
-  public String getApplicationId() {
-    return applicationId;
+  public String getApplication() {
+    return application;
   }
 
   /**
-   * Gets the sparkApplicationId.
+   * Gets the jars.
    *
-   * Identifier of the Spark application.
+   * Path of the jar files containing the application.
    *
-   * @return the sparkApplicationId
+   * @return the jars
    */
-  public String getSparkApplicationId() {
-    return sparkApplicationId;
+  public String getJars() {
+    return jars;
   }
 
   /**
-   * Gets the state.
+   * Gets the packages.
    *
-   * Status of the application.
+   * Package names.
    *
-   * @return the state
+   * @return the packages
    */
-  public String getState() {
-    return state;
+  public String getPackages() {
+    return packages;
   }
 
   /**
-   * Gets the startTime.
+   * Gets the repositories.
    *
-   * Time when the application was started.
+   * Repositories names.
    *
-   * @return the startTime
+   * @return the repositories
    */
-  public String getStartTime() {
-    return startTime;
+  public String getRepositories() {
+    return repositories;
   }
 
   /**
-   * Gets the finishTime.
+   * Gets the files.
    *
-   * Time when the application was completed.
+   * File names.
    *
-   * @return the finishTime
+   * @return the files
    */
-  public String getFinishTime() {
-    return finishTime;
+  public String getFiles() {
+    return files;
+  }
+
+  /**
+   * Gets the archives.
+   *
+   * Archive Names.
+   *
+   * @return the archives
+   */
+  public String getArchives() {
+    return archives;
+  }
+
+  /**
+   * Gets the name.
+   *
+   * Name of the application.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Gets the xClass.
+   *
+   * Entry point for a Spark application bundled as a '.jar' file. This is applicable only for Java or Scala
+   * applications.
+   *
+   * @return the xClass
+   */
+  public String getXClass() {
+    return xClass;
+  }
+
+  /**
+   * Gets the arguments.
+   *
+   * An array of arguments to be passed to the application.
+   *
+   * @return the arguments
+   */
+  public List<String> getArguments() {
+    return arguments;
+  }
+
+  /**
+   * Gets the conf.
+   *
+   * Application configurations to override the value specified at instance level. See [Spark environment variables](
+   * https://spark.apache.org/docs/latest/configuration.html#available-properties) for a list of the supported
+   * variables.
+   *
+   * @return the conf
+   */
+  public Map<String, Object> getConf() {
+    return conf;
+  }
+
+  /**
+   * Gets the env.
+   *
+   * Application environment configurations to use. See [Spark environment
+   * variables](https://spark.apache.org/docs/latest/configuration.html#environment-variables) for a list of the
+   * supported variables.
+   *
+   * @return the env
+   */
+  public Map<String, Object> getEnv() {
+    return env;
   }
 }
 

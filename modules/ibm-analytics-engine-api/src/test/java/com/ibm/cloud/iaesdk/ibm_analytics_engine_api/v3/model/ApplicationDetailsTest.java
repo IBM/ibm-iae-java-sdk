@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -32,10 +32,16 @@ public class ApplicationDetailsTest {
   @Test
   public void testApplicationDetails() throws Throwable {
     ApplicationDetails applicationDetailsModel = new ApplicationDetails();
-    assertNull(applicationDetailsModel.getApplicationId());
-    assertNull(applicationDetailsModel.getSparkApplicationId());
-    assertNull(applicationDetailsModel.getState());
-    assertNull(applicationDetailsModel.getStartTime());
-    assertNull(applicationDetailsModel.getFinishTime());
+    assertNull(applicationDetailsModel.getApplication());
+    assertNull(applicationDetailsModel.getJars());
+    assertNull(applicationDetailsModel.getPackages());
+    assertNull(applicationDetailsModel.getRepositories());
+    assertNull(applicationDetailsModel.getFiles());
+    assertNull(applicationDetailsModel.getArchives());
+    assertNull(applicationDetailsModel.getName());
+    assertNull(applicationDetailsModel.getXClass());
+    assertNull(applicationDetailsModel.getArguments());
+    assertNull(applicationDetailsModel.getConf());
+    assertNull(applicationDetailsModel.getEnv());
   }
 }

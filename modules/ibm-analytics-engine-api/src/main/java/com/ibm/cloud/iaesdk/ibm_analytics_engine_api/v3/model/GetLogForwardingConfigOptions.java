@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -15,9 +15,9 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * The getInstanceById options.
+ * The getLogForwardingConfig options.
  */
-public class GetInstanceByIdOptions extends GenericModel {
+public class GetLogForwardingConfigOptions extends GenericModel {
 
   protected String instanceId;
 
@@ -27,8 +27,8 @@ public class GetInstanceByIdOptions extends GenericModel {
   public static class Builder {
     private String instanceId;
 
-    private Builder(GetInstanceByIdOptions getInstanceByIdOptions) {
-      this.instanceId = getInstanceByIdOptions.instanceId;
+    private Builder(GetLogForwardingConfigOptions getLogForwardingConfigOptions) {
+      this.instanceId = getLogForwardingConfigOptions.instanceId;
     }
 
     /**
@@ -47,19 +47,19 @@ public class GetInstanceByIdOptions extends GenericModel {
     }
 
     /**
-     * Builds a GetInstanceByIdOptions.
+     * Builds a GetLogForwardingConfigOptions.
      *
-     * @return the new GetInstanceByIdOptions instance
+     * @return the new GetLogForwardingConfigOptions instance
      */
-    public GetInstanceByIdOptions build() {
-      return new GetInstanceByIdOptions(this);
+    public GetLogForwardingConfigOptions build() {
+      return new GetLogForwardingConfigOptions(this);
     }
 
     /**
      * Set the instanceId.
      *
      * @param instanceId the instanceId
-     * @return the GetInstanceByIdOptions builder
+     * @return the GetLogForwardingConfigOptions builder
      */
     public Builder instanceId(String instanceId) {
       this.instanceId = instanceId;
@@ -67,7 +67,9 @@ public class GetInstanceByIdOptions extends GenericModel {
     }
   }
 
-  protected GetInstanceByIdOptions(Builder builder) {
+  protected GetLogForwardingConfigOptions() { }
+
+  protected GetLogForwardingConfigOptions(Builder builder) {
     com.ibm.cloud.sdk.core.util.Validator.notEmpty(builder.instanceId,
       "instanceId cannot be empty");
     instanceId = builder.instanceId;
@@ -76,7 +78,7 @@ public class GetInstanceByIdOptions extends GenericModel {
   /**
    * New builder.
    *
-   * @return a GetInstanceByIdOptions builder
+   * @return a GetLogForwardingConfigOptions builder
    */
   public Builder newBuilder() {
     return new Builder(this);
@@ -85,7 +87,7 @@ public class GetInstanceByIdOptions extends GenericModel {
   /**
    * Gets the instanceId.
    *
-   * Identifier of the instance to retrieve.
+   * ID of the Analytics Engine instance.
    *
    * @return the instanceId
    */

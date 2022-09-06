@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -79,18 +79,9 @@ public class CreateApplicationOptions extends GenericModel {
       this.applicationDetails = applicationDetails;
       return this;
     }
-
-    /**
-     * Set the applicationRequest.
-     *
-     * @param applicationRequest the applicationRequest
-     * @return the CreateApplicationOptions builder
-     */
-    public Builder applicationRequest(ApplicationRequest applicationRequest) {
-      this.applicationDetails = applicationRequest.applicationDetails();
-      return this;
-    }
   }
+
+  protected CreateApplicationOptions() { }
 
   protected CreateApplicationOptions(Builder builder) {
     com.ibm.cloud.sdk.core.util.Validator.notEmpty(builder.instanceId,

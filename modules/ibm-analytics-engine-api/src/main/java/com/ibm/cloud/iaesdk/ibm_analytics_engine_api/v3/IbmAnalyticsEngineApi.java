@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -12,7 +12,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 3.38.0-07189efd-20210827-205025
+ * IBM OpenAPI SDK Code Generator Version: 3.54.1-1d9808a7-20220817-143039
  */
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
@@ -23,13 +23,28 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollect
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ConfigurePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CurrentResourceConsumptionResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetCurrentResourceConsumptionOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceDefaultConfigsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceStateOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLogForwardingConfigOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceGetStateResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LogForwardingConfigResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceInstanceDefaultConfigsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceLogForwardingConfigOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SetInstanceHomeOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceDefaultConfigsOptions;
 import com.ibm.cloud.sdk.core.http.RequestBuilder;
 import com.ibm.cloud.sdk.core.http.ResponseConverter;
 import com.ibm.cloud.sdk.core.http.ServiceCall;
@@ -37,6 +52,7 @@ import com.ibm.cloud.sdk.core.security.Authenticator;
 import com.ibm.cloud.sdk.core.security.ConfigBasedAuthenticatorFactory;
 import com.ibm.cloud.sdk.core.service.BaseService;
 import com.ibm.cloud.sdk.core.util.ResponseConverterUtils;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -51,6 +67,24 @@ public class IbmAnalyticsEngineApi extends BaseService {
   public static final String DEFAULT_SERVICE_NAME = "ibm_analytics_engine_api";
 
   public static final String DEFAULT_SERVICE_URL = "https://api.us-south.ae.cloud.ibm.com";
+
+  private static final Map<String, String> _regionalEndpoints;
+  static {
+    Map<String, String> m = new HashMap<>();
+    m.put("us-south", "https://api.us-south.ae.cloud.ibm.com");
+    m.put("eu-de", "https://api.eu-de.ae.cloud.ibm.com");
+    _regionalEndpoints = Collections.unmodifiableMap(m);
+  }
+
+  /**
+   * Returns the service URL associated with the specified region.
+   * @param region a string representing the region
+   * @return the service URL associated with the specified region or null
+   * if no mapping for the region exists
+   */
+  public static String getServiceUrlForRegion(String region) {
+    return _regionalEndpoints.get(region);
+  }
 
  /**
    * Class method which constructs an instance of the `IbmAnalyticsEngineApi` client.
@@ -113,6 +147,152 @@ public class IbmAnalyticsEngineApi extends BaseService {
   }
 
   /**
+   * Find Analytics Engine state by id.
+   *
+   * Retrieve the state of a single Analytics Engine instance.
+   *
+   * @param getInstanceStateOptions the {@link GetInstanceStateOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link InstanceGetStateResponse}
+   */
+  public ServiceCall<InstanceGetStateResponse> getInstanceState(GetInstanceStateOptions getInstanceStateOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(getInstanceStateOptions,
+      "getInstanceStateOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", getInstanceStateOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/state", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "getInstanceState");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    ResponseConverter<InstanceGetStateResponse> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<InstanceGetStateResponse>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Set instance home.
+   *
+   * Provide the details of the Cloud Object Storage instance to associate with the Analytics Engine instance and use as
+   * 'instance home' if 'instance home' has not already been set.
+   *
+   * @param setInstanceHomeOptions the {@link SetInstanceHomeOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link InstanceHomeResponse}
+   */
+  public ServiceCall<InstanceHomeResponse> setInstanceHome(SetInstanceHomeOptions setInstanceHomeOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(setInstanceHomeOptions,
+      "setInstanceHomeOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", setInstanceHomeOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.put(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/instance_home", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "setInstanceHome");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    final JsonObject contentJson = new JsonObject();
+    if (setInstanceHomeOptions.newInstanceId() != null) {
+      contentJson.addProperty("instance_id", setInstanceHomeOptions.newInstanceId());
+    }
+    if (setInstanceHomeOptions.newProvider() != null) {
+      contentJson.addProperty("provider", setInstanceHomeOptions.newProvider());
+    }
+    if (setInstanceHomeOptions.newType() != null) {
+      contentJson.addProperty("type", setInstanceHomeOptions.newType());
+    }
+    if (setInstanceHomeOptions.newRegion() != null) {
+      contentJson.addProperty("region", setInstanceHomeOptions.newRegion());
+    }
+    if (setInstanceHomeOptions.newEndpoint() != null) {
+      contentJson.addProperty("endpoint", setInstanceHomeOptions.newEndpoint());
+    }
+    if (setInstanceHomeOptions.newHmacAccessKey() != null) {
+      contentJson.addProperty("hmac_access_key", setInstanceHomeOptions.newHmacAccessKey());
+    }
+    if (setInstanceHomeOptions.newHmacSecretKey() != null) {
+      contentJson.addProperty("hmac_secret_key", setInstanceHomeOptions.newHmacSecretKey());
+    }
+    builder.bodyJson(contentJson);
+    ResponseConverter<InstanceHomeResponse> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<InstanceHomeResponse>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Get instance default Spark configurations.
+   *
+   * Get the default Spark configuration properties that will be applied to all applications of the instance.
+   *
+   * @param getInstanceDefaultConfigsOptions the {@link GetInstanceDefaultConfigsOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link Map}
+   */
+  public ServiceCall<Map<String, String>> getInstanceDefaultConfigs(GetInstanceDefaultConfigsOptions getInstanceDefaultConfigsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(getInstanceDefaultConfigsOptions,
+      "getInstanceDefaultConfigsOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", getInstanceDefaultConfigsOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/default_configs", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "getInstanceDefaultConfigs");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    ResponseConverter<Map<String, String>> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<Map<String, String>>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Replace instance default Spark configurations.
+   *
+   * Replace the default Spark configuration properties that will be applied to all applications of the instance.
+   *
+   * @param replaceInstanceDefaultConfigsOptions the {@link ReplaceInstanceDefaultConfigsOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link Map}
+   */
+  public ServiceCall<Map<String, String>> replaceInstanceDefaultConfigs(ReplaceInstanceDefaultConfigsOptions replaceInstanceDefaultConfigsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(replaceInstanceDefaultConfigsOptions,
+      "replaceInstanceDefaultConfigsOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", replaceInstanceDefaultConfigsOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.put(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/default_configs", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "replaceInstanceDefaultConfigs");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    builder.bodyContent(com.ibm.cloud.sdk.core.util.GsonSingleton.getGsonWithoutPrettyPrinting().toJson(replaceInstanceDefaultConfigsOptions.body()), "application/json");
+    ResponseConverter<Map<String, String>> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<Map<String, String>>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Update instance default Spark configurations.
+   *
+   * Update the default Spark configuration properties that will be applied to all applications of the instance.
+   *
+   * @param updateInstanceDefaultConfigsOptions the {@link UpdateInstanceDefaultConfigsOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link Map}
+   */
+  public ServiceCall<Map<String, String>> updateInstanceDefaultConfigs(UpdateInstanceDefaultConfigsOptions updateInstanceDefaultConfigsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(updateInstanceDefaultConfigsOptions,
+      "updateInstanceDefaultConfigsOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", updateInstanceDefaultConfigsOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.patch(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/default_configs", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "updateInstanceDefaultConfigs");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    builder.bodyContent(com.ibm.cloud.sdk.core.util.GsonSingleton.getGsonWithoutPrettyPrinting().toJson(updateInstanceDefaultConfigsOptions.body()), "application/merge-patch+json");
+    ResponseConverter<Map<String, String>> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<Map<String, String>>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
    * Deploy a Spark application.
    *
    * Deploys a Spark application on a given serverless Spark instance.
@@ -144,7 +324,7 @@ public class IbmAnalyticsEngineApi extends BaseService {
   /**
    * Retrieve all Spark applications.
    *
-   * Gets all applications submitted in an instance with a specified inst_id.
+   * Gets all applications submitted in an instance with a specified instance-id.
    *
    * @param listApplicationsOptions the {@link ListApplicationsOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link ApplicationCollection}
@@ -168,7 +348,7 @@ public class IbmAnalyticsEngineApi extends BaseService {
   /**
    * Retrieve the details of a given Spark application.
    *
-   * Gets the details of the given Spark application.
+   * Gets the details of a given Spark application.
    *
    * @param getApplicationOptions the {@link GetApplicationOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link ApplicationGetResponse}
@@ -236,6 +416,147 @@ public class IbmAnalyticsEngineApi extends BaseService {
     builder.header("Accept", "application/json");
     ResponseConverter<ApplicationGetStateResponse> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<ApplicationGetStateResponse>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Get current resource consumption.
+   *
+   * Gives the total memory and virtual processor cores allotted to all the applications running in the service instance
+   * at this point in time. When auto-scaled applications are running, the resources allotted will change over time,
+   * based on the applications's demands. Note: The consumption is not an indication of actual resource consumption by
+   * Spark processes. It is the sum of resources allocated to the currently running applications at the time of
+   * application submission.
+   *
+   * @param getCurrentResourceConsumptionOptions the {@link GetCurrentResourceConsumptionOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link CurrentResourceConsumptionResponse}
+   */
+  public ServiceCall<CurrentResourceConsumptionResponse> getCurrentResourceConsumption(GetCurrentResourceConsumptionOptions getCurrentResourceConsumptionOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(getCurrentResourceConsumptionOptions,
+      "getCurrentResourceConsumptionOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", getCurrentResourceConsumptionOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/current_resource_consumption", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "getCurrentResourceConsumption");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    ResponseConverter<CurrentResourceConsumptionResponse> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<CurrentResourceConsumptionResponse>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Replace log forwarding configuration.
+   *
+   * Modify the configuration for forwarding logs from the Analytics Engine instance to IBM Log Analysis server. Use
+   * this endpoint to enable or disable log forwarding.
+   *
+   * @param replaceLogForwardingConfigOptions the {@link ReplaceLogForwardingConfigOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link LogForwardingConfigResponse}
+   */
+  public ServiceCall<LogForwardingConfigResponse> replaceLogForwardingConfig(ReplaceLogForwardingConfigOptions replaceLogForwardingConfigOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(replaceLogForwardingConfigOptions,
+      "replaceLogForwardingConfigOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", replaceLogForwardingConfigOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.put(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/log_forwarding_config", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "replaceLogForwardingConfig");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    final JsonObject contentJson = new JsonObject();
+    if (replaceLogForwardingConfigOptions.enabled() != null) {
+      contentJson.addProperty("enabled", replaceLogForwardingConfigOptions.enabled());
+    }
+    if (replaceLogForwardingConfigOptions.sources() != null) {
+      contentJson.add("sources", com.ibm.cloud.sdk.core.util.GsonSingleton.getGson().toJsonTree(replaceLogForwardingConfigOptions.sources()));
+    }
+    if (replaceLogForwardingConfigOptions.tags() != null) {
+      contentJson.add("tags", com.ibm.cloud.sdk.core.util.GsonSingleton.getGson().toJsonTree(replaceLogForwardingConfigOptions.tags()));
+    }
+    builder.bodyJson(contentJson);
+    ResponseConverter<LogForwardingConfigResponse> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<LogForwardingConfigResponse>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Get log forwarding configuration.
+   *
+   * Retrieve the log forwarding configuration of the Analytics Engine instance.
+   *
+   * @param getLogForwardingConfigOptions the {@link GetLogForwardingConfigOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link LogForwardingConfigResponse}
+   */
+  public ServiceCall<LogForwardingConfigResponse> getLogForwardingConfig(GetLogForwardingConfigOptions getLogForwardingConfigOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(getLogForwardingConfigOptions,
+      "getLogForwardingConfigOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", getLogForwardingConfigOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/log_forwarding_config", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "getLogForwardingConfig");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    ResponseConverter<LogForwardingConfigResponse> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<LogForwardingConfigResponse>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Enable or disable log forwarding.
+   *
+   * Enable or disable log forwarding from IBM Analytics Engine to IBM Log Analysis server.
+   *
+   * @param configurePlatformLoggingOptions the {@link ConfigurePlatformLoggingOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link LoggingConfigurationResponse}
+   */
+  public ServiceCall<LoggingConfigurationResponse> configurePlatformLogging(ConfigurePlatformLoggingOptions configurePlatformLoggingOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(configurePlatformLoggingOptions,
+      "configurePlatformLoggingOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_guid", configurePlatformLoggingOptions.instanceGuid());
+    RequestBuilder builder = RequestBuilder.put(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_guid}/logging", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "configurePlatformLogging");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    final JsonObject contentJson = new JsonObject();
+    if (configurePlatformLoggingOptions.enable() != null) {
+      contentJson.addProperty("enable", configurePlatformLoggingOptions.enable());
+    }
+    builder.bodyJson(contentJson);
+    ResponseConverter<LoggingConfigurationResponse> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<LoggingConfigurationResponse>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Retrieve the logging configuration for a given instance id.
+   *
+   * Retrieve the logging configuration of a given Analytics Engine instance.
+   *
+   * @param getLoggingConfigurationOptions the {@link GetLoggingConfigurationOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link LoggingConfigurationResponse}
+   */
+  public ServiceCall<LoggingConfigurationResponse> getLoggingConfiguration(GetLoggingConfigurationOptions getLoggingConfigurationOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(getLoggingConfigurationOptions,
+      "getLoggingConfigurationOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_guid", getLoggingConfigurationOptions.instanceGuid());
+    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_guid}/logging", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "getLoggingConfiguration");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    ResponseConverter<LoggingConfigurationResponse> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<LoggingConfigurationResponse>() { }.getType());
     return createServiceCall(builder.build(), responseConverter);
   }
 

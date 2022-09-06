@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -15,21 +15,38 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.IbmAnalyticsEngineApi;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Application;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollection;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequest;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequestApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ConfigurePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CurrentResourceConsumptionResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.DeleteApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetCurrentResourceConsumptionOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceDefaultConfigsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceStateOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLogForwardingConfigOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultConfig;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultRuntime;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceGetStateResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHome;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LogForwardingConfigResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LogForwardingConfigResponseLogServer;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponseLogServer;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceInstanceDefaultConfigsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceLogForwardingConfigOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SetInstanceHomeOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceDefaultConfigsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.security.Authenticator;
@@ -38,8 +55,6 @@ import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import com.ibm.cloud.sdk.core.util.EnvironmentUtils;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,14 +83,899 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   protected MockWebServer server;
   protected IbmAnalyticsEngineApi ibmAnalyticsEngineApiService;
 
-  // Creates a mock set of environment variables that are returned by EnvironmentUtils.getenv().
+  // Construct the service with a null authenticator (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testConstructorWithNullAuthenticator() throws Throwable {
+    final String serviceName = "testService";
+    new IbmAnalyticsEngineApi(serviceName, null);
+  }
+
+  // Test the getServiceUrlForRegion() method
+  @Test
+  public void testGetServiceUrlForRegion() throws Throwable {
+    assertNull(IbmAnalyticsEngineApi.getServiceUrlForRegion("INVALID_REGION"));
+    assertEquals(IbmAnalyticsEngineApi.getServiceUrlForRegion("us-south"), "https://api.us-south.ae.cloud.ibm.com");
+    assertEquals(IbmAnalyticsEngineApi.getServiceUrlForRegion("eu-de"), "https://api.eu-de.ae.cloud.ibm.com");
+  }
+
+  // Test the getInstance operation with a valid options model parameter
+  @Test
+  public void testGetInstanceWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"id\": \"id\", \"href\": \"href\", \"state\": \"created\", \"state_change_time\": \"2021-01-30T08:30:00.000Z\", \"default_runtime\": {\"spark_version\": \"sparkVersion\"}, \"instance_home\": {\"id\": \"id\", \"provider\": \"provider\", \"type\": \"type\", \"region\": \"region\", \"endpoint\": \"endpoint\", \"bucket\": \"bucket\", \"hmac_access_key\": \"hmacAccessKey\", \"hmac_secret_key\": \"hmacSecretKey\"}, \"default_config\": {\"key\": \"key\"}}";
+    String getInstancePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetInstanceOptions model
+    GetInstanceOptions getInstanceOptionsModel = new GetInstanceOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .build();
+
+    // Invoke getInstance() with a valid options model and verify the result
+    Response<Instance> response = ibmAnalyticsEngineApiService.getInstance(getInstanceOptionsModel).execute();
+    assertNotNull(response);
+    Instance responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getInstancePath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getInstance operation with and without retries enabled
+  @Test
+  public void testGetInstanceWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testGetInstanceWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testGetInstanceWOptions();
+  }
+
+  // Test the getInstance operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetInstanceNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.getInstance(null).execute();
+  }
+
+  // Test the getInstanceState operation with a valid options model parameter
+  @Test
+  public void testGetInstanceStateWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"id\": \"id\", \"state\": \"created\"}";
+    String getInstanceStatePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/state";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetInstanceStateOptions model
+    GetInstanceStateOptions getInstanceStateOptionsModel = new GetInstanceStateOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .build();
+
+    // Invoke getInstanceState() with a valid options model and verify the result
+    Response<InstanceGetStateResponse> response = ibmAnalyticsEngineApiService.getInstanceState(getInstanceStateOptionsModel).execute();
+    assertNotNull(response);
+    InstanceGetStateResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getInstanceStatePath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getInstanceState operation with and without retries enabled
+  @Test
+  public void testGetInstanceStateWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testGetInstanceStateWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testGetInstanceStateWOptions();
+  }
+
+  // Test the getInstanceState operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetInstanceStateNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.getInstanceState(null).execute();
+  }
+
+  // Test the setInstanceHome operation with a valid options model parameter
+  @Test
+  public void testSetInstanceHomeWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"instance_id\": \"instanceId\", \"provider\": \"provider\", \"type\": \"type\", \"region\": \"region\", \"endpoint\": \"endpoint\", \"hmac_access_key\": \"hmacAccessKey\", \"hmac_secret_key\": \"hmacSecretKey\"}";
+    String setInstanceHomePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/instance_home";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the SetInstanceHomeOptions model
+    SetInstanceHomeOptions setInstanceHomeOptionsModel = new SetInstanceHomeOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .newInstanceId("testString")
+      .newProvider("ibm-cos")
+      .newType("objectstore")
+      .newRegion("us-south")
+      .newEndpoint("s3.direct.us-south.cloud-object-storage.appdomain.cloud")
+      .newHmacAccessKey("821**********0ae")
+      .newHmacSecretKey("03e****************4fc3")
+      .build();
+
+    // Invoke setInstanceHome() with a valid options model and verify the result
+    Response<InstanceHomeResponse> response = ibmAnalyticsEngineApiService.setInstanceHome(setInstanceHomeOptionsModel).execute();
+    assertNotNull(response);
+    InstanceHomeResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "PUT");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, setInstanceHomePath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the setInstanceHome operation with and without retries enabled
+  @Test
+  public void testSetInstanceHomeWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testSetInstanceHomeWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testSetInstanceHomeWOptions();
+  }
+
+  // Test the setInstanceHome operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testSetInstanceHomeNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.setInstanceHome(null).execute();
+  }
+
+  // Test the getInstanceDefaultConfigs operation with a valid options model parameter
+  @Test
+  public void testGetInstanceDefaultConfigsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"mapKey\": \"inner\"}";
+    String getInstanceDefaultConfigsPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/default_configs";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetInstanceDefaultConfigsOptions model
+    GetInstanceDefaultConfigsOptions getInstanceDefaultConfigsOptionsModel = new GetInstanceDefaultConfigsOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .build();
+
+    // Invoke getInstanceDefaultConfigs() with a valid options model and verify the result
+    Response<Map<String, String>> response = ibmAnalyticsEngineApiService.getInstanceDefaultConfigs(getInstanceDefaultConfigsOptionsModel).execute();
+    assertNotNull(response);
+    Map<String, String> responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getInstanceDefaultConfigsPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getInstanceDefaultConfigs operation with and without retries enabled
+  @Test
+  public void testGetInstanceDefaultConfigsWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testGetInstanceDefaultConfigsWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testGetInstanceDefaultConfigsWOptions();
+  }
+
+  // Test the getInstanceDefaultConfigs operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetInstanceDefaultConfigsNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.getInstanceDefaultConfigs(null).execute();
+  }
+
+  // Test the replaceInstanceDefaultConfigs operation with a valid options model parameter
+  @Test
+  public void testReplaceInstanceDefaultConfigsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"mapKey\": \"inner\"}";
+    String replaceInstanceDefaultConfigsPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/default_configs";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the ReplaceInstanceDefaultConfigsOptions model
+    ReplaceInstanceDefaultConfigsOptions replaceInstanceDefaultConfigsOptionsModel = new ReplaceInstanceDefaultConfigsOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .body(new java.util.HashMap<String, String>() { { put("foo", "testString"); } })
+      .build();
+
+    // Invoke replaceInstanceDefaultConfigs() with a valid options model and verify the result
+    Response<Map<String, String>> response = ibmAnalyticsEngineApiService.replaceInstanceDefaultConfigs(replaceInstanceDefaultConfigsOptionsModel).execute();
+    assertNotNull(response);
+    Map<String, String> responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "PUT");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, replaceInstanceDefaultConfigsPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the replaceInstanceDefaultConfigs operation with and without retries enabled
+  @Test
+  public void testReplaceInstanceDefaultConfigsWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testReplaceInstanceDefaultConfigsWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testReplaceInstanceDefaultConfigsWOptions();
+  }
+
+  // Test the replaceInstanceDefaultConfigs operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testReplaceInstanceDefaultConfigsNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.replaceInstanceDefaultConfigs(null).execute();
+  }
+
+  // Test the updateInstanceDefaultConfigs operation with a valid options model parameter
+  @Test
+  public void testUpdateInstanceDefaultConfigsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"mapKey\": \"inner\"}";
+    String updateInstanceDefaultConfigsPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/default_configs";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the UpdateInstanceDefaultConfigsOptions model
+    UpdateInstanceDefaultConfigsOptions updateInstanceDefaultConfigsOptionsModel = new UpdateInstanceDefaultConfigsOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .body(new java.util.HashMap<String, Object>() { { put("foo", TestUtilities.createMockMap()); } })
+      .build();
+
+    // Invoke updateInstanceDefaultConfigs() with a valid options model and verify the result
+    Response<Map<String, String>> response = ibmAnalyticsEngineApiService.updateInstanceDefaultConfigs(updateInstanceDefaultConfigsOptionsModel).execute();
+    assertNotNull(response);
+    Map<String, String> responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "PATCH");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, updateInstanceDefaultConfigsPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the updateInstanceDefaultConfigs operation with and without retries enabled
+  @Test
+  public void testUpdateInstanceDefaultConfigsWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testUpdateInstanceDefaultConfigsWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testUpdateInstanceDefaultConfigsWOptions();
+  }
+
+  // Test the updateInstanceDefaultConfigs operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testUpdateInstanceDefaultConfigsNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.updateInstanceDefaultConfigs(null).execute();
+  }
+
+  // Test the createApplication operation with a valid options model parameter
+  @Test
+  public void testCreateApplicationWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"id\": \"id\", \"state\": \"accepted\"}";
+    String createApplicationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(202)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the ApplicationRequestApplicationDetails model
+    ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
+      .application("cos://bucket_name.my_cos/my_spark_app.py")
+      .jars("cos://cloud-object-storage/jars/tests.jar")
+      .packages("testString")
+      .repositories("testString")
+      .files("testString")
+      .archives("testString")
+      .name("spark-app")
+      .xClass("com.company.path.ClassName")
+      .arguments(java.util.Arrays.asList("[arg1, arg2, arg3]"))
+      .conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      .env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      .build();
+
+    // Construct an instance of the CreateApplicationOptions model
+    CreateApplicationOptions createApplicationOptionsModel = new CreateApplicationOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .applicationDetails(applicationRequestApplicationDetailsModel)
+      .build();
+
+    // Invoke createApplication() with a valid options model and verify the result
+    Response<ApplicationResponse> response = ibmAnalyticsEngineApiService.createApplication(createApplicationOptionsModel).execute();
+    assertNotNull(response);
+    ApplicationResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, createApplicationPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the createApplication operation with and without retries enabled
+  @Test
+  public void testCreateApplicationWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testCreateApplicationWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testCreateApplicationWOptions();
+  }
+
+  // Test the createApplication operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCreateApplicationNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.createApplication(null).execute();
+  }
+
+  // Test the listApplications operation with a valid options model parameter
+  @Test
+  public void testListApplicationsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"applications\": [{\"id\": \"id\", \"href\": \"href\", \"spark_application_id\": \"sparkApplicationId\", \"spark_application_name\": \"sparkApplicationName\", \"state\": \"state\", \"start_time\": \"startTime\", \"end_time\": \"endTime\", \"finish_time\": \"finishTime\"}]}";
+    String listApplicationsPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the ListApplicationsOptions model
+    ListApplicationsOptions listApplicationsOptionsModel = new ListApplicationsOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .build();
+
+    // Invoke listApplications() with a valid options model and verify the result
+    Response<ApplicationCollection> response = ibmAnalyticsEngineApiService.listApplications(listApplicationsOptionsModel).execute();
+    assertNotNull(response);
+    ApplicationCollection responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, listApplicationsPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the listApplications operation with and without retries enabled
+  @Test
+  public void testListApplicationsWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testListApplicationsWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testListApplicationsWOptions();
+  }
+
+  // Test the listApplications operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testListApplicationsNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.listApplications(null).execute();
+  }
+
+  // Test the getApplication operation with a valid options model parameter
+  @Test
+  public void testGetApplicationWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"application_details\": {\"application\": \"cos://bucket_name.my_cos/my_spark_app.py\", \"jars\": \"cos://cloud-object-storage/jars/tests.jar\", \"packages\": \"packages\", \"repositories\": \"repositories\", \"files\": \"files\", \"archives\": \"archives\", \"name\": \"spark-app\", \"class\": \"com.company.path.ClassName\", \"arguments\": [\"[arg1, arg2, arg3]\"], \"conf\": {\"mapKey\": \"anyValue\"}, \"env\": {\"mapKey\": \"anyValue\"}}, \"id\": \"2b83d31c-397b-48ad-ad76-b83347c982db\", \"spark_application_id\": \"sparkApplicationId\", \"spark_application_name\": \"sparkApplicationName\", \"state\": \"accepted\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"end_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\"}";
+    String getApplicationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications/ff48cc19-0e7e-4627-aac6-0b4ad080397b";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetApplicationOptions model
+    GetApplicationOptions getApplicationOptionsModel = new GetApplicationOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
+      .build();
+
+    // Invoke getApplication() with a valid options model and verify the result
+    Response<ApplicationGetResponse> response = ibmAnalyticsEngineApiService.getApplication(getApplicationOptionsModel).execute();
+    assertNotNull(response);
+    ApplicationGetResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getApplicationPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getApplication operation with and without retries enabled
+  @Test
+  public void testGetApplicationWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testGetApplicationWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testGetApplicationWOptions();
+  }
+
+  // Test the getApplication operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetApplicationNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.getApplication(null).execute();
+  }
+
+  // Test the deleteApplication operation with a valid options model parameter
+  @Test
+  public void testDeleteApplicationWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "";
+    String deleteApplicationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications/ff48cc19-0e7e-4627-aac6-0b4ad080397b";
+    server.enqueue(new MockResponse()
+      .setResponseCode(204)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the DeleteApplicationOptions model
+    DeleteApplicationOptions deleteApplicationOptionsModel = new DeleteApplicationOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
+      .build();
+
+    // Invoke deleteApplication() with a valid options model and verify the result
+    Response<Void> response = ibmAnalyticsEngineApiService.deleteApplication(deleteApplicationOptionsModel).execute();
+    assertNotNull(response);
+    Void responseObj = response.getResult();
+    assertNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "DELETE");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, deleteApplicationPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the deleteApplication operation with and without retries enabled
+  @Test
+  public void testDeleteApplicationWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testDeleteApplicationWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testDeleteApplicationWOptions();
+  }
+
+  // Test the deleteApplication operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testDeleteApplicationNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.deleteApplication(null).execute();
+  }
+
+  // Test the getApplicationState operation with a valid options model parameter
+  @Test
+  public void testGetApplicationStateWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"id\": \"id\", \"state\": \"state\", \"start_time\": \"startTime\", \"end_time\": \"endTime\", \"finish_time\": \"finishTime\"}";
+    String getApplicationStatePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications/ff48cc19-0e7e-4627-aac6-0b4ad080397b/state";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetApplicationStateOptions model
+    GetApplicationStateOptions getApplicationStateOptionsModel = new GetApplicationStateOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
+      .build();
+
+    // Invoke getApplicationState() with a valid options model and verify the result
+    Response<ApplicationGetStateResponse> response = ibmAnalyticsEngineApiService.getApplicationState(getApplicationStateOptionsModel).execute();
+    assertNotNull(response);
+    ApplicationGetStateResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getApplicationStatePath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getApplicationState operation with and without retries enabled
+  @Test
+  public void testGetApplicationStateWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testGetApplicationStateWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testGetApplicationStateWOptions();
+  }
+
+  // Test the getApplicationState operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetApplicationStateNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.getApplicationState(null).execute();
+  }
+
+  // Test the getCurrentResourceConsumption operation with a valid options model parameter
+  @Test
+  public void testGetCurrentResourceConsumptionWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"cores\": \"cores\", \"memory\": \"memory\"}";
+    String getCurrentResourceConsumptionPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/current_resource_consumption";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetCurrentResourceConsumptionOptions model
+    GetCurrentResourceConsumptionOptions getCurrentResourceConsumptionOptionsModel = new GetCurrentResourceConsumptionOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .build();
+
+    // Invoke getCurrentResourceConsumption() with a valid options model and verify the result
+    Response<CurrentResourceConsumptionResponse> response = ibmAnalyticsEngineApiService.getCurrentResourceConsumption(getCurrentResourceConsumptionOptionsModel).execute();
+    assertNotNull(response);
+    CurrentResourceConsumptionResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getCurrentResourceConsumptionPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getCurrentResourceConsumption operation with and without retries enabled
+  @Test
+  public void testGetCurrentResourceConsumptionWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testGetCurrentResourceConsumptionWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testGetCurrentResourceConsumptionWOptions();
+  }
+
+  // Test the getCurrentResourceConsumption operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetCurrentResourceConsumptionNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.getCurrentResourceConsumption(null).execute();
+  }
+
+  // Test the replaceLogForwardingConfig operation with a valid options model parameter
+  @Test
+  public void testReplaceLogForwardingConfigWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"sources\": [\"sources\"], \"tags\": [\"tags\"], \"log_server\": {\"type\": \"ibm-log-analysis\"}, \"enabled\": true}";
+    String replaceLogForwardingConfigPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/log_forwarding_config";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the ReplaceLogForwardingConfigOptions model
+    ReplaceLogForwardingConfigOptions replaceLogForwardingConfigOptionsModel = new ReplaceLogForwardingConfigOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .enabled(true)
+      .sources(java.util.Arrays.asList("spark-driver", "spark-executor"))
+      .tags(java.util.Arrays.asList("<tag_1>", "<tag_2>", "<tag_n"))
+      .build();
+
+    // Invoke replaceLogForwardingConfig() with a valid options model and verify the result
+    Response<LogForwardingConfigResponse> response = ibmAnalyticsEngineApiService.replaceLogForwardingConfig(replaceLogForwardingConfigOptionsModel).execute();
+    assertNotNull(response);
+    LogForwardingConfigResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "PUT");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, replaceLogForwardingConfigPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the replaceLogForwardingConfig operation with and without retries enabled
+  @Test
+  public void testReplaceLogForwardingConfigWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testReplaceLogForwardingConfigWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testReplaceLogForwardingConfigWOptions();
+  }
+
+  // Test the replaceLogForwardingConfig operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testReplaceLogForwardingConfigNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.replaceLogForwardingConfig(null).execute();
+  }
+
+  // Test the getLogForwardingConfig operation with a valid options model parameter
+  @Test
+  public void testGetLogForwardingConfigWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"sources\": [\"sources\"], \"tags\": [\"tags\"], \"log_server\": {\"type\": \"ibm-log-analysis\"}, \"enabled\": true}";
+    String getLogForwardingConfigPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/log_forwarding_config";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetLogForwardingConfigOptions model
+    GetLogForwardingConfigOptions getLogForwardingConfigOptionsModel = new GetLogForwardingConfigOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .build();
+
+    // Invoke getLogForwardingConfig() with a valid options model and verify the result
+    Response<LogForwardingConfigResponse> response = ibmAnalyticsEngineApiService.getLogForwardingConfig(getLogForwardingConfigOptionsModel).execute();
+    assertNotNull(response);
+    LogForwardingConfigResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getLogForwardingConfigPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getLogForwardingConfig operation with and without retries enabled
+  @Test
+  public void testGetLogForwardingConfigWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testGetLogForwardingConfigWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testGetLogForwardingConfigWOptions();
+  }
+
+  // Test the getLogForwardingConfig operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetLogForwardingConfigNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.getLogForwardingConfig(null).execute();
+  }
+
+  // Test the configurePlatformLogging operation with a valid options model parameter
+  @Test
+  public void testConfigurePlatformLoggingWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"components\": [\"components\"], \"log_server\": {\"type\": \"ibm-log-analysis\"}, \"enable\": true}";
+    String configurePlatformLoggingPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/logging";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(201)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the ConfigurePlatformLoggingOptions model
+    ConfigurePlatformLoggingOptions configurePlatformLoggingOptionsModel = new ConfigurePlatformLoggingOptions.Builder()
+      .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .enable(true)
+      .build();
+
+    // Invoke configurePlatformLogging() with a valid options model and verify the result
+    Response<LoggingConfigurationResponse> response = ibmAnalyticsEngineApiService.configurePlatformLogging(configurePlatformLoggingOptionsModel).execute();
+    assertNotNull(response);
+    LoggingConfigurationResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "PUT");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, configurePlatformLoggingPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the configurePlatformLogging operation with and without retries enabled
+  @Test
+  public void testConfigurePlatformLoggingWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testConfigurePlatformLoggingWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testConfigurePlatformLoggingWOptions();
+  }
+
+  // Test the configurePlatformLogging operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testConfigurePlatformLoggingNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.configurePlatformLogging(null).execute();
+  }
+
+  // Test the getLoggingConfiguration operation with a valid options model parameter
+  @Test
+  public void testGetLoggingConfigurationWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"components\": [\"components\"], \"log_server\": {\"type\": \"ibm-log-analysis\"}, \"enable\": true}";
+    String getLoggingConfigurationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/logging";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetLoggingConfigurationOptions model
+    GetLoggingConfigurationOptions getLoggingConfigurationOptionsModel = new GetLoggingConfigurationOptions.Builder()
+      .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .build();
+
+    // Invoke getLoggingConfiguration() with a valid options model and verify the result
+    Response<LoggingConfigurationResponse> response = ibmAnalyticsEngineApiService.getLoggingConfiguration(getLoggingConfigurationOptionsModel).execute();
+    assertNotNull(response);
+    LoggingConfigurationResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getLoggingConfigurationPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getLoggingConfiguration operation with and without retries enabled
+  @Test
+  public void testGetLoggingConfigurationWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testGetLoggingConfigurationWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testGetLoggingConfigurationWOptions();
+  }
+
+  // Test the getLoggingConfiguration operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetLoggingConfigurationNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.getLoggingConfiguration(null).execute();
+  }
+
+  // Perform setup needed before each test method
+  @BeforeMethod
+  public void beforeEachTest() {
+    // Start the mock server.
+    try {
+      server = new MockWebServer();
+      server.start();
+    } catch (IOException err) {
+      fail("Failed to instantiate mock web server");
+    }
+
+    // Construct an instance of the service
+    constructClientService();
+  }
+
+  // Perform tear down after each test method
+  @AfterMethod
+  public void afterEachTest() throws IOException {
+    server.shutdown();
+    ibmAnalyticsEngineApiService = null;
+  }
+
+  // Creates a mock set of environment variables that are returned by EnvironmentUtils.getenv()
   private Map<String, String> getTestProcessEnvironment() {
     Map<String, String> env = new HashMap<>();
     env.put("TESTSERVICE_AUTH_TYPE", "noAuth");
     return env;
   }
 
-  public void constructClientService() throws Throwable {
+  // Constructs an instance of the service to be used by the tests
+  public void constructClientService() {
     PowerMockito.spy(EnvironmentUtils.class);
     PowerMockito.when(EnvironmentUtils.getenv()).thenReturn(getTestProcessEnvironment());
     final String serviceName = "testService";
@@ -83,347 +983,5 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     ibmAnalyticsEngineApiService = IbmAnalyticsEngineApi.newInstance(serviceName);
     String url = server.url("/").toString();
     ibmAnalyticsEngineApiService.setServiceUrl(url);
-  }
-
-  /**
-  * Negative Test - construct the service with a null authenticator.
-  */
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testConstructorWithNullAuthenticator() throws Throwable {
-    final String serviceName = "testService";
-
-    new IbmAnalyticsEngineApi(serviceName, null);
-  }
-
-  @Test
-  public void testGetInstanceWOptions() throws Throwable {
-    // Schedule some responses.
-    String mockResponseBody = "{\"id\": \"id\", \"href\": \"href\", \"state\": \"created\", \"state_change_time\": \"2021-01-30T08:30:00.000Z\", \"default_runtime\": {\"spark_version\": \"sparkVersion\"}, \"instance_home\": {\"id\": \"id\", \"provider\": \"provider\", \"type\": \"type\", \"region\": \"region\", \"endpoint\": \"endpoint\", \"bucket\": \"bucket\", \"hmac_access_key\": \"hmacAccessKey\", \"hmac_secret_key\": \"hmacSecretKey\"}, \"default_config\": {\"key\": \"key\"}}";
-    String getInstancePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09";
-
-    server.enqueue(new MockResponse()
-    .setHeader("Content-type", "application/json")
-    .setResponseCode(200)
-    .setBody(mockResponseBody));
-
-    constructClientService();
-
-    // Construct an instance of the GetInstanceOptions model
-    GetInstanceOptions getInstanceOptionsModel = new GetInstanceOptions.Builder()
-    .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-    .build();
-
-    // Invoke operation with valid options model (positive test)
-    Response<Instance> response = ibmAnalyticsEngineApiService.getInstance(getInstanceOptionsModel).execute();
-    assertNotNull(response);
-    Instance responseObj = response.getResult();
-    assertNotNull(responseObj);
-
-    // Verify the contents of the request
-    RecordedRequest request = server.takeRequest();
-    assertNotNull(request);
-    assertEquals(request.getMethod(), "GET");
-
-    // Check query
-    Map<String, String> query = TestUtilities.parseQueryString(request);
-    assertNull(query);
-
-    // Check request path
-    String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, getInstancePath);
-  }
-
-  // Test the getInstance operation with null options model parameter
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testGetInstanceNoOptions() throws Throwable {
-    // construct the service
-    constructClientService();
-
-    server.enqueue(new MockResponse());
-
-    // Invoke operation with null options model (negative test)
-    ibmAnalyticsEngineApiService.getInstance(null).execute();
-  }
-
-  @Test
-  public void testCreateApplicationWOptions() throws Throwable {
-    // Schedule some responses.
-    String mockResponseBody = "{\"id\": \"id\", \"state\": \"accepted\"}";
-    String createApplicationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications";
-
-    server.enqueue(new MockResponse()
-    .setHeader("Content-type", "application/json")
-    .setResponseCode(202)
-    .setBody(mockResponseBody));
-
-    constructClientService();
-
-    // Construct an instance of the ApplicationRequestApplicationDetails model
-    ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
-    .application("cos://bucket_name.my_cos/my_spark_app.py")
-    .xClass("com.company.path.ClassName")
-    .arguments(new java.util.ArrayList<String>(java.util.Arrays.asList("[arg1, arg2, arg3]")))
-    .conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-    .env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-    .build();
-
-    // Construct an instance of the CreateApplicationOptions model
-    CreateApplicationOptions createApplicationOptionsModel = new CreateApplicationOptions.Builder()
-    .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-    .applicationDetails(applicationRequestApplicationDetailsModel)
-    .build();
-
-    // Invoke operation with valid options model (positive test)
-    Response<ApplicationResponse> response = ibmAnalyticsEngineApiService.createApplication(createApplicationOptionsModel).execute();
-    assertNotNull(response);
-    ApplicationResponse responseObj = response.getResult();
-    assertNotNull(responseObj);
-
-    // Verify the contents of the request
-    RecordedRequest request = server.takeRequest();
-    assertNotNull(request);
-    assertEquals(request.getMethod(), "POST");
-
-    // Check query
-    Map<String, String> query = TestUtilities.parseQueryString(request);
-    assertNull(query);
-
-    // Check request path
-    String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, createApplicationPath);
-  }
-
-  // Test the createApplication operation with null options model parameter
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testCreateApplicationNoOptions() throws Throwable {
-    // construct the service
-    constructClientService();
-
-    server.enqueue(new MockResponse());
-
-    // Invoke operation with null options model (negative test)
-    ibmAnalyticsEngineApiService.createApplication(null).execute();
-  }
-
-  @Test
-  public void testListApplicationsWOptions() throws Throwable {
-    // Schedule some responses.
-    String mockResponseBody = "{\"applications\": [{\"id\": \"id\", \"href\": \"href\", \"spark_application_id\": \"sparkApplicationId\", \"state\": \"state\", \"start_time\": \"startTime\", \"finish_time\": \"finishTime\"}]}";
-    String listApplicationsPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications";
-
-    server.enqueue(new MockResponse()
-    .setHeader("Content-type", "application/json")
-    .setResponseCode(200)
-    .setBody(mockResponseBody));
-
-    constructClientService();
-
-    // Construct an instance of the ListApplicationsOptions model
-    ListApplicationsOptions listApplicationsOptionsModel = new ListApplicationsOptions.Builder()
-    .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-    .build();
-
-    // Invoke operation with valid options model (positive test)
-    Response<ApplicationCollection> response = ibmAnalyticsEngineApiService.listApplications(listApplicationsOptionsModel).execute();
-    assertNotNull(response);
-    ApplicationCollection responseObj = response.getResult();
-    assertNotNull(responseObj);
-
-    // Verify the contents of the request
-    RecordedRequest request = server.takeRequest();
-    assertNotNull(request);
-    assertEquals(request.getMethod(), "GET");
-
-    // Check query
-    Map<String, String> query = TestUtilities.parseQueryString(request);
-    assertNull(query);
-
-    // Check request path
-    String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, listApplicationsPath);
-  }
-
-  // Test the listApplications operation with null options model parameter
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testListApplicationsNoOptions() throws Throwable {
-    // construct the service
-    constructClientService();
-
-    server.enqueue(new MockResponse());
-
-    // Invoke operation with null options model (negative test)
-    ibmAnalyticsEngineApiService.listApplications(null).execute();
-  }
-
-  @Test
-  public void testGetApplicationWOptions() throws Throwable {
-    // Schedule some responses.
-    String mockResponseBody = "{\"application_details\": {\"application_details\": {\"application\": \"cos://bucket_name.my_cos/my_spark_app.py\", \"class\": \"com.company.path.ClassName\", \"arguments\": [\"[arg1, arg2, arg3]\"], \"conf\": {\"mapKey\": \"anyValue\"}, \"env\": {\"mapKey\": \"anyValue\"}}}, \"id\": \"2b83d31c-397b-48ad-ad76-b83347c982db\", \"state\": \"accepted\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\"}";
-    String getApplicationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications/ff48cc19-0e7e-4627-aac6-0b4ad080397b";
-
-    server.enqueue(new MockResponse()
-    .setHeader("Content-type", "application/json")
-    .setResponseCode(200)
-    .setBody(mockResponseBody));
-
-    constructClientService();
-
-    // Construct an instance of the GetApplicationOptions model
-    GetApplicationOptions getApplicationOptionsModel = new GetApplicationOptions.Builder()
-    .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-    .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
-    .build();
-
-    // Invoke operation with valid options model (positive test)
-    Response<ApplicationGetResponse> response = ibmAnalyticsEngineApiService.getApplication(getApplicationOptionsModel).execute();
-    assertNotNull(response);
-    ApplicationGetResponse responseObj = response.getResult();
-    assertNotNull(responseObj);
-
-    // Verify the contents of the request
-    RecordedRequest request = server.takeRequest();
-    assertNotNull(request);
-    assertEquals(request.getMethod(), "GET");
-
-    // Check query
-    Map<String, String> query = TestUtilities.parseQueryString(request);
-    assertNull(query);
-
-    // Check request path
-    String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, getApplicationPath);
-  }
-
-  // Test the getApplication operation with null options model parameter
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testGetApplicationNoOptions() throws Throwable {
-    // construct the service
-    constructClientService();
-
-    server.enqueue(new MockResponse());
-
-    // Invoke operation with null options model (negative test)
-    ibmAnalyticsEngineApiService.getApplication(null).execute();
-  }
-
-  @Test
-  public void testDeleteApplicationWOptions() throws Throwable {
-    // Schedule some responses.
-    String mockResponseBody = "";
-    String deleteApplicationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications/ff48cc19-0e7e-4627-aac6-0b4ad080397b";
-
-    server.enqueue(new MockResponse()
-    .setResponseCode(204)
-    .setBody(mockResponseBody));
-
-    constructClientService();
-
-    // Construct an instance of the DeleteApplicationOptions model
-    DeleteApplicationOptions deleteApplicationOptionsModel = new DeleteApplicationOptions.Builder()
-    .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-    .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
-    .build();
-
-    // Invoke operation with valid options model (positive test)
-    Response<Void> response = ibmAnalyticsEngineApiService.deleteApplication(deleteApplicationOptionsModel).execute();
-    assertNotNull(response);
-    Void responseObj = response.getResult();
-    // Response does not have a return type. Check that the result is null.
-    assertNull(responseObj);
-
-    // Verify the contents of the request
-    RecordedRequest request = server.takeRequest();
-    assertNotNull(request);
-    assertEquals(request.getMethod(), "DELETE");
-
-    // Check query
-    Map<String, String> query = TestUtilities.parseQueryString(request);
-    assertNull(query);
-
-    // Check request path
-    String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, deleteApplicationPath);
-  }
-
-  // Test the deleteApplication operation with null options model parameter
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testDeleteApplicationNoOptions() throws Throwable {
-    // construct the service
-    constructClientService();
-
-    server.enqueue(new MockResponse());
-
-    // Invoke operation with null options model (negative test)
-    ibmAnalyticsEngineApiService.deleteApplication(null).execute();
-  }
-
-  @Test
-  public void testGetApplicationStateWOptions() throws Throwable {
-    // Schedule some responses.
-    String mockResponseBody = "{\"id\": \"id\", \"state\": \"state\", \"start_time\": \"startTime\", \"finish_time\": \"finishTime\"}";
-    String getApplicationStatePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications/ff48cc19-0e7e-4627-aac6-0b4ad080397b/state";
-
-    server.enqueue(new MockResponse()
-    .setHeader("Content-type", "application/json")
-    .setResponseCode(200)
-    .setBody(mockResponseBody));
-
-    constructClientService();
-
-    // Construct an instance of the GetApplicationStateOptions model
-    GetApplicationStateOptions getApplicationStateOptionsModel = new GetApplicationStateOptions.Builder()
-    .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-    .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
-    .build();
-
-    // Invoke operation with valid options model (positive test)
-    Response<ApplicationGetStateResponse> response = ibmAnalyticsEngineApiService.getApplicationState(getApplicationStateOptionsModel).execute();
-    assertNotNull(response);
-    ApplicationGetStateResponse responseObj = response.getResult();
-    assertNotNull(responseObj);
-
-    // Verify the contents of the request
-    RecordedRequest request = server.takeRequest();
-    assertNotNull(request);
-    assertEquals(request.getMethod(), "GET");
-
-    // Check query
-    Map<String, String> query = TestUtilities.parseQueryString(request);
-    assertNull(query);
-
-    // Check request path
-    String parsedPath = TestUtilities.parseReqPath(request);
-    assertEquals(parsedPath, getApplicationStatePath);
-  }
-
-  // Test the getApplicationState operation with null options model parameter
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testGetApplicationStateNoOptions() throws Throwable {
-    // construct the service
-    constructClientService();
-
-    server.enqueue(new MockResponse());
-
-    // Invoke operation with null options model (negative test)
-    ibmAnalyticsEngineApiService.getApplicationState(null).execute();
-  }
-
-  /** Initialize the server */
-  @BeforeMethod
-  public void setUpMockServer() {
-    try {
-        server = new MockWebServer();
-        // register handler
-        server.start();
-        }
-    catch (IOException err) {
-        fail("Failed to instantiate mock web server");
-    }
-  }
-
-  @AfterMethod
-  public void tearDownMockServer() throws IOException {
-    server.shutdown();
-    ibmAnalyticsEngineApiService = null;
   }
 }

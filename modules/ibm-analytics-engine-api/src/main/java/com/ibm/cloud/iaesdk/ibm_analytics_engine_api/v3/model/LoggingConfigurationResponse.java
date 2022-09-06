@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -18,35 +18,46 @@ import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * Specifies the default runtime to use for all workloads that run in this instance.
+ * Response of logging API.
  */
-public class InstanceDetailsDefaultRuntime extends GenericModel {
+public class LoggingConfigurationResponse extends GenericModel {
 
-  @SerializedName("spark_version")
-  protected String sparkVersion;
-  @SerializedName("additional_packages")
-  protected List<String> additionalPackages;
+  protected List<String> components;
+  @SerializedName("log_server")
+  protected LoggingConfigurationResponseLogServer logServer;
+  protected Boolean enable;
 
   /**
-   * Gets the sparkVersion.
+   * Gets the components.
    *
-   * Version of Spark runtime to use. Currently, only 3.0 is supported.
+   * component array.
    *
-   * @return the sparkVersion
+   * @return the components
    */
-  public String getSparkVersion() {
-    return sparkVersion;
+  public List<String> getComponents() {
+    return components;
   }
 
   /**
-   * Gets the additionalPackages.
+   * Gets the logServer.
    *
-   * Add-on packages.
+   * log server properties.
    *
-   * @return the additionalPackages
+   * @return the logServer
    */
-  public List<String> getAdditionalPackages() {
-    return additionalPackages;
+  public LoggingConfigurationResponseLogServer getLogServer() {
+    return logServer;
+  }
+
+  /**
+   * Gets the enable.
+   *
+   * enable.
+   *
+   * @return the enable
+   */
+  public Boolean isEnable() {
+    return enable;
   }
 }
 

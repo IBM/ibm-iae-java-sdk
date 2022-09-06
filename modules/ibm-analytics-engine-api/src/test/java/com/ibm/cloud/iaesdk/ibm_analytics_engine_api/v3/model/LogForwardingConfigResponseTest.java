@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -13,7 +13,8 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDetailsDefaultRuntime;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LogForwardingConfigResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LogForwardingConfigResponseLogServer;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -23,16 +24,18 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the InstanceDetailsDefaultRuntime model.
+ * Unit test class for the LogForwardingConfigResponse model.
  */
-public class InstanceDetailsDefaultRuntimeTest {
+public class LogForwardingConfigResponseTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testInstanceDetailsDefaultRuntime() throws Throwable {
-    InstanceDetailsDefaultRuntime instanceDetailsDefaultRuntimeModel = new InstanceDetailsDefaultRuntime();
-    assertNull(instanceDetailsDefaultRuntimeModel.getSparkVersion());
-    assertNull(instanceDetailsDefaultRuntimeModel.getAdditionalPackages());
+  public void testLogForwardingConfigResponse() throws Throwable {
+    LogForwardingConfigResponse logForwardingConfigResponseModel = new LogForwardingConfigResponse();
+    assertNull(logForwardingConfigResponseModel.getSources());
+    assertNull(logForwardingConfigResponseModel.getTags());
+    assertNull(logForwardingConfigResponseModel.getLogServer());
+    assertNull(logForwardingConfigResponseModel.isEnabled());
   }
 }

@@ -12,26 +12,36 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import java.util.List;
-
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * An array of application details.
+ * Current resource consumption of the instance.
  */
-public class ApplicationCollection extends GenericModel {
+public class CurrentResourceConsumptionResponse extends GenericModel {
 
-  protected List<Application> applications;
+  protected String cores;
+  protected String memory;
 
   /**
-   * Gets the applications.
+   * Gets the cores.
    *
-   * List of applications.
+   * Number of virtual processor cores used.
    *
-   * @return the applications
+   * @return the cores
    */
-  public List<Application> getApplications() {
-    return applications;
+  public String getCores() {
+    return cores;
+  }
+
+  /**
+   * Gets the memory.
+   *
+   * Amount of memory used.
+   *
+   * @return the memory
+   */
+  public String getMemory() {
+    return memory;
   }
 }
 

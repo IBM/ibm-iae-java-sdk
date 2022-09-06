@@ -70,6 +70,13 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public static Map<String, String> config = null;
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
+
+  public String instanceId = null;
+  public String instanceIdWithoutInstanceHome = null;
+  public String hmacAccessKey = null;
+  public String hmacSecretKey = null;
+  public String applicationId = null;
+
   /**
    * This method provides our config filename to the base class.
    */
@@ -94,6 +101,10 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     assertNotNull(config);
     assertFalse(config.isEmpty());
     assertEquals(service.getServiceUrl(), config.get("URL"));
+    instanceId = config.get("INSTANCE_GUID");
+    instanceIdWithoutInstanceHome = config.get("INSTANCE_GUID_WO_INSTANCE_HOME");
+    hmacAccessKey = config.get("HMAC_ACCESS_KEY");
+    hmacSecretKey = config.get("HMAC_SECRET_KEY");
 
     service.enableRetries(4, 30);
 
@@ -104,7 +115,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetInstance() throws Exception {
     try {
       GetInstanceOptions getInstanceOptions = new GetInstanceOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .instanceId(instanceId)
         .build();
 
       // Invoke operation
@@ -126,7 +137,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetInstanceState() throws Exception {
     try {
       GetInstanceStateOptions getInstanceStateOptions = new GetInstanceStateOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .instanceId(instanceId)
         .build();
 
       // Invoke operation
@@ -148,14 +159,14 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testSetInstanceHome() throws Exception {
     try {
       SetInstanceHomeOptions setInstanceHomeOptions = new SetInstanceHomeOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .instanceId(instanceIdWithoutInstanceHome)
         .newInstanceId("testString")
         .newProvider("ibm-cos")
         .newType("objectstore")
         .newRegion("us-south")
         .newEndpoint("s3.direct.us-south.cloud-object-storage.appdomain.cloud")
-        .newHmacAccessKey("821**********0ae")
-        .newHmacSecretKey("03e****************4fc3")
+        .newHmacAccessKey(hmacAccessKey)
+        .newHmacSecretKey(hmacSecretKey)
         .build();
 
       // Invoke operation
@@ -177,7 +188,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetInstanceDefaultConfigs() throws Exception {
     try {
       GetInstanceDefaultConfigsOptions getInstanceDefaultConfigsOptions = new GetInstanceDefaultConfigsOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .instanceId(instanceId)
         .build();
 
       // Invoke operation
@@ -198,9 +209,12 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   @Test
   public void testReplaceInstanceDefaultConfigs() throws Exception {
     try {
+      Map<String, String> newDefaultConfigs = new HashMap<String, String>();
+      newDefaultConfigs.put("foo", "testString");
+
       ReplaceInstanceDefaultConfigsOptions replaceInstanceDefaultConfigsOptions = new ReplaceInstanceDefaultConfigsOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-        .body(new java.util.HashMap<String, String>() { { put("foo", "testString"); } })
+        .instanceId(instanceId)
+        .body(newDefaultConfigs)
         .build();
 
       // Invoke operation
@@ -221,9 +235,12 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   @Test
   public void testUpdateInstanceDefaultConfigs() throws Exception {
     try {
+      Map<String, Object> updatedDefaultConfigs = new HashMap<String, Object>();
+      updatedDefaultConfigs.put("foo", "testString2");
+      
       UpdateInstanceDefaultConfigsOptions updateInstanceDefaultConfigsOptions = new UpdateInstanceDefaultConfigsOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-        .body(new java.util.HashMap<String, Object>() { { put("foo", "bar"); } })
+        .instanceId(instanceId)
+        .body(updatedDefaultConfigs)
         .build();
 
       // Invoke operation
@@ -245,21 +262,12 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testCreateApplication() throws Exception {
     try {
       ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
-        .application("cos://bucket_name.my_cos/my_spark_app.py")
-        .jars("cos://cloud-object-storage/jars/tests.jar")
-        .packages("testString")
-        .repositories("testString")
-        .files("testString")
-        .archives("testString")
-        .name("spark-app")
-        .xClass("com.company.path.ClassName")
-        .arguments(java.util.Arrays.asList("[arg1, arg2, arg3]"))
-        .conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-        .env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+        .application("/opt/ibm/spark/examples/src/main/python/wordcount.py")
+        .arguments(java.util.Arrays.asList("/opt/ibm/spark/examples/src/main/resources/people.txt"))
         .build();
 
       CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .instanceId(instanceId)
         .applicationDetails(applicationRequestApplicationDetailsModel)
         .build();
 
@@ -272,6 +280,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       ApplicationResponse applicationResponseResult = response.getResult();
 
       assertNotNull(applicationResponseResult);
+
+      applicationId = applicationResponseResult.getId();
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
@@ -282,7 +292,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testListApplications() throws Exception {
     try {
       ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .instanceId(instanceId)
         .build();
 
       // Invoke operation
@@ -304,8 +314,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetApplication() throws Exception {
     try {
       GetApplicationOptions getApplicationOptions = new GetApplicationOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-        .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
+        .instanceId(instanceId)
+        .applicationId(applicationId)
         .build();
 
       // Invoke operation
@@ -327,8 +337,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetApplicationState() throws Exception {
     try {
       GetApplicationStateOptions getApplicationStateOptions = new GetApplicationStateOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-        .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
+        .instanceId(instanceId)
+        .applicationId(applicationId)
         .build();
 
       // Invoke operation
@@ -350,7 +360,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetCurrentResourceConsumption() throws Exception {
     try {
       GetCurrentResourceConsumptionOptions getCurrentResourceConsumptionOptions = new GetCurrentResourceConsumptionOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .instanceId(instanceId)
         .build();
 
       // Invoke operation
@@ -372,7 +382,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testReplaceLogForwardingConfig() throws Exception {
     try {
       ReplaceLogForwardingConfigOptions replaceLogForwardingConfigOptions = new ReplaceLogForwardingConfigOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .instanceId(instanceId)
         .enabled(true)
         .sources(java.util.Arrays.asList("spark-driver", "spark-executor"))
         .tags(java.util.Arrays.asList("<tag_1>", "<tag_2>", "<tag_n"))
@@ -397,7 +407,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetLogForwardingConfig() throws Exception {
     try {
       GetLogForwardingConfigOptions getLogForwardingConfigOptions = new GetLogForwardingConfigOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .instanceId(instanceId)
         .build();
 
       // Invoke operation
@@ -419,7 +429,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testConfigurePlatformLogging() throws Exception {
     try {
       ConfigurePlatformLoggingOptions configurePlatformLoggingOptions = new ConfigurePlatformLoggingOptions.Builder()
-        .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .instanceGuid(instanceId)
         .enable(true)
         .build();
 
@@ -442,7 +452,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testGetLoggingConfiguration() throws Exception {
     try {
       GetLoggingConfigurationOptions getLoggingConfigurationOptions = new GetLoggingConfigurationOptions.Builder()
-        .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .instanceGuid(instanceId)
         .build();
 
       // Invoke operation
@@ -464,8 +474,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testDeleteApplication() throws Exception {
     try {
       DeleteApplicationOptions deleteApplicationOptions = new DeleteApplicationOptions.Builder()
-        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-        .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
+        .instanceId(instanceId)
+        .applicationId(applicationId)
         .build();
 
       // Invoke operation

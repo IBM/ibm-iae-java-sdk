@@ -12,26 +12,48 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import java.util.List;
-
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * An array of application details.
+ * State details of Analytics Engine instance.
  */
-public class ApplicationCollection extends GenericModel {
-
-  protected List<Application> applications;
+public class InstanceGetStateResponse extends GenericModel {
 
   /**
-   * Gets the applications.
-   *
-   * List of applications.
-   *
-   * @return the applications
+   * Instance state.
    */
-  public List<Application> getApplications() {
-    return applications;
+  public interface State {
+    /** created. */
+    String CREATED = "created";
+    /** deleted. */
+    String DELETED = "deleted";
+    /** failed. */
+    String FAILED = "failed";
+  }
+
+  protected String id;
+  protected String state;
+
+  /**
+   * Gets the id.
+   *
+   * GUID of the Analytics Engine instance.
+   *
+   * @return the id
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
+   * Gets the state.
+   *
+   * Instance state.
+   *
+   * @return the state
+   */
+  public String getState() {
+    return state;
   }
 }
 

@@ -13,10 +13,7 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultConfig;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultRuntime;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHome;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ConfigurePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -26,21 +23,25 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the Instance model.
+ * Unit test class for the ConfigurePlatformLoggingOptions model.
  */
-public class InstanceTest {
+public class ConfigurePlatformLoggingOptionsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testInstance() throws Throwable {
-    Instance instanceModel = new Instance();
-    assertNull(instanceModel.getId());
-    assertNull(instanceModel.getHref());
-    assertNull(instanceModel.getState());
-    assertNull(instanceModel.getStateChangeTime());
-    assertNull(instanceModel.getDefaultRuntime());
-    assertNull(instanceModel.getInstanceHome());
-    assertNull(instanceModel.getDefaultConfig());
+  public void testConfigurePlatformLoggingOptions() throws Throwable {
+    ConfigurePlatformLoggingOptions configurePlatformLoggingOptionsModel = new ConfigurePlatformLoggingOptions.Builder()
+      .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .enable(true)
+      .build();
+    assertEquals(configurePlatformLoggingOptionsModel.instanceGuid(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
+    assertEquals(configurePlatformLoggingOptionsModel.enable(), Boolean.valueOf(true));
   }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testConfigurePlatformLoggingOptionsError() throws Throwable {
+    new ConfigurePlatformLoggingOptions.Builder().build();
+  }
+
 }

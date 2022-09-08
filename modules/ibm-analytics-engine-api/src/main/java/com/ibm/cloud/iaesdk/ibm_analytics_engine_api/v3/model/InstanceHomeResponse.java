@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -16,30 +16,30 @@ import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * Instance home storage associated with the instance.
+ * Response of Instance home API.
  */
-public class InstanceDetailsInstanceHome extends GenericModel {
+public class InstanceHomeResponse extends GenericModel {
 
-  protected String guid;
+  @SerializedName("instance_id")
+  protected String instanceId;
   protected String provider;
   protected String type;
   protected String region;
   protected String endpoint;
-  protected String bucket;
   @SerializedName("hmac_access_key")
   protected String hmacAccessKey;
   @SerializedName("hmac_secret_key")
   protected String hmacSecretKey;
 
   /**
-   * Gets the guid.
+   * Gets the instanceId.
    *
    * UUID of the instance home storage instance.
    *
-   * @return the guid
+   * @return the instanceId
    */
-  public String getGuid() {
-    return guid;
+  public String getInstanceId() {
+    return instanceId;
   }
 
   /**
@@ -56,7 +56,7 @@ public class InstanceDetailsInstanceHome extends GenericModel {
   /**
    * Gets the type.
    *
-   * Type of the instance home storage. Currently, only objectstore (Cloud Object Storage)is supported.
+   * Type of the instance home storage. Currently, only objectstore (Cloud Object Storage) is supported.
    *
    * @return the type
    */
@@ -87,20 +87,9 @@ public class InstanceDetailsInstanceHome extends GenericModel {
   }
 
   /**
-   * Gets the bucket.
-   *
-   * Cloud Object Storage bucket used as instance home.
-   *
-   * @return the bucket
-   */
-  public String getBucket() {
-    return bucket;
-  }
-
-  /**
    * Gets the hmacAccessKey.
    *
-   * Cloud Object Storage access key. Masked for security reasons.
+   * Cloud Object Storage access key.
    *
    * @return the hmacAccessKey
    */
@@ -111,7 +100,7 @@ public class InstanceDetailsInstanceHome extends GenericModel {
   /**
    * Gets the hmacSecretKey.
    *
-   * Cloud Object Storage secret key. Masked for security reasons.
+   * Cloud Object Storage secret key.
    *
    * @return the hmacSecretKey
    */

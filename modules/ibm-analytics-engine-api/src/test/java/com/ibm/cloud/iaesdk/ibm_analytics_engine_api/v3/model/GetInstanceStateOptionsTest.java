@@ -13,10 +13,7 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultConfig;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultRuntime;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHome;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceStateOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -26,21 +23,23 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the Instance model.
+ * Unit test class for the GetInstanceStateOptions model.
  */
-public class InstanceTest {
+public class GetInstanceStateOptionsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testInstance() throws Throwable {
-    Instance instanceModel = new Instance();
-    assertNull(instanceModel.getId());
-    assertNull(instanceModel.getHref());
-    assertNull(instanceModel.getState());
-    assertNull(instanceModel.getStateChangeTime());
-    assertNull(instanceModel.getDefaultRuntime());
-    assertNull(instanceModel.getInstanceHome());
-    assertNull(instanceModel.getDefaultConfig());
+  public void testGetInstanceStateOptions() throws Throwable {
+    GetInstanceStateOptions getInstanceStateOptionsModel = new GetInstanceStateOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .build();
+    assertEquals(getInstanceStateOptionsModel.instanceId(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
   }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetInstanceStateOptionsError() throws Throwable {
+    new GetInstanceStateOptions.Builder().build();
+  }
+
 }

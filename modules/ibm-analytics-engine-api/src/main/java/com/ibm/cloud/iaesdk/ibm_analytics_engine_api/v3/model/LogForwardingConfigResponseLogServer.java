@@ -12,26 +12,24 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import java.util.List;
-
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * An array of application details.
+ * Log server properties.
  */
-public class ApplicationCollection extends GenericModel {
+public class LogForwardingConfigResponseLogServer extends GenericModel {
 
-  protected List<Application> applications;
+  protected String type;
 
   /**
-   * Gets the applications.
+   * Gets the type.
    *
-   * List of applications.
+   * Type of the log server.
    *
-   * @return the applications
+   * @return the type
    */
-  public List<Application> getApplications() {
-    return applications;
+  public String getType() {
+    return type;
   }
 }
 

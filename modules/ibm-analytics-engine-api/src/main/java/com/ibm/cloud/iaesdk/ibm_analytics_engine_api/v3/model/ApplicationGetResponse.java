@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -23,22 +23,28 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
 public class ApplicationGetResponse extends GenericModel {
 
   @SerializedName("application_details")
-  protected ApplicationRequest applicationDetails;
+  protected ApplicationDetails applicationDetails;
   protected String id;
+  @SerializedName("spark_application_id")
+  protected String sparkApplicationId;
+  @SerializedName("spark_application_name")
+  protected String sparkApplicationName;
   protected String state;
   @SerializedName("start_time")
   protected Date startTime;
+  @SerializedName("end_time")
+  protected Date endTime;
   @SerializedName("finish_time")
   protected Date finishTime;
 
   /**
    * Gets the applicationDetails.
    *
-   * Application request details.
+   * Application details.
    *
    * @return the applicationDetails
    */
-  public ApplicationRequest getApplicationDetails() {
+  public ApplicationDetails getApplicationDetails() {
     return applicationDetails;
   }
 
@@ -51,6 +57,28 @@ public class ApplicationGetResponse extends GenericModel {
    */
   public String getId() {
     return id;
+  }
+
+  /**
+   * Gets the sparkApplicationId.
+   *
+   * Identifier provided by Apache Spark for the application.
+   *
+   * @return the sparkApplicationId
+   */
+  public String getSparkApplicationId() {
+    return sparkApplicationId;
+  }
+
+  /**
+   * Gets the sparkApplicationName.
+   *
+   * Name of the Spark application.
+   *
+   * @return the sparkApplicationName
+   */
+  public String getSparkApplicationName() {
+    return sparkApplicationName;
   }
 
   /**
@@ -76,9 +104,20 @@ public class ApplicationGetResponse extends GenericModel {
   }
 
   /**
-   * Gets the finishTime.
+   * Gets the endTime.
    *
    * Application end time in the format YYYY-MM-DDTHH:mm:ssZ.
+   *
+   * @return the endTime
+   */
+  public Date getEndTime() {
+    return endTime;
+  }
+
+  /**
+   * Gets the finishTime.
+   *
+   * Application finish time in the format YYYY-MM-DDTHH:mm:ssZ.
    *
    * @return the finishTime
    */

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -12,26 +12,28 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
+import java.util.Map;
+
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * The deleteApplicationById options.
+ * The replaceInstanceDefaultConfigs options.
  */
-public class DeleteApplicationByIdOptions extends GenericModel {
+public class ReplaceInstanceDefaultConfigsOptions extends GenericModel {
 
   protected String instanceId;
-  protected String applicationId;
+  protected Map<String, String> body;
 
   /**
    * Builder.
    */
   public static class Builder {
     private String instanceId;
-    private String applicationId;
+    private Map<String, String> body;
 
-    private Builder(DeleteApplicationByIdOptions deleteApplicationByIdOptions) {
-      this.instanceId = deleteApplicationByIdOptions.instanceId;
-      this.applicationId = deleteApplicationByIdOptions.applicationId;
+    private Builder(ReplaceInstanceDefaultConfigsOptions replaceInstanceDefaultConfigsOptions) {
+      this.instanceId = replaceInstanceDefaultConfigsOptions.instanceId;
+      this.body = replaceInstanceDefaultConfigsOptions.body;
     }
 
     /**
@@ -44,27 +46,27 @@ public class DeleteApplicationByIdOptions extends GenericModel {
      * Instantiates a new builder with required properties.
      *
      * @param instanceId the instanceId
-     * @param applicationId the applicationId
+     * @param body the body
      */
-    public Builder(String instanceId, String applicationId) {
+    public Builder(String instanceId, Map<String, String> body) {
       this.instanceId = instanceId;
-      this.applicationId = applicationId;
+      this.body = body;
     }
 
     /**
-     * Builds a DeleteApplicationByIdOptions.
+     * Builds a ReplaceInstanceDefaultConfigsOptions.
      *
-     * @return the new DeleteApplicationByIdOptions instance
+     * @return the new ReplaceInstanceDefaultConfigsOptions instance
      */
-    public DeleteApplicationByIdOptions build() {
-      return new DeleteApplicationByIdOptions(this);
+    public ReplaceInstanceDefaultConfigsOptions build() {
+      return new ReplaceInstanceDefaultConfigsOptions(this);
     }
 
     /**
      * Set the instanceId.
      *
      * @param instanceId the instanceId
-     * @return the DeleteApplicationByIdOptions builder
+     * @return the ReplaceInstanceDefaultConfigsOptions builder
      */
     public Builder instanceId(String instanceId) {
       this.instanceId = instanceId;
@@ -72,30 +74,32 @@ public class DeleteApplicationByIdOptions extends GenericModel {
     }
 
     /**
-     * Set the applicationId.
+     * Set the body.
      *
-     * @param applicationId the applicationId
-     * @return the DeleteApplicationByIdOptions builder
+     * @param body the body
+     * @return the ReplaceInstanceDefaultConfigsOptions builder
      */
-    public Builder applicationId(String applicationId) {
-      this.applicationId = applicationId;
+    public Builder body(Map<String, String> body) {
+      this.body = body;
       return this;
     }
   }
 
-  protected DeleteApplicationByIdOptions(Builder builder) {
+  protected ReplaceInstanceDefaultConfigsOptions() { }
+
+  protected ReplaceInstanceDefaultConfigsOptions(Builder builder) {
     com.ibm.cloud.sdk.core.util.Validator.notEmpty(builder.instanceId,
       "instanceId cannot be empty");
-    com.ibm.cloud.sdk.core.util.Validator.notEmpty(builder.applicationId,
-      "applicationId cannot be empty");
+    com.ibm.cloud.sdk.core.util.Validator.notNull(builder.body,
+      "body cannot be null");
     instanceId = builder.instanceId;
-    applicationId = builder.applicationId;
+    body = builder.body;
   }
 
   /**
    * New builder.
    *
-   * @return a DeleteApplicationByIdOptions builder
+   * @return a ReplaceInstanceDefaultConfigsOptions builder
    */
   public Builder newBuilder() {
     return new Builder(this);
@@ -104,7 +108,7 @@ public class DeleteApplicationByIdOptions extends GenericModel {
   /**
    * Gets the instanceId.
    *
-   * Identifier of the instance to which the application belongs.
+   * The ID of the Analytics Engine instance.
    *
    * @return the instanceId
    */
@@ -113,14 +117,14 @@ public class DeleteApplicationByIdOptions extends GenericModel {
   }
 
   /**
-   * Gets the applicationId.
+   * Gets the body.
    *
-   * Identifier of the application that needs to be stopped.
+   * Spark configuration properties to replace existing instance default Spark configurations.
    *
-   * @return the applicationId
+   * @return the body
    */
-  public String applicationId() {
-    return applicationId;
+  public Map<String, String> body() {
+    return body;
   }
 }
 

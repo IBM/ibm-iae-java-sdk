@@ -15,23 +15,20 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * The getApplication options.
+ * The getInstanceState options.
  */
-public class GetApplicationOptions extends GenericModel {
+public class GetInstanceStateOptions extends GenericModel {
 
   protected String instanceId;
-  protected String applicationId;
 
   /**
    * Builder.
    */
   public static class Builder {
     private String instanceId;
-    private String applicationId;
 
-    private Builder(GetApplicationOptions getApplicationOptions) {
-      this.instanceId = getApplicationOptions.instanceId;
-      this.applicationId = getApplicationOptions.applicationId;
+    private Builder(GetInstanceStateOptions getInstanceStateOptions) {
+      this.instanceId = getInstanceStateOptions.instanceId;
     }
 
     /**
@@ -44,60 +41,44 @@ public class GetApplicationOptions extends GenericModel {
      * Instantiates a new builder with required properties.
      *
      * @param instanceId the instanceId
-     * @param applicationId the applicationId
      */
-    public Builder(String instanceId, String applicationId) {
+    public Builder(String instanceId) {
       this.instanceId = instanceId;
-      this.applicationId = applicationId;
     }
 
     /**
-     * Builds a GetApplicationOptions.
+     * Builds a GetInstanceStateOptions.
      *
-     * @return the new GetApplicationOptions instance
+     * @return the new GetInstanceStateOptions instance
      */
-    public GetApplicationOptions build() {
-      return new GetApplicationOptions(this);
+    public GetInstanceStateOptions build() {
+      return new GetInstanceStateOptions(this);
     }
 
     /**
      * Set the instanceId.
      *
      * @param instanceId the instanceId
-     * @return the GetApplicationOptions builder
+     * @return the GetInstanceStateOptions builder
      */
     public Builder instanceId(String instanceId) {
       this.instanceId = instanceId;
       return this;
     }
-
-    /**
-     * Set the applicationId.
-     *
-     * @param applicationId the applicationId
-     * @return the GetApplicationOptions builder
-     */
-    public Builder applicationId(String applicationId) {
-      this.applicationId = applicationId;
-      return this;
-    }
   }
 
-  protected GetApplicationOptions() { }
+  protected GetInstanceStateOptions() { }
 
-  protected GetApplicationOptions(Builder builder) {
+  protected GetInstanceStateOptions(Builder builder) {
     com.ibm.cloud.sdk.core.util.Validator.notEmpty(builder.instanceId,
       "instanceId cannot be empty");
-    com.ibm.cloud.sdk.core.util.Validator.notEmpty(builder.applicationId,
-      "applicationId cannot be empty");
     instanceId = builder.instanceId;
-    applicationId = builder.applicationId;
   }
 
   /**
    * New builder.
    *
-   * @return a GetApplicationOptions builder
+   * @return a GetInstanceStateOptions builder
    */
   public Builder newBuilder() {
     return new Builder(this);
@@ -106,23 +87,12 @@ public class GetApplicationOptions extends GenericModel {
   /**
    * Gets the instanceId.
    *
-   * Identifier of the instance to which the application belongs.
+   * GUID of the Analytics Engine service instance to retrieve state.
    *
    * @return the instanceId
    */
   public String instanceId() {
     return instanceId;
-  }
-
-  /**
-   * Gets the applicationId.
-   *
-   * Identifier of the application for which details are requested.
-   *
-   * @return the applicationId
-   */
-  public String applicationId() {
-    return applicationId;
   }
 }
 

@@ -44,9 +44,10 @@ The two versions are differntiated by the version number in the Java package str
 
 **NOTE**
 
-IBM Analytics Engine v2 is for the classic plans : Lite, Standard Hourly and Standard monthly
+IBM Analytics Engine v2 is for the classic plans : Lite, Standard Hourly and Standard monthly.
+The classic plans are now deprecated.
 
-IBM Analytics Engine v3 is for the Standard Serverless Spark plan
+IBM Analytics Engine v3 is for the Standard Serverless for Apache Spark plan.
 
 
 ## Prerequisites

@@ -1,3 +1,10 @@
+## [0.5.2](https://github.com/IBM/ibm-iae-java-sdk/compare/0.5.1...0.5.2) (2022-09-23)
+
+
+### Bug Fixes
+
+* update signing step ([8763afc](https://github.com/IBM/ibm-iae-java-sdk/commit/8763afcdd6d03634320e0a559a4266fd6949d792))
+
 ## [0.5.1](https://github.com/IBM/ibm-iae-java-sdk/compare/0.5.0...0.5.1) (2022-09-23)
 
 

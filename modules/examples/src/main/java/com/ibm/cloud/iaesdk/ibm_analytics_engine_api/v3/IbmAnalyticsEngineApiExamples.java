@@ -175,7 +175,7 @@ public class IbmAnalyticsEngineApiExamples {
       Map<String, Object> defaultConfigsUpdate = new java.util.HashMap<String, Object>();
       defaultConfigsUpdate.put("ae.spark.history-server.cores", "1");
       defaultConfigsUpdate.put("ae.spark.history-server.memory", "4G");
-      
+
       UpdateInstanceDefaultConfigsOptions updateInstanceDefaultConfigsOptions = new UpdateInstanceDefaultConfigsOptions.Builder()
         .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
         .body(defaultConfigsUpdate)

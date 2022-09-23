@@ -1,3 +1,11 @@
+## [0.5.1](https://github.com/IBM/ibm-iae-java-sdk/compare/0.5.0...0.5.1) (2022-09-23)
+
+
+### Bug Fixes
+
+* examples ([b659a65](https://github.com/IBM/ibm-iae-java-sdk/commit/b659a656be3250497cabe27619b18a9a9cfb2b8a))
+* remove trailing spaces ([649e213](https://github.com/IBM/ibm-iae-java-sdk/commit/649e21366bac33676f4273ca21434447d348c5ff))
+
 # [0.5.0](https://github.com/IBM/ibm-iae-java-sdk/compare/0.4.2...0.5.0) (2022-09-08)
 
 

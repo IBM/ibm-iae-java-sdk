@@ -1,3 +1,10 @@
+## [0.5.3](https://github.com/IBM/ibm-iae-java-sdk/compare/0.5.2...0.5.3) (2022-09-24)
+
+
+### Bug Fixes
+
+* allow javadoc generation for examples ([b651d20](https://github.com/IBM/ibm-iae-java-sdk/commit/b651d2027df4aaf39969275d69cd88ce12ca67b0))
+
 ## [0.5.2](https://github.com/IBM/ibm-iae-java-sdk/compare/0.5.1...0.5.2) (2022-09-23)
 
 

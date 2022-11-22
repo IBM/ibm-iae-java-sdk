@@ -26,10 +26,12 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOpti
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetCurrentResourceConsumptionOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceDefaultConfigsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceDefaultRuntimeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceStateOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLogForwardingConfigOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLoggingConfigurationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetResourceConsumptionLimitsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceGetStateResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeResponse;
@@ -37,7 +39,10 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOp
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LogForwardingConfigResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceInstanceDefaultConfigsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceInstanceDefaultRuntimeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceLogForwardingConfigOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ResourceConsumptionLimitsResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Runtime;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SetInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceDefaultConfigsOptions;
 import com.ibm.cloud.sdk.core.http.Response;
@@ -192,13 +197,53 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
+      System.out.println("getInstanceDefaultRuntime() result:");
+      // begin-get_instance_default_runtime
+      GetInstanceDefaultRuntimeOptions getInstanceDefaultRuntimeOptions = new GetInstanceDefaultRuntimeOptions.Builder()
+        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+        .build();
+
+      Response<Runtime> response = ibmAnalyticsEngineApiService.getInstanceDefaultRuntime(getInstanceDefaultRuntimeOptions).execute();
+      Runtime runtime = response.getResult();
+
+      System.out.println(runtime);
+      // end-get_instance_default_runtime
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      System.out.println("replaceInstanceDefaultRuntime() result:");
+      // begin-replace_instance_default_runtime
+      ReplaceInstanceDefaultRuntimeOptions replaceInstanceDefaultRuntimeOptions = new ReplaceInstanceDefaultRuntimeOptions.Builder()
+        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+        .sparkVersion("3.3")
+        .build();
+
+      Response<Runtime> response = ibmAnalyticsEngineApiService.replaceInstanceDefaultRuntime(replaceInstanceDefaultRuntimeOptions).execute();
+      Runtime runtime = response.getResult();
+
+      System.out.println(runtime);
+      // end-replace_instance_default_runtime
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
       System.out.println("createApplication() result:");
       // begin-create_application
+      Runtime runtimeModel = new Runtime.Builder()
+        .sparkVersion("3.1")
+        .build();
+      
       CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
         .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
         .applicationDetails(new ApplicationRequestApplicationDetails.Builder()
           .application("/opt/ibm/spark/examples/src/main/python/wordcount.py")
           .addArguments("/opt/ibm/spark/examples/src/main/resources/people.txt")
+          .runtime(runtimeModel)
           .build())
         .build();
 
@@ -217,6 +262,12 @@ public class IbmAnalyticsEngineApiExamples {
       // begin-list_applications
       ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
         .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+        .addState("accepted")
+        .addState("submitted")
+        .addState("waiting")
+        .addState("running")
+        .addState("finished")
+        .addState("failed")
         .build();
 
       Response<ApplicationCollection> response = ibmAnalyticsEngineApiService.listApplications(listApplicationsOptions).execute();
@@ -277,6 +328,23 @@ public class IbmAnalyticsEngineApiExamples {
 
       System.out.println(currentResourceConsumptionResponse);
       // end-get_current_resource_consumption
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
+      System.out.println("getResourceConsumptionLimits() result:");
+      // begin-get_resource_consumption_limits
+      GetResourceConsumptionLimitsOptions getResourceConsumptionLimitsOptions = new GetResourceConsumptionLimitsOptions.Builder()
+        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+        .build();
+
+      Response<ResourceConsumptionLimitsResponse> response = ibmAnalyticsEngineApiService.getResourceConsumptionLimits(getResourceConsumptionLimitsOptions).execute();
+      ResourceConsumptionLimitsResponse resourceConsumptionLimitsResponse = response.getResult();
+
+      System.out.println(resourceConsumptionLimitsResponse);
+      // end-get_resource_consumption_limits
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);

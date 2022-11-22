@@ -13,6 +13,7 @@
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
 import java.util.Date;
+import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
@@ -22,6 +23,34 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
  */
 public class ApplicationGetResponse extends GenericModel {
 
+  /**
+   * State of the Spark application.
+   */
+  public interface State {
+    /** finished. */
+    String FINISHED = "finished";
+    /** running. */
+    String RUNNING = "running";
+    /** failed. */
+    String FAILED = "failed";
+    /** error. */
+    String ERROR = "error";
+    /** accepted. */
+    String ACCEPTED = "accepted";
+    /** submitted. */
+    String SUBMITTED = "submitted";
+    /** waiting. */
+    String WAITING = "waiting";
+    /** unknown. */
+    String UNKNOWN = "unknown";
+    /** stopped. */
+    String STOPPED = "stopped";
+    /** auto_terminated. */
+    String AUTO_TERMINATED = "auto_terminated";
+    /** ops_terminated. */
+    String OPS_TERMINATED = "ops_terminated";
+  }
+
   @SerializedName("application_details")
   protected ApplicationDetails applicationDetails;
   protected String id;
@@ -30,6 +59,8 @@ public class ApplicationGetResponse extends GenericModel {
   @SerializedName("spark_application_name")
   protected String sparkApplicationName;
   protected String state;
+  @SerializedName("state_details")
+  protected List<ApplicationGetResponseStateDetailsItem> stateDetails;
   @SerializedName("start_time")
   protected Date startTime;
   @SerializedName("end_time")
@@ -84,12 +115,23 @@ public class ApplicationGetResponse extends GenericModel {
   /**
    * Gets the state.
    *
-   * Application state.
+   * State of the Spark application.
    *
    * @return the state
    */
   public String getState() {
     return state;
+  }
+
+  /**
+   * Gets the stateDetails.
+   *
+   * List of additional information messages on the current state of the application.
+   *
+   * @return the stateDetails
+   */
+  public List<ApplicationGetResponseStateDetailsItem> getStateDetails() {
+    return stateDetails;
   }
 
   /**

@@ -12,6 +12,9 @@
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
@@ -19,16 +22,47 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
  */
 public class ListApplicationsOptions extends GenericModel {
 
+  /**
+   * State of the Spark application.
+   */
+  public interface State {
+    /** finished. */
+    String FINISHED = "finished";
+    /** running. */
+    String RUNNING = "running";
+    /** failed. */
+    String FAILED = "failed";
+    /** error. */
+    String ERROR = "error";
+    /** accepted. */
+    String ACCEPTED = "accepted";
+    /** submitted. */
+    String SUBMITTED = "submitted";
+    /** waiting. */
+    String WAITING = "waiting";
+    /** unknown. */
+    String UNKNOWN = "unknown";
+    /** stopped. */
+    String STOPPED = "stopped";
+    /** auto_terminated. */
+    String AUTO_TERMINATED = "auto_terminated";
+    /** ops_terminated. */
+    String OPS_TERMINATED = "ops_terminated";
+  }
+
   protected String instanceId;
+  protected List<String> state;
 
   /**
    * Builder.
    */
   public static class Builder {
     private String instanceId;
+    private List<String> state;
 
     private Builder(ListApplicationsOptions listApplicationsOptions) {
       this.instanceId = listApplicationsOptions.instanceId;
+      this.state = listApplicationsOptions.state;
     }
 
     /**
@@ -56,6 +90,22 @@ public class ListApplicationsOptions extends GenericModel {
     }
 
     /**
+     * Adds an state to state.
+     *
+     * @param state the new state
+     * @return the ListApplicationsOptions builder
+     */
+    public Builder addState(String state) {
+      com.ibm.cloud.sdk.core.util.Validator.notNull(state,
+        "state cannot be null");
+      if (this.state == null) {
+        this.state = new ArrayList<String>();
+      }
+      this.state.add(state);
+      return this;
+    }
+
+    /**
      * Set the instanceId.
      *
      * @param instanceId the instanceId
@@ -63,6 +113,18 @@ public class ListApplicationsOptions extends GenericModel {
      */
     public Builder instanceId(String instanceId) {
       this.instanceId = instanceId;
+      return this;
+    }
+
+    /**
+     * Set the state.
+     * Existing state will be replaced.
+     *
+     * @param state the state
+     * @return the ListApplicationsOptions builder
+     */
+    public Builder state(List<String> state) {
+      this.state = state;
       return this;
     }
   }
@@ -73,6 +135,7 @@ public class ListApplicationsOptions extends GenericModel {
     com.ibm.cloud.sdk.core.util.Validator.notEmpty(builder.instanceId,
       "instanceId cannot be empty");
     instanceId = builder.instanceId;
+    state = builder.state;
   }
 
   /**
@@ -87,12 +150,23 @@ public class ListApplicationsOptions extends GenericModel {
   /**
    * Gets the instanceId.
    *
-   * Identifier of the instance where the applications run.
+   * The identifier of the Analytics Engine instance associated with the Spark application(s).
    *
    * @return the instanceId
    */
   public String instanceId() {
     return instanceId;
+  }
+
+  /**
+   * Gets the state.
+   *
+   * List of Spark application states that will be used to filter the response.
+   *
+   * @return the state
+   */
+  public List<String> state() {
+    return state;
   }
 }
 

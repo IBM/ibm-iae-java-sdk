@@ -25,6 +25,7 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
 public class ApplicationRequestApplicationDetails extends GenericModel {
 
   protected String application;
+  protected Runtime runtime;
   protected String jars;
   protected String packages;
   protected String repositories;
@@ -42,6 +43,7 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
    */
   public static class Builder {
     private String application;
+    private Runtime runtime;
     private String jars;
     private String packages;
     private String repositories;
@@ -55,6 +57,7 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
 
     private Builder(ApplicationRequestApplicationDetails applicationRequestApplicationDetails) {
       this.application = applicationRequestApplicationDetails.application;
+      this.runtime = applicationRequestApplicationDetails.runtime;
       this.jars = applicationRequestApplicationDetails.jars;
       this.packages = applicationRequestApplicationDetails.packages;
       this.repositories = applicationRequestApplicationDetails.repositories;
@@ -106,6 +109,17 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
      */
     public Builder application(String application) {
       this.application = application;
+      return this;
+    }
+
+    /**
+     * Set the runtime.
+     *
+     * @param runtime the runtime
+     * @return the ApplicationRequestApplicationDetails builder
+     */
+    public Builder runtime(Runtime runtime) {
+      this.runtime = runtime;
       return this;
     }
 
@@ -225,6 +239,7 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
 
   protected ApplicationRequestApplicationDetails(Builder builder) {
     application = builder.application;
+    runtime = builder.runtime;
     jars = builder.jars;
     packages = builder.packages;
     repositories = builder.repositories;
@@ -255,6 +270,17 @@ public class ApplicationRequestApplicationDetails extends GenericModel {
    */
   public String application() {
     return application;
+  }
+
+  /**
+   * Gets the runtime.
+   *
+   * Runtime enviroment for applications and other workloads.
+   *
+   * @return the runtime
+   */
+  public Runtime runtime() {
+    return runtime;
   }
 
   /**

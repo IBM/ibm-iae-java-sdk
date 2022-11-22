@@ -13,7 +13,7 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ResourceConsumptionLimitsResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -23,25 +23,16 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the ListApplicationsOptions model.
+ * Unit test class for the ResourceConsumptionLimitsResponse model.
  */
-public class ListApplicationsOptionsTest {
+public class ResourceConsumptionLimitsResponseTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testListApplicationsOptions() throws Throwable {
-    ListApplicationsOptions listApplicationsOptionsModel = new ListApplicationsOptions.Builder()
-      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-      .state(java.util.Arrays.asList("finished"))
-      .build();
-    assertEquals(listApplicationsOptionsModel.instanceId(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
-    assertEquals(listApplicationsOptionsModel.state(), java.util.Arrays.asList("finished"));
+  public void testResourceConsumptionLimitsResponse() throws Throwable {
+    ResourceConsumptionLimitsResponse resourceConsumptionLimitsResponseModel = new ResourceConsumptionLimitsResponse();
+    assertNull(resourceConsumptionLimitsResponseModel.getMaxCores());
+    assertNull(resourceConsumptionLimitsResponseModel.getMaxMemory());
   }
-
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testListApplicationsOptionsError() throws Throwable {
-    new ListApplicationsOptions.Builder().build();
-  }
-
 }

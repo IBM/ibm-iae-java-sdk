@@ -15,23 +15,20 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * The createApplication options.
+ * The getInstanceDefaultRuntime options.
  */
-public class CreateApplicationOptions extends GenericModel {
+public class GetInstanceDefaultRuntimeOptions extends GenericModel {
 
   protected String instanceId;
-  protected ApplicationRequestApplicationDetails applicationDetails;
 
   /**
    * Builder.
    */
   public static class Builder {
     private String instanceId;
-    private ApplicationRequestApplicationDetails applicationDetails;
 
-    private Builder(CreateApplicationOptions createApplicationOptions) {
-      this.instanceId = createApplicationOptions.instanceId;
-      this.applicationDetails = createApplicationOptions.applicationDetails;
+    private Builder(GetInstanceDefaultRuntimeOptions getInstanceDefaultRuntimeOptions) {
+      this.instanceId = getInstanceDefaultRuntimeOptions.instanceId;
     }
 
     /**
@@ -50,50 +47,38 @@ public class CreateApplicationOptions extends GenericModel {
     }
 
     /**
-     * Builds a CreateApplicationOptions.
+     * Builds a GetInstanceDefaultRuntimeOptions.
      *
-     * @return the new CreateApplicationOptions instance
+     * @return the new GetInstanceDefaultRuntimeOptions instance
      */
-    public CreateApplicationOptions build() {
-      return new CreateApplicationOptions(this);
+    public GetInstanceDefaultRuntimeOptions build() {
+      return new GetInstanceDefaultRuntimeOptions(this);
     }
 
     /**
      * Set the instanceId.
      *
      * @param instanceId the instanceId
-     * @return the CreateApplicationOptions builder
+     * @return the GetInstanceDefaultRuntimeOptions builder
      */
     public Builder instanceId(String instanceId) {
       this.instanceId = instanceId;
       return this;
     }
-
-    /**
-     * Set the applicationDetails.
-     *
-     * @param applicationDetails the applicationDetails
-     * @return the CreateApplicationOptions builder
-     */
-    public Builder applicationDetails(ApplicationRequestApplicationDetails applicationDetails) {
-      this.applicationDetails = applicationDetails;
-      return this;
-    }
   }
 
-  protected CreateApplicationOptions() { }
+  protected GetInstanceDefaultRuntimeOptions() { }
 
-  protected CreateApplicationOptions(Builder builder) {
+  protected GetInstanceDefaultRuntimeOptions(Builder builder) {
     com.ibm.cloud.sdk.core.util.Validator.notEmpty(builder.instanceId,
       "instanceId cannot be empty");
     instanceId = builder.instanceId;
-    applicationDetails = builder.applicationDetails;
   }
 
   /**
    * New builder.
    *
-   * @return a CreateApplicationOptions builder
+   * @return a GetInstanceDefaultRuntimeOptions builder
    */
   public Builder newBuilder() {
     return new Builder(this);
@@ -102,23 +87,12 @@ public class CreateApplicationOptions extends GenericModel {
   /**
    * Gets the instanceId.
    *
-   * The identifier of the Analytics Engine instance associated with the Spark application(s).
+   * The ID of the Analytics Engine instance.
    *
    * @return the instanceId
    */
   public String instanceId() {
     return instanceId;
-  }
-
-  /**
-   * Gets the applicationDetails.
-   *
-   * Application details.
-   *
-   * @return the applicationDetails
-   */
-  public ApplicationRequestApplicationDetails applicationDetails() {
-    return applicationDetails;
   }
 }
 

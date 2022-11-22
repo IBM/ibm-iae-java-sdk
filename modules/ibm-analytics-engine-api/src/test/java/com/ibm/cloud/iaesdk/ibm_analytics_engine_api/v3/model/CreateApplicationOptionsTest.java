@@ -15,6 +15,7 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequestApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Runtime;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -32,8 +33,14 @@ public class CreateApplicationOptionsTest {
 
   @Test
   public void testCreateApplicationOptions() throws Throwable {
+    Runtime runtimeModel = new Runtime.Builder()
+      .sparkVersion("3.1")
+      .build();
+    assertEquals(runtimeModel.sparkVersion(), "3.1");
+
     ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
       .application("cos://bucket_name.my_cos/my_spark_app.py")
+      .runtime(runtimeModel)
       .jars("cos://cloud-object-storage/jars/tests.jar")
       .packages("testString")
       .repositories("testString")
@@ -46,6 +53,7 @@ public class CreateApplicationOptionsTest {
       .env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       .build();
     assertEquals(applicationRequestApplicationDetailsModel.application(), "cos://bucket_name.my_cos/my_spark_app.py");
+    assertEquals(applicationRequestApplicationDetailsModel.runtime(), runtimeModel);
     assertEquals(applicationRequestApplicationDetailsModel.jars(), "cos://cloud-object-storage/jars/tests.jar");
     assertEquals(applicationRequestApplicationDetailsModel.packages(), "testString");
     assertEquals(applicationRequestApplicationDetailsModel.repositories(), "testString");

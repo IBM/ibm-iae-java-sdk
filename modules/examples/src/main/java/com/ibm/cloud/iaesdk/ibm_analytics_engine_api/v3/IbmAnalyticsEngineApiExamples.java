@@ -237,7 +237,7 @@ public class IbmAnalyticsEngineApiExamples {
       Runtime runtimeModel = new Runtime.Builder()
         .sparkVersion("3.1")
         .build();
-      
+
       CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
         .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
         .applicationDetails(new ApplicationRequestApplicationDetails.Builder()

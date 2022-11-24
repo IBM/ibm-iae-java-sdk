@@ -13,7 +13,7 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceDefaultRuntimeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -23,25 +23,23 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the ListApplicationsOptions model.
+ * Unit test class for the GetInstanceDefaultRuntimeOptions model.
  */
-public class ListApplicationsOptionsTest {
+public class GetInstanceDefaultRuntimeOptionsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testListApplicationsOptions() throws Throwable {
-    ListApplicationsOptions listApplicationsOptionsModel = new ListApplicationsOptions.Builder()
+  public void testGetInstanceDefaultRuntimeOptions() throws Throwable {
+    GetInstanceDefaultRuntimeOptions getInstanceDefaultRuntimeOptionsModel = new GetInstanceDefaultRuntimeOptions.Builder()
       .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-      .state(java.util.Arrays.asList("finished"))
       .build();
-    assertEquals(listApplicationsOptionsModel.instanceId(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
-    assertEquals(listApplicationsOptionsModel.state(), java.util.Arrays.asList("finished"));
+    assertEquals(getInstanceDefaultRuntimeOptionsModel.instanceId(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testListApplicationsOptionsError() throws Throwable {
-    new ListApplicationsOptions.Builder().build();
+  public void testGetInstanceDefaultRuntimeOptionsError() throws Throwable {
+    new GetInstanceDefaultRuntimeOptions.Builder().build();
   }
 
 }

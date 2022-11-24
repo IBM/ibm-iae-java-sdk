@@ -14,6 +14,7 @@
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Application;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Runtime;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -34,6 +35,7 @@ public class ApplicationTest {
     Application applicationModel = new Application();
     assertNull(applicationModel.getId());
     assertNull(applicationModel.getHref());
+    assertNull(applicationModel.getRuntime());
     assertNull(applicationModel.getSparkApplicationId());
     assertNull(applicationModel.getSparkApplicationName());
     assertNull(applicationModel.getState());

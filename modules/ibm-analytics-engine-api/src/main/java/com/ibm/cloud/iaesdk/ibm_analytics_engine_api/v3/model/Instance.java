@@ -23,15 +23,23 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
 public class Instance extends GenericModel {
 
   /**
-   * Instance state.
+   * State of the Analytics Engine instance.
    */
   public interface State {
-    /** created. */
-    String CREATED = "created";
+    /** creation_accepted. */
+    String CREATION_ACCEPTED = "creation_accepted";
+    /** initialized. */
+    String INITIALIZED = "initialized";
+    /** preparing. */
+    String PREPARING = "preparing";
+    /** active. */
+    String ACTIVE = "active";
     /** deleted. */
     String DELETED = "deleted";
-    /** failed. */
-    String FAILED = "failed";
+    /** disabled. */
+    String DISABLED = "disabled";
+    /** creation_failed. */
+    String CREATION_FAILED = "creation_failed";
   }
 
   protected String id;
@@ -40,7 +48,7 @@ public class Instance extends GenericModel {
   @SerializedName("state_change_time")
   protected Date stateChangeTime;
   @SerializedName("default_runtime")
-  protected InstanceDefaultRuntime defaultRuntime;
+  protected Runtime defaultRuntime;
   @SerializedName("instance_home")
   protected InstanceHome instanceHome;
   @SerializedName("default_config")
@@ -71,7 +79,7 @@ public class Instance extends GenericModel {
   /**
    * Gets the state.
    *
-   * Instance state.
+   * State of the Analytics Engine instance.
    *
    * @return the state
    */
@@ -93,11 +101,11 @@ public class Instance extends GenericModel {
   /**
    * Gets the defaultRuntime.
    *
-   * Specifies the default runtime to use for all workloads that run in this instance.
+   * Runtime enviroment for applications and other workloads.
    *
    * @return the defaultRuntime
    */
-  public InstanceDefaultRuntime getDefaultRuntime() {
+  public Runtime getDefaultRuntime() {
     return defaultRuntime;
   }
 

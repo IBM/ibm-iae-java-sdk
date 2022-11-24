@@ -20,15 +20,31 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
 public class ApplicationResponse extends GenericModel {
 
   /**
-   * State of the submitted application.
+   * State of the Spark application.
    */
   public interface State {
-    /** accepted. */
-    String ACCEPTED = "accepted";
+    /** finished. */
+    String FINISHED = "finished";
+    /** running. */
+    String RUNNING = "running";
     /** failed. */
     String FAILED = "failed";
     /** error. */
     String ERROR = "error";
+    /** accepted. */
+    String ACCEPTED = "accepted";
+    /** submitted. */
+    String SUBMITTED = "submitted";
+    /** waiting. */
+    String WAITING = "waiting";
+    /** unknown. */
+    String UNKNOWN = "unknown";
+    /** stopped. */
+    String STOPPED = "stopped";
+    /** auto_terminated. */
+    String AUTO_TERMINATED = "auto_terminated";
+    /** ops_terminated. */
+    String OPS_TERMINATED = "ops_terminated";
   }
 
   protected String id;
@@ -48,7 +64,7 @@ public class ApplicationResponse extends GenericModel {
   /**
    * Gets the state.
    *
-   * State of the submitted application.
+   * State of the Spark application.
    *
    * @return the state
    */

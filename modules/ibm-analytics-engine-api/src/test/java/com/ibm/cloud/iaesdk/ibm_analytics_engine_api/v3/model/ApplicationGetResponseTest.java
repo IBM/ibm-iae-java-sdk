@@ -15,6 +15,8 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponseStateDetailsItem;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Runtime;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -38,6 +40,7 @@ public class ApplicationGetResponseTest {
     assertNull(applicationGetResponseModel.getSparkApplicationId());
     assertNull(applicationGetResponseModel.getSparkApplicationName());
     assertNull(applicationGetResponseModel.getState());
+    assertNull(applicationGetResponseModel.getStateDetails());
     assertNull(applicationGetResponseModel.getStartTime());
     assertNull(applicationGetResponseModel.getEndTime());
     assertNull(applicationGetResponseModel.getFinishTime());

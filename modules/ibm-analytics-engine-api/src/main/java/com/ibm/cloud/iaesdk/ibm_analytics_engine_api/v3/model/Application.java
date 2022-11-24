@@ -20,8 +20,37 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
  */
 public class Application extends GenericModel {
 
+  /**
+   * State of the Spark application.
+   */
+  public interface State {
+    /** finished. */
+    String FINISHED = "finished";
+    /** running. */
+    String RUNNING = "running";
+    /** failed. */
+    String FAILED = "failed";
+    /** error. */
+    String ERROR = "error";
+    /** accepted. */
+    String ACCEPTED = "accepted";
+    /** submitted. */
+    String SUBMITTED = "submitted";
+    /** waiting. */
+    String WAITING = "waiting";
+    /** unknown. */
+    String UNKNOWN = "unknown";
+    /** stopped. */
+    String STOPPED = "stopped";
+    /** auto_terminated. */
+    String AUTO_TERMINATED = "auto_terminated";
+    /** ops_terminated. */
+    String OPS_TERMINATED = "ops_terminated";
+  }
+
   protected String id;
   protected String href;
+  protected Runtime runtime;
   @SerializedName("spark_application_id")
   protected String sparkApplicationId;
   @SerializedName("spark_application_name")
@@ -57,6 +86,17 @@ public class Application extends GenericModel {
   }
 
   /**
+   * Gets the runtime.
+   *
+   * Runtime enviroment for applications and other workloads.
+   *
+   * @return the runtime
+   */
+  public Runtime getRuntime() {
+    return runtime;
+  }
+
+  /**
    * Gets the sparkApplicationId.
    *
    * Identifier provided by Apache Spark for the application.
@@ -81,7 +121,7 @@ public class Application extends GenericModel {
   /**
    * Gets the state.
    *
-   * Status of the application.
+   * State of the Spark application.
    *
    * @return the state
    */

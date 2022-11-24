@@ -20,15 +20,23 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
 public class InstanceGetStateResponse extends GenericModel {
 
   /**
-   * Instance state.
+   * State of the Analytics Engine instance.
    */
   public interface State {
-    /** created. */
-    String CREATED = "created";
+    /** creation_accepted. */
+    String CREATION_ACCEPTED = "creation_accepted";
+    /** initialized. */
+    String INITIALIZED = "initialized";
+    /** preparing. */
+    String PREPARING = "preparing";
+    /** active. */
+    String ACTIVE = "active";
     /** deleted. */
     String DELETED = "deleted";
-    /** failed. */
-    String FAILED = "failed";
+    /** disabled. */
+    String DISABLED = "disabled";
+    /** creation_failed. */
+    String CREATION_FAILED = "creation_failed";
   }
 
   protected String id;
@@ -48,7 +56,7 @@ public class InstanceGetStateResponse extends GenericModel {
   /**
    * Gets the state.
    *
-   * Instance state.
+   * State of the Analytics Engine instance.
    *
    * @return the state
    */

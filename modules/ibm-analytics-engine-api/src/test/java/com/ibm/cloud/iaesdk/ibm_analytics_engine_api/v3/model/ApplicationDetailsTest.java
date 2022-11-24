@@ -14,6 +14,7 @@
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationDetails;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Runtime;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -33,6 +34,7 @@ public class ApplicationDetailsTest {
   public void testApplicationDetails() throws Throwable {
     ApplicationDetails applicationDetailsModel = new ApplicationDetails();
     assertNull(applicationDetailsModel.getApplication());
+    assertNull(applicationDetailsModel.getRuntime());
     assertNull(applicationDetailsModel.getJars());
     assertNull(applicationDetailsModel.getPackages());
     assertNull(applicationDetailsModel.getRepositories());

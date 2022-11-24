@@ -31,10 +31,12 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationOpti
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetApplicationStateOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetCurrentResourceConsumptionOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceDefaultConfigsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceDefaultRuntimeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceStateOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLogForwardingConfigOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLoggingConfigurationOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetResourceConsumptionLimitsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceGetStateResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeResponse;
@@ -42,7 +44,10 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ListApplicationsOp
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LogForwardingConfigResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceInstanceDefaultConfigsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceInstanceDefaultRuntimeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceLogForwardingConfigOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ResourceConsumptionLimitsResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Runtime;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SetInstanceHomeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceDefaultConfigsOptions;
 import com.ibm.cloud.sdk.core.http.RequestBuilder;
@@ -51,6 +56,7 @@ import com.ibm.cloud.sdk.core.http.ServiceCall;
 import com.ibm.cloud.sdk.core.security.Authenticator;
 import com.ibm.cloud.sdk.core.security.ConfigBasedAuthenticatorFactory;
 import com.ibm.cloud.sdk.core.service.BaseService;
+import com.ibm.cloud.sdk.core.util.RequestUtils;
 import com.ibm.cloud.sdk.core.util.ResponseConverterUtils;
 import java.util.Collections;
 import java.util.HashMap;
@@ -176,6 +182,8 @@ public class IbmAnalyticsEngineApi extends BaseService {
    * Provide the details of the Cloud Object Storage instance to associate with the Analytics Engine instance and use as
    * 'instance home' if 'instance home' has not already been set.
    *
+   * **Note**: You can set 'instance home' again if the instance is in 'instance_home_creation_failure' state.
+   *
    * @param setInstanceHomeOptions the {@link SetInstanceHomeOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link InstanceHomeResponse}
    */
@@ -293,6 +301,59 @@ public class IbmAnalyticsEngineApi extends BaseService {
   }
 
   /**
+   * Get instance default runtime.
+   *
+   * Get the default runtime environment on which all workloads of the instance will run.
+   *
+   * @param getInstanceDefaultRuntimeOptions the {@link GetInstanceDefaultRuntimeOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link Runtime}
+   */
+  public ServiceCall<Runtime> getInstanceDefaultRuntime(GetInstanceDefaultRuntimeOptions getInstanceDefaultRuntimeOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(getInstanceDefaultRuntimeOptions,
+      "getInstanceDefaultRuntimeOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", getInstanceDefaultRuntimeOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/default_runtime", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "getInstanceDefaultRuntime");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    ResponseConverter<Runtime> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<Runtime>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Replace instance default runtime.
+   *
+   * Replace the default runtime environment on which all workloads of the instance will run.
+   *
+   * @param replaceInstanceDefaultRuntimeOptions the {@link ReplaceInstanceDefaultRuntimeOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link Runtime}
+   */
+  public ServiceCall<Runtime> replaceInstanceDefaultRuntime(ReplaceInstanceDefaultRuntimeOptions replaceInstanceDefaultRuntimeOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(replaceInstanceDefaultRuntimeOptions,
+      "replaceInstanceDefaultRuntimeOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", replaceInstanceDefaultRuntimeOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.put(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/default_runtime", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "replaceInstanceDefaultRuntime");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    final JsonObject contentJson = new JsonObject();
+    if (replaceInstanceDefaultRuntimeOptions.sparkVersion() != null) {
+      contentJson.addProperty("spark_version", replaceInstanceDefaultRuntimeOptions.sparkVersion());
+    }
+    builder.bodyJson(contentJson);
+    ResponseConverter<Runtime> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<Runtime>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
    * Deploy a Spark application.
    *
    * Deploys a Spark application on a given serverless Spark instance.
@@ -322,9 +383,10 @@ public class IbmAnalyticsEngineApi extends BaseService {
   }
 
   /**
-   * Retrieve all Spark applications.
+   * List all Spark applications.
    *
-   * Gets all applications submitted in an instance with a specified instance-id.
+   * Returns a list of all Spark applications submitted to the specified Analytics Engine instance. The result can be
+   * filtered by specifying query parameters.
    *
    * @param listApplicationsOptions the {@link ListApplicationsOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link ApplicationCollection}
@@ -340,6 +402,9 @@ public class IbmAnalyticsEngineApi extends BaseService {
       builder.header(header.getKey(), header.getValue());
     }
     builder.header("Accept", "application/json");
+    if (listApplicationsOptions.state() != null) {
+      builder.query("state", RequestUtils.join(listApplicationsOptions.state(), ","));
+    }
     ResponseConverter<ApplicationCollection> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<ApplicationCollection>() { }.getType());
     return createServiceCall(builder.build(), responseConverter);
@@ -444,6 +509,31 @@ public class IbmAnalyticsEngineApi extends BaseService {
     builder.header("Accept", "application/json");
     ResponseConverter<CurrentResourceConsumptionResponse> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<CurrentResourceConsumptionResponse>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Get resource consumption limits.
+   *
+   * Returns the maximum total memory and virtual processor cores that can be allotted across all the applications
+   * running in the service instance at any point in time.
+   *
+   * @param getResourceConsumptionLimitsOptions the {@link GetResourceConsumptionLimitsOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link ResourceConsumptionLimitsResponse}
+   */
+  public ServiceCall<ResourceConsumptionLimitsResponse> getResourceConsumptionLimits(GetResourceConsumptionLimitsOptions getResourceConsumptionLimitsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(getResourceConsumptionLimitsOptions,
+      "getResourceConsumptionLimitsOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", getResourceConsumptionLimitsOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/resource_consumption_limits", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "getResourceConsumptionLimits");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    ResponseConverter<ResourceConsumptionLimitsResponse> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<ResourceConsumptionLimitsResponse>() { }.getType());
     return createServiceCall(builder.build(), responseConverter);
   }
 

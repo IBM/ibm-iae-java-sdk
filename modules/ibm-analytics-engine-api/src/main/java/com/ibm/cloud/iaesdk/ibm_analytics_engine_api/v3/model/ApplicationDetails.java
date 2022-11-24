@@ -24,6 +24,7 @@ import com.ibm.cloud.sdk.core.service.model.GenericModel;
 public class ApplicationDetails extends GenericModel {
 
   protected String application;
+  protected Runtime runtime;
   protected String jars;
   protected String packages;
   protected String repositories;
@@ -45,6 +46,17 @@ public class ApplicationDetails extends GenericModel {
    */
   public String getApplication() {
     return application;
+  }
+
+  /**
+   * Gets the runtime.
+   *
+   * Runtime enviroment for applications and other workloads.
+   *
+   * @return the runtime
+   */
+  public Runtime getRuntime() {
+    return runtime;
   }
 
   /**

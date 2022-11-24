@@ -15,23 +15,23 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * The createApplication options.
+ * The replaceInstanceDefaultRuntime options.
  */
-public class CreateApplicationOptions extends GenericModel {
+public class ReplaceInstanceDefaultRuntimeOptions extends GenericModel {
 
   protected String instanceId;
-  protected ApplicationRequestApplicationDetails applicationDetails;
+  protected String sparkVersion;
 
   /**
    * Builder.
    */
   public static class Builder {
     private String instanceId;
-    private ApplicationRequestApplicationDetails applicationDetails;
+    private String sparkVersion;
 
-    private Builder(CreateApplicationOptions createApplicationOptions) {
-      this.instanceId = createApplicationOptions.instanceId;
-      this.applicationDetails = createApplicationOptions.applicationDetails;
+    private Builder(ReplaceInstanceDefaultRuntimeOptions replaceInstanceDefaultRuntimeOptions) {
+      this.instanceId = replaceInstanceDefaultRuntimeOptions.instanceId;
+      this.sparkVersion = replaceInstanceDefaultRuntimeOptions.sparkVersion;
     }
 
     /**
@@ -50,19 +50,19 @@ public class CreateApplicationOptions extends GenericModel {
     }
 
     /**
-     * Builds a CreateApplicationOptions.
+     * Builds a ReplaceInstanceDefaultRuntimeOptions.
      *
-     * @return the new CreateApplicationOptions instance
+     * @return the new ReplaceInstanceDefaultRuntimeOptions instance
      */
-    public CreateApplicationOptions build() {
-      return new CreateApplicationOptions(this);
+    public ReplaceInstanceDefaultRuntimeOptions build() {
+      return new ReplaceInstanceDefaultRuntimeOptions(this);
     }
 
     /**
      * Set the instanceId.
      *
      * @param instanceId the instanceId
-     * @return the CreateApplicationOptions builder
+     * @return the ReplaceInstanceDefaultRuntimeOptions builder
      */
     public Builder instanceId(String instanceId) {
       this.instanceId = instanceId;
@@ -70,30 +70,41 @@ public class CreateApplicationOptions extends GenericModel {
     }
 
     /**
-     * Set the applicationDetails.
+     * Set the sparkVersion.
      *
-     * @param applicationDetails the applicationDetails
-     * @return the CreateApplicationOptions builder
+     * @param sparkVersion the sparkVersion
+     * @return the ReplaceInstanceDefaultRuntimeOptions builder
      */
-    public Builder applicationDetails(ApplicationRequestApplicationDetails applicationDetails) {
-      this.applicationDetails = applicationDetails;
+    public Builder sparkVersion(String sparkVersion) {
+      this.sparkVersion = sparkVersion;
+      return this;
+    }
+
+    /**
+     * Set the runtime.
+     *
+     * @param runtime the runtime
+     * @return the ReplaceInstanceDefaultRuntimeOptions builder
+     */
+    public Builder runtime(Runtime runtime) {
+      this.sparkVersion = runtime.sparkVersion();
       return this;
     }
   }
 
-  protected CreateApplicationOptions() { }
+  protected ReplaceInstanceDefaultRuntimeOptions() { }
 
-  protected CreateApplicationOptions(Builder builder) {
+  protected ReplaceInstanceDefaultRuntimeOptions(Builder builder) {
     com.ibm.cloud.sdk.core.util.Validator.notEmpty(builder.instanceId,
       "instanceId cannot be empty");
     instanceId = builder.instanceId;
-    applicationDetails = builder.applicationDetails;
+    sparkVersion = builder.sparkVersion;
   }
 
   /**
    * New builder.
    *
-   * @return a CreateApplicationOptions builder
+   * @return a ReplaceInstanceDefaultRuntimeOptions builder
    */
   public Builder newBuilder() {
     return new Builder(this);
@@ -102,7 +113,7 @@ public class CreateApplicationOptions extends GenericModel {
   /**
    * Gets the instanceId.
    *
-   * The identifier of the Analytics Engine instance associated with the Spark application(s).
+   * The ID of the Analytics Engine instance.
    *
    * @return the instanceId
    */
@@ -111,14 +122,14 @@ public class CreateApplicationOptions extends GenericModel {
   }
 
   /**
-   * Gets the applicationDetails.
+   * Gets the sparkVersion.
    *
-   * Application details.
+   * Spark version of the runtime environment.
    *
-   * @return the applicationDetails
+   * @return the sparkVersion
    */
-  public ApplicationRequestApplicationDetails applicationDetails() {
-    return applicationDetails;
+  public String sparkVersion() {
+    return sparkVersion;
   }
 }
 

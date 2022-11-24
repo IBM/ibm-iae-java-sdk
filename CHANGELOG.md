@@ -1,3 +1,10 @@
+# [0.6.0](https://github.com/IBM/ibm-iae-java-sdk/compare/0.5.3...0.6.0) (2022-11-24)
+
+
+### Features
+
+* add sdk methods and update models for v3 ([7f7677a](https://github.com/IBM/ibm-iae-java-sdk/commit/7f7677a2ca730133893787280828e2cddff14d25))
+
 ## [0.5.3](https://github.com/IBM/ibm-iae-java-sdk/compare/0.5.2...0.5.3) (2022-09-24)
 
 

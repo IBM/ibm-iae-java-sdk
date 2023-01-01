@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,6 +11,8 @@
  * specific language governing permissions and limitations under the License.
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
+
+import java.util.Date;
 
 import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
@@ -30,16 +32,8 @@ public class Application extends GenericModel {
     String RUNNING = "running";
     /** failed. */
     String FAILED = "failed";
-    /** error. */
-    String ERROR = "error";
     /** accepted. */
     String ACCEPTED = "accepted";
-    /** submitted. */
-    String SUBMITTED = "submitted";
-    /** waiting. */
-    String WAITING = "waiting";
-    /** unknown. */
-    String UNKNOWN = "unknown";
     /** stopped. */
     String STOPPED = "stopped";
     /** auto_terminated. */
@@ -56,12 +50,18 @@ public class Application extends GenericModel {
   @SerializedName("spark_application_name")
   protected String sparkApplicationName;
   protected String state;
+  @SerializedName("spark_ui")
+  protected String sparkUi;
+  @SerializedName("submission_time")
+  protected Date submissionTime;
   @SerializedName("start_time")
-  protected String startTime;
+  protected Date startTime;
   @SerializedName("end_time")
-  protected String endTime;
+  protected Date endTime;
   @SerializedName("finish_time")
-  protected String finishTime;
+  protected Date finishTime;
+  @SerializedName("auto_termination_time")
+  protected Date autoTerminationTime;
 
   /**
    * Gets the id.
@@ -130,13 +130,35 @@ public class Application extends GenericModel {
   }
 
   /**
+   * Gets the sparkUi.
+   *
+   * URL of the Apache Spark web UI that is available when the application is running.
+   *
+   * @return the sparkUi
+   */
+  public String getSparkUi() {
+    return sparkUi;
+  }
+
+  /**
+   * Gets the submissionTime.
+   *
+   * Time when the application was submitted.
+   *
+   * @return the submissionTime
+   */
+  public Date getSubmissionTime() {
+    return submissionTime;
+  }
+
+  /**
    * Gets the startTime.
    *
    * Time when the application was started.
    *
    * @return the startTime
    */
-  public String getStartTime() {
+  public Date getStartTime() {
     return startTime;
   }
 
@@ -147,19 +169,30 @@ public class Application extends GenericModel {
    *
    * @return the endTime
    */
-  public String getEndTime() {
+  public Date getEndTime() {
     return endTime;
   }
 
   /**
    * Gets the finishTime.
    *
-   * Time when the application was completed.
+   * (deprecated) Time when the application was completed.
    *
    * @return the finishTime
    */
-  public String getFinishTime() {
+  public Date getFinishTime() {
     return finishTime;
+  }
+
+  /**
+   * Gets the autoTerminationTime.
+   *
+   * Time when the application will be automatically stopped by the service.
+   *
+   * @return the autoTerminationTime
+   */
+  public Date getAutoTerminationTime() {
+    return autoTerminationTime;
   }
 }
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -33,16 +33,8 @@ public class ApplicationGetResponse extends GenericModel {
     String RUNNING = "running";
     /** failed. */
     String FAILED = "failed";
-    /** error. */
-    String ERROR = "error";
     /** accepted. */
     String ACCEPTED = "accepted";
-    /** submitted. */
-    String SUBMITTED = "submitted";
-    /** waiting. */
-    String WAITING = "waiting";
-    /** unknown. */
-    String UNKNOWN = "unknown";
     /** stopped. */
     String STOPPED = "stopped";
     /** auto_terminated. */
@@ -59,14 +51,20 @@ public class ApplicationGetResponse extends GenericModel {
   @SerializedName("spark_application_name")
   protected String sparkApplicationName;
   protected String state;
+  @SerializedName("spark_ui")
+  protected String sparkUi;
   @SerializedName("state_details")
   protected List<ApplicationGetResponseStateDetailsItem> stateDetails;
+  @SerializedName("submission_time")
+  protected Date submissionTime;
   @SerializedName("start_time")
   protected Date startTime;
   @SerializedName("end_time")
   protected Date endTime;
   @SerializedName("finish_time")
   protected Date finishTime;
+  @SerializedName("auto_termination_time")
+  protected Date autoTerminationTime;
 
   /**
    * Gets the applicationDetails.
@@ -124,6 +122,17 @@ public class ApplicationGetResponse extends GenericModel {
   }
 
   /**
+   * Gets the sparkUi.
+   *
+   * URL of the Apache Spark web UI that is available when the application is running.
+   *
+   * @return the sparkUi
+   */
+  public String getSparkUi() {
+    return sparkUi;
+  }
+
+  /**
    * Gets the stateDetails.
    *
    * List of additional information messages on the current state of the application.
@@ -135,9 +144,20 @@ public class ApplicationGetResponse extends GenericModel {
   }
 
   /**
+   * Gets the submissionTime.
+   *
+   * Time when the application was submitted.
+   *
+   * @return the submissionTime
+   */
+  public Date getSubmissionTime() {
+    return submissionTime;
+  }
+
+  /**
    * Gets the startTime.
    *
-   * Application start time in the format YYYY-MM-DDTHH:mm:ssZ.
+   * Time when the application started, in the format YYYY-MM-DDTHH:mm:ssZ.
    *
    * @return the startTime
    */
@@ -148,7 +168,7 @@ public class ApplicationGetResponse extends GenericModel {
   /**
    * Gets the endTime.
    *
-   * Application end time in the format YYYY-MM-DDTHH:mm:ssZ.
+   * Time when the application ended either in success or failure, in the format YYYY-MM-DDTHH:mm:ssZ.
    *
    * @return the endTime
    */
@@ -159,12 +179,23 @@ public class ApplicationGetResponse extends GenericModel {
   /**
    * Gets the finishTime.
    *
-   * Application finish time in the format YYYY-MM-DDTHH:mm:ssZ.
+   * (deprecated) Time when the application completed successfully, in the format YYYY-MM-DDTHH:mm:ssZ.
    *
    * @return the finishTime
    */
   public Date getFinishTime() {
     return finishTime;
+  }
+
+  /**
+   * Gets the autoTerminationTime.
+   *
+   * Time when the application will be automatically stopped by the service.
+   *
+   * @return the autoTerminationTime
+   */
+  public Date getAutoTerminationTime() {
+    return autoTerminationTime;
   }
 }
 

@@ -35,6 +35,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceStateOp
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLogForwardingConfigOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetResourceConsumptionLimitsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultConfig;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceGetStateResponse;
@@ -51,6 +52,9 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceLogForwardi
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ResourceConsumptionLimitsResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Runtime;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SetInstanceHomeOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServerResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StartSparkHistoryServerOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StopSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceDefaultConfigsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.iaesdk.test.SdkIntegrationTestBase;
@@ -58,6 +62,7 @@ import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import com.ibm.cloud.sdk.core.util.CredentialUtils;
+import com.ibm.cloud.sdk.core.util.DateUtils;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -348,7 +353,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     try {
       ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
         .instanceId(instanceId)
-        .state(java.util.Arrays.asList("accepted", "submitted", "waiting", "running", "finished", "failed"))
+        .state(java.util.Arrays.asList("accepted", "running", "finished", "failed"))
         .build();
 
       // Invoke operation
@@ -542,6 +547,68 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       LoggingConfigurationResponse loggingConfigurationResponseResult = response.getResult();
 
       assertNotNull(loggingConfigurationResponseResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test
+  public void testStartSparkHistoryServer() throws Exception {
+    try {
+      StartSparkHistoryServerOptions startSparkHistoryServerOptions = new StartSparkHistoryServerOptions.Builder()
+        .instanceId(instanceId)
+        .build();
+
+      // Invoke operation
+      Response<SparkHistoryServerResponse> response = service.startSparkHistoryServer(startSparkHistoryServerOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 202);
+
+      SparkHistoryServerResponse sparkHistoryServerResponseResult = response.getResult();
+
+      assertNotNull(sparkHistoryServerResponseResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test
+  public void testGetSparkHistoryServer() throws Exception {
+    try {
+      GetSparkHistoryServerOptions getSparkHistoryServerOptions = new GetSparkHistoryServerOptions.Builder()
+        .instanceId(instanceId)
+        .build();
+
+      // Invoke operation
+      Response<SparkHistoryServerResponse> response = service.getSparkHistoryServer(getSparkHistoryServerOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      SparkHistoryServerResponse sparkHistoryServerResponseResult = response.getResult();
+
+      assertNotNull(sparkHistoryServerResponseResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test
+  public void testStopSparkHistoryServer() throws Exception {
+    try {
+      StopSparkHistoryServerOptions stopSparkHistoryServerOptions = new StopSparkHistoryServerOptions.Builder()
+        .instanceId(instanceId)
+        .build();
+
+      // Invoke operation
+      Response<Void> response = service.stopSparkHistoryServer(stopSparkHistoryServerOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 204);
     } catch (ServiceResponseException e) {
         fail(String.format("Service returned status code %d: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));

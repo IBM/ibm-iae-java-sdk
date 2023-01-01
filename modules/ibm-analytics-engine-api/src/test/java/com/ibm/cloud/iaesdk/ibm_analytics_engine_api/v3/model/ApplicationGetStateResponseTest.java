@@ -37,5 +37,6 @@ public class ApplicationGetStateResponseTest {
     assertNull(applicationGetStateResponseModel.getStartTime());
     assertNull(applicationGetStateResponseModel.getEndTime());
     assertNull(applicationGetStateResponseModel.getFinishTime());
+    assertNull(applicationGetStateResponseModel.getAutoTerminationTime());
   }
 }

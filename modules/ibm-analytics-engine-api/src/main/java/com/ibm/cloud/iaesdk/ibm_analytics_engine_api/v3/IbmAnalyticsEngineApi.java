@@ -37,6 +37,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceStateOp
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLogForwardingConfigOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetResourceConsumptionLimitsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceGetStateResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceHomeResponse;
@@ -49,6 +50,9 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceLogForwardi
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ResourceConsumptionLimitsResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Runtime;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SetInstanceHomeOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServerResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StartSparkHistoryServerOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StopSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceDefaultConfigsOptions;
 import com.ibm.cloud.sdk.core.http.RequestBuilder;
 import com.ibm.cloud.sdk.core.http.ResponseConverter;
@@ -601,6 +605,7 @@ public class IbmAnalyticsEngineApi extends BaseService {
    * Enable or disable log forwarding.
    *
    * Enable or disable log forwarding from IBM Analytics Engine to IBM Log Analysis server.
+   * *Note:* Deprecated. Use the log forwarding config api instead.
    *
    * @param configurePlatformLoggingOptions the {@link ConfigurePlatformLoggingOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link LoggingConfigurationResponse}
@@ -630,6 +635,7 @@ public class IbmAnalyticsEngineApi extends BaseService {
    * Retrieve the logging configuration for a given instance id.
    *
    * Retrieve the logging configuration of a given Analytics Engine instance.
+   * *Note:* Deprecated. Use the log forwarding config api instead.
    *
    * @param getLoggingConfigurationOptions the {@link GetLoggingConfigurationOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link LoggingConfigurationResponse}
@@ -647,6 +653,76 @@ public class IbmAnalyticsEngineApi extends BaseService {
     builder.header("Accept", "application/json");
     ResponseConverter<LoggingConfigurationResponse> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<LoggingConfigurationResponse>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Start Spark history server.
+   *
+   * Start the Spark history server for the given Analytics Engine instance.
+   *
+   * @param startSparkHistoryServerOptions the {@link StartSparkHistoryServerOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link SparkHistoryServerResponse}
+   */
+  public ServiceCall<SparkHistoryServerResponse> startSparkHistoryServer(StartSparkHistoryServerOptions startSparkHistoryServerOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(startSparkHistoryServerOptions,
+      "startSparkHistoryServerOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", startSparkHistoryServerOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.post(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/spark_history_server", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "startSparkHistoryServer");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    ResponseConverter<SparkHistoryServerResponse> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<SparkHistoryServerResponse>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Get Spark history server details.
+   *
+   * Get the details of the Spark history server of the given Analytics Engine instance.
+   *
+   * @param getSparkHistoryServerOptions the {@link GetSparkHistoryServerOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link SparkHistoryServerResponse}
+   */
+  public ServiceCall<SparkHistoryServerResponse> getSparkHistoryServer(GetSparkHistoryServerOptions getSparkHistoryServerOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(getSparkHistoryServerOptions,
+      "getSparkHistoryServerOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", getSparkHistoryServerOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.get(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/spark_history_server", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "getSparkHistoryServer");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    ResponseConverter<SparkHistoryServerResponse> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<SparkHistoryServerResponse>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Stop Spark history server.
+   *
+   * Stop the Spark history server of the given Analytics Engine instance.
+   *
+   * @param stopSparkHistoryServerOptions the {@link StopSparkHistoryServerOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a void result
+   */
+  public ServiceCall<Void> stopSparkHistoryServer(StopSparkHistoryServerOptions stopSparkHistoryServerOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(stopSparkHistoryServerOptions,
+      "stopSparkHistoryServerOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", stopSparkHistoryServerOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.delete(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/spark_history_server", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "stopSparkHistoryServer");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    ResponseConverter<Void> responseConverter = ResponseConverterUtils.getVoid();
     return createServiceCall(builder.build(), responseConverter);
   }
 

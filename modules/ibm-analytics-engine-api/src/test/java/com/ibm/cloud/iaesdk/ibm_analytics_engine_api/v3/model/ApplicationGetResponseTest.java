@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -40,9 +40,12 @@ public class ApplicationGetResponseTest {
     assertNull(applicationGetResponseModel.getSparkApplicationId());
     assertNull(applicationGetResponseModel.getSparkApplicationName());
     assertNull(applicationGetResponseModel.getState());
+    assertNull(applicationGetResponseModel.getSparkUi());
     assertNull(applicationGetResponseModel.getStateDetails());
+    assertNull(applicationGetResponseModel.getSubmissionTime());
     assertNull(applicationGetResponseModel.getStartTime());
     assertNull(applicationGetResponseModel.getEndTime());
     assertNull(applicationGetResponseModel.getFinishTime());
+    assertNull(applicationGetResponseModel.getAutoTerminationTime());
   }
 }

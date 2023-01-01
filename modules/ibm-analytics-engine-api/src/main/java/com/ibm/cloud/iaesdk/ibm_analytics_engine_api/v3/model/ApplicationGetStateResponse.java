@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,6 +11,8 @@
  * specific language governing permissions and limitations under the License.
  */
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
+
+import java.util.Date;
 
 import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
@@ -30,16 +32,8 @@ public class ApplicationGetStateResponse extends GenericModel {
     String RUNNING = "running";
     /** failed. */
     String FAILED = "failed";
-    /** error. */
-    String ERROR = "error";
     /** accepted. */
     String ACCEPTED = "accepted";
-    /** submitted. */
-    String SUBMITTED = "submitted";
-    /** waiting. */
-    String WAITING = "waiting";
-    /** unknown. */
-    String UNKNOWN = "unknown";
     /** stopped. */
     String STOPPED = "stopped";
     /** auto_terminated. */
@@ -51,11 +45,13 @@ public class ApplicationGetStateResponse extends GenericModel {
   protected String id;
   protected String state;
   @SerializedName("start_time")
-  protected String startTime;
+  protected Date startTime;
   @SerializedName("end_time")
-  protected String endTime;
+  protected Date endTime;
   @SerializedName("finish_time")
-  protected String finishTime;
+  protected Date finishTime;
+  @SerializedName("auto_termination_time")
+  protected Date autoTerminationTime;
 
   /**
    * Gets the id.
@@ -86,7 +82,7 @@ public class ApplicationGetStateResponse extends GenericModel {
    *
    * @return the startTime
    */
-  public String getStartTime() {
+  public Date getStartTime() {
     return startTime;
   }
 
@@ -97,19 +93,30 @@ public class ApplicationGetStateResponse extends GenericModel {
    *
    * @return the endTime
    */
-  public String getEndTime() {
+  public Date getEndTime() {
     return endTime;
   }
 
   /**
    * Gets the finishTime.
    *
-   * Time when the application was completed.
+   * (deprecated) Time when the application was completed.
    *
    * @return the finishTime
    */
-  public String getFinishTime() {
+  public Date getFinishTime() {
     return finishTime;
+  }
+
+  /**
+   * Gets the autoTerminationTime.
+   *
+   * Time when the application will be automatically stopped by the service.
+   *
+   * @return the autoTerminationTime
+   */
+  public Date getAutoTerminationTime() {
+    return autoTerminationTime;
   }
 }
 

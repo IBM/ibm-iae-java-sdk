@@ -1,3 +1,19 @@
+# [1.0.0](https://github.com/IBM/ibm-iae-java-sdk/compare/0.6.0...1.0.0) (2023-01-05)
+
+
+### Features
+
+* add spark history server api ([9201b7d](https://github.com/IBM/ibm-iae-java-sdk/commit/9201b7da4da30c615d28e1df69e321adb1a533fc))
+
+
+### BREAKING CHANGES
+
+* Type of timestamp fields in Application response models has been changed to `Date`.
+
+The type of timestamp fields like startTime, endTime in `ApplicationGetStateResponse` and `Application` models has been changed from `String` to `Date`.
+
+Signed-off-by: Subin Shekhar <subinpc@gmail.com>
+
 # [0.6.0](https://github.com/IBM/ibm-iae-java-sdk/compare/0.5.3...0.6.0) (2022-11-24)
 
 

@@ -18,7 +18,7 @@ import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * Response of logging API.
+ * (deprecated) Response of logging API.
  */
 public class LoggingConfigurationResponse extends GenericModel {
 

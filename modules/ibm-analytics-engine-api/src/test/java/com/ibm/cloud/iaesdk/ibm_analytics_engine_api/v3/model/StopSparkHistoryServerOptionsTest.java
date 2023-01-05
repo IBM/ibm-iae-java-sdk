@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -13,8 +13,7 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Application;
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Runtime;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StopSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -24,26 +23,23 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the Application model.
+ * Unit test class for the StopSparkHistoryServerOptions model.
  */
-public class ApplicationTest {
+public class StopSparkHistoryServerOptionsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testApplication() throws Throwable {
-    Application applicationModel = new Application();
-    assertNull(applicationModel.getId());
-    assertNull(applicationModel.getHref());
-    assertNull(applicationModel.getRuntime());
-    assertNull(applicationModel.getSparkApplicationId());
-    assertNull(applicationModel.getSparkApplicationName());
-    assertNull(applicationModel.getState());
-    assertNull(applicationModel.getSparkUi());
-    assertNull(applicationModel.getSubmissionTime());
-    assertNull(applicationModel.getStartTime());
-    assertNull(applicationModel.getEndTime());
-    assertNull(applicationModel.getFinishTime());
-    assertNull(applicationModel.getAutoTerminationTime());
+  public void testStopSparkHistoryServerOptions() throws Throwable {
+    StopSparkHistoryServerOptions stopSparkHistoryServerOptionsModel = new StopSparkHistoryServerOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .build();
+    assertEquals(stopSparkHistoryServerOptionsModel.instanceId(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
   }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testStopSparkHistoryServerOptionsError() throws Throwable {
+    new StopSparkHistoryServerOptions.Builder().build();
+  }
+
 }

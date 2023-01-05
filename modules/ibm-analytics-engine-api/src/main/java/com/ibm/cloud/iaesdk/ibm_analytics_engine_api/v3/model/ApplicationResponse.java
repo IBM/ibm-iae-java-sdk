@@ -29,16 +29,8 @@ public class ApplicationResponse extends GenericModel {
     String RUNNING = "running";
     /** failed. */
     String FAILED = "failed";
-    /** error. */
-    String ERROR = "error";
     /** accepted. */
     String ACCEPTED = "accepted";
-    /** submitted. */
-    String SUBMITTED = "submitted";
-    /** waiting. */
-    String WAITING = "waiting";
-    /** unknown. */
-    String UNKNOWN = "unknown";
     /** stopped. */
     String STOPPED = "stopped";
     /** auto_terminated. */

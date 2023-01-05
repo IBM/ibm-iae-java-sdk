@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -35,6 +35,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetInstanceStateOp
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLogForwardingConfigOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetLoggingConfigurationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetResourceConsumptionLimitsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.GetSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Instance;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceDefaultConfig;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.InstanceGetStateResponse;
@@ -51,12 +52,16 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceLogForwardi
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ResourceConsumptionLimitsResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Runtime;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SetInstanceHomeOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServerResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StartSparkHistoryServerOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StopSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceDefaultConfigsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.security.Authenticator;
 import com.ibm.cloud.sdk.core.security.NoAuthAuthenticator;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
+import com.ibm.cloud.sdk.core.util.DateUtils;
 import com.ibm.cloud.sdk.core.util.EnvironmentUtils;
 import com.ibm.cloud.sdk.core.util.RequestUtils;
 import java.io.IOException;
@@ -225,8 +230,8 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
       .newType("objectstore")
       .newRegion("us-south")
       .newEndpoint("s3.direct.us-south.cloud-object-storage.appdomain.cloud")
-      .newHmacAccessKey("821**********0ae")
-      .newHmacSecretKey("03e****************4fc3")
+      .newHmacAccessKey("b9****************************4b")
+      .newHmacSecretKey("fa********************************************8a")
       .build();
 
     // Invoke setInstanceHome() with a valid options model and verify the result
@@ -540,7 +545,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
     // Construct an instance of the ApplicationRequestApplicationDetails model
     ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
-      .application("cos://bucket_name.my_cos/my_spark_app.py")
+      .application("/opt/ibm/spark/examples/src/main/python/wordcount.py")
       .runtime(runtimeModel)
       .jars("cos://cloud-object-storage/jars/tests.jar")
       .packages("testString")
@@ -549,7 +554,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
       .archives("testString")
       .name("spark-app")
       .xClass("com.company.path.ClassName")
-      .arguments(java.util.Arrays.asList("[arg1, arg2, arg3]"))
+      .arguments(java.util.Arrays.asList("/opt/ibm/spark/examples/src/main/resources/people.txt"))
       .conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       .env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
       .build();
@@ -599,7 +604,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   @Test
   public void testListApplicationsWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"applications\": [{\"id\": \"id\", \"href\": \"href\", \"runtime\": {\"spark_version\": \"3.1\"}, \"spark_application_id\": \"sparkApplicationId\", \"spark_application_name\": \"sparkApplicationName\", \"state\": \"finished\", \"start_time\": \"startTime\", \"end_time\": \"endTime\", \"finish_time\": \"finishTime\"}]}";
+    String mockResponseBody = "{\"applications\": [{\"id\": \"id\", \"href\": \"href\", \"runtime\": {\"spark_version\": \"3.1\"}, \"spark_application_id\": \"sparkApplicationId\", \"spark_application_name\": \"sparkApplicationName\", \"state\": \"finished\", \"spark_ui\": \"sparkUi\", \"submission_time\": \"2021-01-30T08:30:00.000Z\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"end_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\", \"auto_termination_time\": \"2021-01-30T08:30:00.000Z\"}]}";
     String listApplicationsPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -652,7 +657,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   @Test
   public void testGetApplicationWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"application_details\": {\"application\": \"cos://bucket_name.my_cos/my_spark_app.py\", \"runtime\": {\"spark_version\": \"3.1\"}, \"jars\": \"cos://cloud-object-storage/jars/tests.jar\", \"packages\": \"packages\", \"repositories\": \"repositories\", \"files\": \"files\", \"archives\": \"archives\", \"name\": \"spark-app\", \"class\": \"com.company.path.ClassName\", \"arguments\": [\"[arg1, arg2, arg3]\"], \"conf\": {\"mapKey\": \"anyValue\"}, \"env\": {\"mapKey\": \"anyValue\"}}, \"id\": \"2b83d31c-397b-48ad-ad76-b83347c982db\", \"spark_application_id\": \"sparkApplicationId\", \"spark_application_name\": \"sparkApplicationName\", \"state\": \"finished\", \"state_details\": [{\"type\": \"server_error\", \"code\": \"server_error\", \"message\": \"message\"}], \"start_time\": \"2021-01-30T08:30:00.000Z\", \"end_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\"}";
+    String mockResponseBody = "{\"application_details\": {\"application\": \"cos://bucket_name.my_cos/my_spark_app.py\", \"runtime\": {\"spark_version\": \"3.1\"}, \"jars\": \"cos://cloud-object-storage/jars/tests.jar\", \"packages\": \"packages\", \"repositories\": \"repositories\", \"files\": \"files\", \"archives\": \"archives\", \"name\": \"spark-app\", \"class\": \"com.company.path.ClassName\", \"arguments\": [\"[arg1, arg2, arg3]\"], \"conf\": {\"mapKey\": \"anyValue\"}, \"env\": {\"mapKey\": \"anyValue\"}}, \"id\": \"2b83d31c-397b-48ad-ad76-b83347c982db\", \"spark_application_id\": \"sparkApplicationId\", \"spark_application_name\": \"sparkApplicationName\", \"state\": \"finished\", \"spark_ui\": \"sparkUi\", \"state_details\": [{\"type\": \"server_error\", \"code\": \"server_error\", \"message\": \"message\"}], \"submission_time\": \"2021-01-30T08:30:00.000Z\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"end_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\", \"auto_termination_time\": \"2021-01-30T08:30:00.000Z\"}";
     String getApplicationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications/ff48cc19-0e7e-4627-aac6-0b4ad080397b";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -755,7 +760,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   @Test
   public void testGetApplicationStateWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"id\": \"id\", \"state\": \"finished\", \"start_time\": \"startTime\", \"end_time\": \"endTime\", \"finish_time\": \"finishTime\"}";
+    String mockResponseBody = "{\"id\": \"id\", \"state\": \"finished\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"end_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\", \"auto_termination_time\": \"2021-01-30T08:30:00.000Z\"}";
     String getApplicationStatePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications/ff48cc19-0e7e-4627-aac6-0b4ad080397b/state";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -1111,6 +1116,158 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   public void testGetLoggingConfigurationNoOptions() throws Throwable {
     server.enqueue(new MockResponse());
     ibmAnalyticsEngineApiService.getLoggingConfiguration(null).execute();
+  }
+
+  // Test the startSparkHistoryServer operation with a valid options model parameter
+  @Test
+  public void testStartSparkHistoryServerWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"state\": \"started\", \"cores\": \"1\", \"memory\": \"4G\", \"start_time\": \"2022-12-02T08:30:00.000Z\", \"stop_time\": \"2022-12-02T10:30:00.000Z\", \"auto_termination_time\": \"2022-12-05T08:30:00.000Z\"}";
+    String startSparkHistoryServerPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_history_server";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(202)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the StartSparkHistoryServerOptions model
+    StartSparkHistoryServerOptions startSparkHistoryServerOptionsModel = new StartSparkHistoryServerOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .build();
+
+    // Invoke startSparkHistoryServer() with a valid options model and verify the result
+    Response<SparkHistoryServerResponse> response = ibmAnalyticsEngineApiService.startSparkHistoryServer(startSparkHistoryServerOptionsModel).execute();
+    assertNotNull(response);
+    SparkHistoryServerResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "POST");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, startSparkHistoryServerPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the startSparkHistoryServer operation with and without retries enabled
+  @Test
+  public void testStartSparkHistoryServerWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testStartSparkHistoryServerWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testStartSparkHistoryServerWOptions();
+  }
+
+  // Test the startSparkHistoryServer operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testStartSparkHistoryServerNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.startSparkHistoryServer(null).execute();
+  }
+
+  // Test the getSparkHistoryServer operation with a valid options model parameter
+  @Test
+  public void testGetSparkHistoryServerWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"state\": \"started\", \"cores\": \"1\", \"memory\": \"4G\", \"start_time\": \"2022-12-02T08:30:00.000Z\", \"stop_time\": \"2022-12-02T10:30:00.000Z\", \"auto_termination_time\": \"2022-12-05T08:30:00.000Z\"}";
+    String getSparkHistoryServerPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_history_server";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the GetSparkHistoryServerOptions model
+    GetSparkHistoryServerOptions getSparkHistoryServerOptionsModel = new GetSparkHistoryServerOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .build();
+
+    // Invoke getSparkHistoryServer() with a valid options model and verify the result
+    Response<SparkHistoryServerResponse> response = ibmAnalyticsEngineApiService.getSparkHistoryServer(getSparkHistoryServerOptionsModel).execute();
+    assertNotNull(response);
+    SparkHistoryServerResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "GET");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, getSparkHistoryServerPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the getSparkHistoryServer operation with and without retries enabled
+  @Test
+  public void testGetSparkHistoryServerWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testGetSparkHistoryServerWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testGetSparkHistoryServerWOptions();
+  }
+
+  // Test the getSparkHistoryServer operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testGetSparkHistoryServerNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.getSparkHistoryServer(null).execute();
+  }
+
+  // Test the stopSparkHistoryServer operation with a valid options model parameter
+  @Test
+  public void testStopSparkHistoryServerWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "";
+    String stopSparkHistoryServerPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_history_server";
+    server.enqueue(new MockResponse()
+      .setResponseCode(204)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the StopSparkHistoryServerOptions model
+    StopSparkHistoryServerOptions stopSparkHistoryServerOptionsModel = new StopSparkHistoryServerOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .build();
+
+    // Invoke stopSparkHistoryServer() with a valid options model and verify the result
+    Response<Void> response = ibmAnalyticsEngineApiService.stopSparkHistoryServer(stopSparkHistoryServerOptionsModel).execute();
+    assertNotNull(response);
+    Void responseObj = response.getResult();
+    assertNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "DELETE");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, stopSparkHistoryServerPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the stopSparkHistoryServer operation with and without retries enabled
+  @Test
+  public void testStopSparkHistoryServerWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testStopSparkHistoryServerWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testStopSparkHistoryServerWOptions();
+  }
+
+  // Test the stopSparkHistoryServer operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testStopSparkHistoryServerNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.stopSparkHistoryServer(null).execute();
   }
 
   // Perform setup needed before each test method

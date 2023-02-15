@@ -21,6 +21,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResp
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequestApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationsPager;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ConfigurePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CurrentResourceConsumptionResponse;
@@ -46,6 +47,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LogForwardingConfi
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LogForwardingConfigResponseLogServer;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponseLogServer;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.PageLink;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceInstanceDefaultConfigsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceInstanceDefaultRuntimeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceLogForwardingConfigOptions;
@@ -66,6 +68,7 @@ import com.ibm.cloud.sdk.core.util.DateUtils;
 import com.ibm.cloud.sdk.core.util.RequestUtils;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -651,7 +654,7 @@ public class IbmAnalyticsEngineApiTest {
   @Test
   public void testListApplicationsWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"applications\": [{\"id\": \"id\", \"href\": \"href\", \"runtime\": {\"spark_version\": \"3.1\"}, \"spark_application_id\": \"sparkApplicationId\", \"spark_application_name\": \"sparkApplicationName\", \"state\": \"finished\", \"spark_ui\": \"sparkUi\", \"submission_time\": \"2021-01-30T08:30:00.000Z\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"end_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\", \"auto_termination_time\": \"2021-01-30T08:30:00.000Z\"}]}";
+    String mockResponseBody = "{\"applications\": [{\"id\": \"id\", \"href\": \"href\", \"runtime\": {\"spark_version\": \"3.1\"}, \"spark_application_id\": \"sparkApplicationId\", \"spark_application_name\": \"sparkApplicationName\", \"state\": \"finished\", \"spark_ui\": \"sparkUi\", \"submission_time\": \"2021-01-30T08:30:00.000Z\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"end_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\", \"auto_termination_time\": \"2021-01-30T08:30:00.000Z\"}], \"first\": {\"href\": \"href\", \"start\": \"start\"}, \"next\": {\"href\": \"href\", \"start\": \"start\"}, \"previous\": {\"href\": \"href\", \"start\": \"start\"}, \"limit\": 1}";
     String listApplicationsPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -662,6 +665,8 @@ public class IbmAnalyticsEngineApiTest {
     ListApplicationsOptions listApplicationsOptionsModel = new ListApplicationsOptions.Builder()
       .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
       .state(java.util.Arrays.asList("finished"))
+      .limit(Long.valueOf("10"))
+      .start("testString")
       .build();
 
     // Invoke listApplications() with a valid options model and verify the result
@@ -681,6 +686,8 @@ public class IbmAnalyticsEngineApiTest {
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNotNull(query);
     assertEquals(query.get("state"), RequestUtils.join(java.util.Arrays.asList("finished"), ","));
+    assertEquals(Long.valueOf(query.get("limit")), Long.valueOf("10"));
+    assertEquals(query.get("start"), "testString");
   }
 
   // Test the listApplications operation with and without retries enabled
@@ -700,6 +707,72 @@ public class IbmAnalyticsEngineApiTest {
     ibmAnalyticsEngineApiService.listApplications(null).execute();
   }
 
+  // Test the listApplications operation using the ApplicationsPager.getNext() method
+  @Test
+  public void testListApplicationsWithPagerGetNext() throws Throwable {
+    // Set up the two-page mock response.
+    String mockResponsePage1 = "{\"next\":{\"start\":\"1\"},\"total_count\":2,\"limit\":1,\"applications\":[{\"id\":\"id\",\"href\":\"href\",\"runtime\":{\"spark_version\":\"3.1\"},\"spark_application_id\":\"sparkApplicationId\",\"spark_application_name\":\"sparkApplicationName\",\"state\":\"finished\",\"spark_ui\":\"sparkUi\",\"submission_time\":\"2021-01-30T08:30:00.000Z\",\"start_time\":\"2021-01-30T08:30:00.000Z\",\"end_time\":\"2021-01-30T08:30:00.000Z\",\"finish_time\":\"2021-01-30T08:30:00.000Z\",\"auto_termination_time\":\"2021-01-30T08:30:00.000Z\"}]}";
+    String mockResponsePage2 = "{\"total_count\":2,\"limit\":1,\"applications\":[{\"id\":\"id\",\"href\":\"href\",\"runtime\":{\"spark_version\":\"3.1\"},\"spark_application_id\":\"sparkApplicationId\",\"spark_application_name\":\"sparkApplicationName\",\"state\":\"finished\",\"spark_ui\":\"sparkUi\",\"submission_time\":\"2021-01-30T08:30:00.000Z\",\"start_time\":\"2021-01-30T08:30:00.000Z\",\"end_time\":\"2021-01-30T08:30:00.000Z\",\"finish_time\":\"2021-01-30T08:30:00.000Z\",\"auto_termination_time\":\"2021-01-30T08:30:00.000Z\"}]}";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponsePage1));
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponsePage2));
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(400)
+      .setBody("{\"message\": \"No more results available!\"}"));
+
+    ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .state(java.util.Arrays.asList("finished"))
+      .limit(Long.valueOf("10"))
+      .build();
+
+    List<Application> allResults = new ArrayList<>();
+    ApplicationsPager pager = new ApplicationsPager(ibmAnalyticsEngineApiService, listApplicationsOptions);
+    while (pager.hasNext()) {
+      List<Application> nextPage = pager.getNext();
+      assertNotNull(nextPage);
+      allResults.addAll(nextPage);
+    }
+    assertEquals(allResults.size(), 2);
+  }
+  
+  // Test the listApplications operation using the ApplicationsPager.getAll() method
+  @Test
+  public void testListApplicationsWithPagerGetAll() throws Throwable {
+    // Set up the two-page mock response.
+    String mockResponsePage1 = "{\"next\":{\"start\":\"1\"},\"total_count\":2,\"limit\":1,\"applications\":[{\"id\":\"id\",\"href\":\"href\",\"runtime\":{\"spark_version\":\"3.1\"},\"spark_application_id\":\"sparkApplicationId\",\"spark_application_name\":\"sparkApplicationName\",\"state\":\"finished\",\"spark_ui\":\"sparkUi\",\"submission_time\":\"2021-01-30T08:30:00.000Z\",\"start_time\":\"2021-01-30T08:30:00.000Z\",\"end_time\":\"2021-01-30T08:30:00.000Z\",\"finish_time\":\"2021-01-30T08:30:00.000Z\",\"auto_termination_time\":\"2021-01-30T08:30:00.000Z\"}]}";
+    String mockResponsePage2 = "{\"total_count\":2,\"limit\":1,\"applications\":[{\"id\":\"id\",\"href\":\"href\",\"runtime\":{\"spark_version\":\"3.1\"},\"spark_application_id\":\"sparkApplicationId\",\"spark_application_name\":\"sparkApplicationName\",\"state\":\"finished\",\"spark_ui\":\"sparkUi\",\"submission_time\":\"2021-01-30T08:30:00.000Z\",\"start_time\":\"2021-01-30T08:30:00.000Z\",\"end_time\":\"2021-01-30T08:30:00.000Z\",\"finish_time\":\"2021-01-30T08:30:00.000Z\",\"auto_termination_time\":\"2021-01-30T08:30:00.000Z\"}]}";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponsePage1));
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponsePage2));
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(400)
+      .setBody("{\"message\": \"No more results available!\"}"));
+
+    ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .state(java.util.Arrays.asList("finished"))
+      .limit(Long.valueOf("10"))
+      .build();
+
+    ApplicationsPager pager = new ApplicationsPager(ibmAnalyticsEngineApiService, listApplicationsOptions);
+    List<Application> allResults = pager.getAll();
+    assertNotNull(allResults);
+    assertEquals(allResults.size(), 2);
+  }
+  
   // Test the getApplication operation with a valid options model parameter
   @Test
   public void testGetApplicationWOptions() throws Throwable {

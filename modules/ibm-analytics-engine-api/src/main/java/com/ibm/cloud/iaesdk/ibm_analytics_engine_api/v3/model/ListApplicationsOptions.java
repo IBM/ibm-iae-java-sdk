@@ -44,6 +44,8 @@ public class ListApplicationsOptions extends GenericModel {
 
   protected String instanceId;
   protected List<String> state;
+  protected Long limit;
+  protected String start;
 
   /**
    * Builder.
@@ -51,6 +53,8 @@ public class ListApplicationsOptions extends GenericModel {
   public static class Builder {
     private String instanceId;
     private List<String> state;
+    private Long limit;
+    private String start;
 
     /**
      * Instantiates a new Builder from an existing ListApplicationsOptions instance.
@@ -60,6 +64,8 @@ public class ListApplicationsOptions extends GenericModel {
     private Builder(ListApplicationsOptions listApplicationsOptions) {
       this.instanceId = listApplicationsOptions.instanceId;
       this.state = listApplicationsOptions.state;
+      this.limit = listApplicationsOptions.limit;
+      this.start = listApplicationsOptions.start;
     }
 
     /**
@@ -124,6 +130,28 @@ public class ListApplicationsOptions extends GenericModel {
       this.state = state;
       return this;
     }
+
+    /**
+     * Set the limit.
+     *
+     * @param limit the limit
+     * @return the ListApplicationsOptions builder
+     */
+    public Builder limit(long limit) {
+      this.limit = limit;
+      return this;
+    }
+
+    /**
+     * Set the start.
+     *
+     * @param start the start
+     * @return the ListApplicationsOptions builder
+     */
+    public Builder start(String start) {
+      this.start = start;
+      return this;
+    }
   }
 
   protected ListApplicationsOptions() { }
@@ -133,6 +161,8 @@ public class ListApplicationsOptions extends GenericModel {
       "instanceId cannot be empty");
     instanceId = builder.instanceId;
     state = builder.state;
+    limit = builder.limit;
+    start = builder.start;
   }
 
   /**
@@ -164,6 +194,28 @@ public class ListApplicationsOptions extends GenericModel {
    */
   public List<String> state() {
     return state;
+  }
+
+  /**
+   * Gets the limit.
+   *
+   * Number of application entries to be included in the response.
+   *
+   * @return the limit
+   */
+  public Long limit() {
+    return limit;
+  }
+
+  /**
+   * Gets the start.
+   *
+   * Token used to fetch the next or the previous page of the applications list.
+   *
+   * @return the start
+   */
+  public String start() {
+    return start;
   }
 }
 

@@ -21,6 +21,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResp
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequestApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationsPager;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ConfigurePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CurrentResourceConsumptionResponse;
@@ -46,6 +47,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LogForwardingConfi
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LogForwardingConfigResponseLogServer;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.LoggingConfigurationResponseLogServer;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.PageLink;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceInstanceDefaultConfigsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceInstanceDefaultRuntimeOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceLogForwardingConfigOptions;
@@ -65,6 +67,7 @@ import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import com.ibm.cloud.sdk.core.util.CredentialUtils;
 import com.ibm.cloud.sdk.core.util.DateUtils;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -247,7 +250,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testReplaceInstanceDefaultConfigs() throws Exception {
     try {
       Map<String, String> newDefaultConfigs = new HashMap<String, String>();
-      newDefaultConfigs.put("foo", "testString");
+      newDefaultConfigs.put("spark.driver.memory", "8G");
+      newDefaultConfigs.put("spark.driver.cores", "2");
 
       ReplaceInstanceDefaultConfigsOptions replaceInstanceDefaultConfigsOptions = new ReplaceInstanceDefaultConfigsOptions.Builder()
         .instanceId(instanceId)
@@ -273,8 +277,9 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testUpdateInstanceDefaultConfigs() throws Exception {
     try {
       Map<String, Object> updatedDefaultConfigs = new HashMap<String, Object>();
-      updatedDefaultConfigs.put("foo", "testString2");
-      
+      updatedDefaultConfigs.put("ae.spark.history-server.cores", "1");
+      updatedDefaultConfigs.put("ae.spark.history-server.memory", "4G");
+
       UpdateInstanceDefaultConfigsOptions updateInstanceDefaultConfigsOptions = new UpdateInstanceDefaultConfigsOptions.Builder()
         .instanceId(instanceId)
         .body(updatedDefaultConfigs)
@@ -380,7 +385,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     try {
       ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
         .instanceId(instanceId)
-        .state(java.util.Arrays.asList("accepted", "running", "finished", "failed"))
+        .state(java.util.Arrays.asList("accepted", "running", "finished", "stopped", "failed"))
+        .limit(Long.valueOf("10"))
         .build();
 
       // Invoke operation
@@ -399,6 +405,40 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   }
 
   @Test(dependsOnMethods = { "testListApplications" })
+  public void testListApplicationsWithPager() throws Exception {
+    try {
+      ListApplicationsOptions options = new ListApplicationsOptions.Builder()
+        .instanceId(instanceId)
+        .state(java.util.Arrays.asList("accepted", "running", "finished", "stopped", "failed"))
+        .limit(Long.valueOf("10"))
+        .build();
+
+      // Test getNext().
+      List<Application> allResults = new ArrayList<>();
+      ApplicationsPager pager = new ApplicationsPager(service, options);
+      while (pager.hasNext()) {
+        System.out.println("");
+        List<Application> nextPage = pager.getNext();
+        assertNotNull(nextPage);
+        allResults.addAll(nextPage);
+      }
+      assertFalse(allResults.isEmpty());
+
+      // Test getAll();
+      pager = new ApplicationsPager(service, options);
+      List<Application> allItems = pager.getAll();
+      assertNotNull(allItems);
+      assertFalse(allItems.isEmpty());
+
+      assertEquals(allItems.size(), allResults.size());
+      System.out.println(String.format("Retrieved a total of %d item(s) with pagination.", allResults.size()));
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test
   public void testGetApplication() throws Exception {
     try {
       GetApplicationOptions getApplicationOptions = new GetApplicationOptions.Builder()

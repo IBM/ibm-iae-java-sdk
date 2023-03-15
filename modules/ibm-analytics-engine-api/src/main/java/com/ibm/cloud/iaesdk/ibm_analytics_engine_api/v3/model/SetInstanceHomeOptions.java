@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -41,6 +41,11 @@ public class SetInstanceHomeOptions extends GenericModel {
     private String newHmacAccessKey;
     private String newHmacSecretKey;
 
+    /**
+     * Instantiates a new Builder from an existing SetInstanceHomeOptions instance.
+     *
+     * @param setInstanceHomeOptions the instance to initialize the Builder with
+     */
     private Builder(SetInstanceHomeOptions setInstanceHomeOptions) {
       this.instanceId = setInstanceHomeOptions.instanceId;
       this.newInstanceId = setInstanceHomeOptions.newInstanceId;
@@ -192,7 +197,7 @@ public class SetInstanceHomeOptions extends GenericModel {
   /**
    * Gets the instanceId.
    *
-   * The ID of the Analytics Engine instance for which 'instance home' is to be set.
+   * The ID of the Analytics Engine instance.
    *
    * @return the instanceId
    */

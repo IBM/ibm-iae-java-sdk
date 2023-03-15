@@ -63,6 +63,8 @@ public class Application extends GenericModel {
   @SerializedName("auto_termination_time")
   protected Date autoTerminationTime;
 
+  protected Application() { }
+
   /**
    * Gets the id.
    *
@@ -179,7 +181,9 @@ public class Application extends GenericModel {
    * (deprecated) Time when the application was completed.
    *
    * @return the finishTime
+   * @deprecated this method is deprecated and may be removed in a future release
    */
+  @Deprecated
   public Date getFinishTime() {
     return finishTime;
   }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -49,6 +49,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServer
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StartSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StopSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceDefaultConfigsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceHomeCredentialsOptions;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
 import com.ibm.cloud.sdk.core.util.CredentialUtils;
@@ -56,19 +57,19 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//
-// This file provides an example of how to use the IBM Analytics Engine API service.
-//
-// The following configuration properties are assumed to be defined:
-// IBM_ANALYTICS_ENGINE_API_URL=<service base url>
-// IBM_ANALYTICS_ENGINE_API_AUTH_TYPE=iam
-// IBM_ANALYTICS_ENGINE_API_APIKEY=<IAM apikey>
-// IBM_ANALYTICS_ENGINE_API_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
-//
-// These configuration properties can be exported as environment variables, or stored
-// in a configuration file and then:
-// export IBM_CREDENTIALS_FILE=<name of configuration file>
-//
+/**
+ * This class contains examples of how to use the IBM Analytics Engine API service.
+ *
+ * The following configuration properties are assumed to be defined:
+ * IBM_ANALYTICS_ENGINE_API_URL=&lt;service base url&gt;
+ * IBM_ANALYTICS_ENGINE_API_AUTH_TYPE=iam
+ * IBM_ANALYTICS_ENGINE_API_APIKEY=&lt;IAM apikey&gt;
+ * IBM_ANALYTICS_ENGINE_API_AUTH_URL=&lt;IAM token service base URL - omit this if using the production environment&gt;
+ *
+ * These configuration properties can be exported as environment variables, or stored
+ * in a configuration file and then:
+ * export IBM_CREDENTIALS_FILE=&lt;name of configuration file&gt;
+ */
 public class IbmAnalyticsEngineApiExamples {
   private static final Logger logger = LoggerFactory.getLogger(IbmAnalyticsEngineApiExamples.class);
   protected IbmAnalyticsEngineApiExamples() { }
@@ -77,6 +78,11 @@ public class IbmAnalyticsEngineApiExamples {
     System.setProperty("IBM_CREDENTIALS_FILE", "../../ibm_analytics_engine_api_v3.env");
   }
 
+  /**
+   * The main() function invokes operations of the IBM Analytics Engine API service.
+   * @param args command-line arguments
+   * @throws Exception an error occurred
+   */
   @SuppressWarnings("checkstyle:methodlength")
   public static void main(String[] args) throws Exception {
     IbmAnalyticsEngineApi ibmAnalyticsEngineApiService = IbmAnalyticsEngineApi.newInstance();
@@ -88,7 +94,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("getInstance() result:");
       // begin-get_instance
       GetInstanceOptions getInstanceOptions = new GetInstanceOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
       Response<Instance> response = ibmAnalyticsEngineApiService.getInstance(getInstanceOptions).execute();
@@ -105,7 +111,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("getInstanceState() result:");
       // begin-get_instance_state
       GetInstanceStateOptions getInstanceStateOptions = new GetInstanceStateOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
       Response<InstanceGetStateResponse> response = ibmAnalyticsEngineApiService.getInstanceState(getInstanceStateOptions).execute();
@@ -122,7 +128,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("setInstanceHome() result:");
       // begin-set_instance_home
       SetInstanceHomeOptions setInstanceHomeOptions = new SetInstanceHomeOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .newHmacAccessKey("b9****************************4b")
         .newHmacSecretKey("fa********************************************8a")
         .build();
@@ -138,10 +144,29 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
+      System.out.println("updateInstanceHomeCredentials() result:");
+      // begin-update_instance_home_credentials
+      UpdateInstanceHomeCredentialsOptions updateInstanceHomeCredentialsOptions = new UpdateInstanceHomeCredentialsOptions.Builder()
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .hmacAccessKey("b9****************************4b")
+        .hmacSecretKey("fa********************************************8a")
+        .build();
+
+      Response<InstanceHomeResponse> response = ibmAnalyticsEngineApiService.updateInstanceHomeCredentials(updateInstanceHomeCredentialsOptions).execute();
+      InstanceHomeResponse instanceHomeResponse = response.getResult();
+
+      System.out.println(instanceHomeResponse);
+      // end-update_instance_home_credentials
+    } catch (ServiceResponseException e) {
+        logger.error(String.format("Service returned status code %s: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
+    }
+
+    try {
       System.out.println("getInstanceDefaultConfigs() result:");
       // begin-get_instance_default_configs
       GetInstanceDefaultConfigsOptions getInstanceDefaultConfigsOptions = new GetInstanceDefaultConfigsOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
       Response<Map<String, String>> response = ibmAnalyticsEngineApiService.getInstanceDefaultConfigs(getInstanceDefaultConfigsOptions).execute();
@@ -157,14 +182,9 @@ public class IbmAnalyticsEngineApiExamples {
     try {
       System.out.println("replaceInstanceDefaultConfigs() result:");
       // begin-replace_instance_default_configs
-
-      Map<String, String> newDefaultConfigs = new java.util.HashMap<String, String>();
-      newDefaultConfigs.put("spark.driver.memory", "8G");
-      newDefaultConfigs.put("spark.driver.cores", "2");
-
       ReplaceInstanceDefaultConfigsOptions replaceInstanceDefaultConfigsOptions = new ReplaceInstanceDefaultConfigsOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
-        .body(newDefaultConfigs)
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .body(java.util.Collections.singletonMap("foo", "testString"))
         .build();
 
       Response<Map<String, String>> response = ibmAnalyticsEngineApiService.replaceInstanceDefaultConfigs(replaceInstanceDefaultConfigsOptions).execute();
@@ -180,14 +200,9 @@ public class IbmAnalyticsEngineApiExamples {
     try {
       System.out.println("updateInstanceDefaultConfigs() result:");
       // begin-update_instance_default_configs
-
-      Map<String, Object> defaultConfigsUpdate = new java.util.HashMap<String, Object>();
-      defaultConfigsUpdate.put("ae.spark.history-server.cores", "1");
-      defaultConfigsUpdate.put("ae.spark.history-server.memory", "4G");
-
       UpdateInstanceDefaultConfigsOptions updateInstanceDefaultConfigsOptions = new UpdateInstanceDefaultConfigsOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
-        .body(defaultConfigsUpdate)
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .body(new java.util.HashMap<String, Object>())
         .build();
 
       Response<Map<String, String>> response = ibmAnalyticsEngineApiService.updateInstanceDefaultConfigs(updateInstanceDefaultConfigsOptions).execute();
@@ -204,7 +219,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("getInstanceDefaultRuntime() result:");
       // begin-get_instance_default_runtime
       GetInstanceDefaultRuntimeOptions getInstanceDefaultRuntimeOptions = new GetInstanceDefaultRuntimeOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
       Response<Runtime> response = ibmAnalyticsEngineApiService.getInstanceDefaultRuntime(getInstanceDefaultRuntimeOptions).execute();
@@ -221,8 +236,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("replaceInstanceDefaultRuntime() result:");
       // begin-replace_instance_default_runtime
       ReplaceInstanceDefaultRuntimeOptions replaceInstanceDefaultRuntimeOptions = new ReplaceInstanceDefaultRuntimeOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
-        .sparkVersion("3.3")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
       Response<Runtime> response = ibmAnalyticsEngineApiService.replaceInstanceDefaultRuntime(replaceInstanceDefaultRuntimeOptions).execute();
@@ -239,16 +253,16 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("createApplication() result:");
       // begin-create_application
       Runtime runtimeModel = new Runtime.Builder()
-        .sparkVersion("3.1")
+        .sparkVersion("3.3")
         .build();
-
-      CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
-        .applicationDetails(new ApplicationRequestApplicationDetails.Builder()
+      ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
         .application("/opt/ibm/spark/examples/src/main/python/wordcount.py")
-          .addArguments("/opt/ibm/spark/examples/src/main/resources/people.txt")
         .runtime(runtimeModel)
-          .build())
+        .arguments(java.util.Arrays.asList("/opt/ibm/spark/examples/src/main/resources/people.txt"))
+        .build();
+      CreateApplicationOptions createApplicationOptions = new CreateApplicationOptions.Builder()
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .applicationDetails(applicationRequestApplicationDetailsModel)
         .build();
 
       Response<ApplicationResponse> response = ibmAnalyticsEngineApiService.createApplication(createApplicationOptions).execute();
@@ -265,11 +279,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("listApplications() result:");
       // begin-list_applications
       ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
-        .addState("accepted")
-        .addState("running")
-        .addState("finished")
-        .addState("failed")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
       Response<ApplicationCollection> response = ibmAnalyticsEngineApiService.listApplications(listApplicationsOptions).execute();
@@ -286,8 +296,8 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("getApplication() result:");
       // begin-get_application
       GetApplicationOptions getApplicationOptions = new GetApplicationOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
-        .applicationId("db933645-0b68-4dcb-80d8-7b71a6c8e542")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
         .build();
 
       Response<ApplicationGetResponse> response = ibmAnalyticsEngineApiService.getApplication(getApplicationOptions).execute();
@@ -304,8 +314,8 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("getApplicationState() result:");
       // begin-get_application_state
       GetApplicationStateOptions getApplicationStateOptions = new GetApplicationStateOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
-        .applicationId("db933645-0b68-4dcb-80d8-7b71a6c8e542")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
         .build();
 
       Response<ApplicationGetStateResponse> response = ibmAnalyticsEngineApiService.getApplicationState(getApplicationStateOptions).execute();
@@ -322,7 +332,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("getCurrentResourceConsumption() result:");
       // begin-get_current_resource_consumption
       GetCurrentResourceConsumptionOptions getCurrentResourceConsumptionOptions = new GetCurrentResourceConsumptionOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
       Response<CurrentResourceConsumptionResponse> response = ibmAnalyticsEngineApiService.getCurrentResourceConsumption(getCurrentResourceConsumptionOptions).execute();
@@ -339,7 +349,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("getResourceConsumptionLimits() result:");
       // begin-get_resource_consumption_limits
       GetResourceConsumptionLimitsOptions getResourceConsumptionLimitsOptions = new GetResourceConsumptionLimitsOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
       Response<ResourceConsumptionLimitsResponse> response = ibmAnalyticsEngineApiService.getResourceConsumptionLimits(getResourceConsumptionLimitsOptions).execute();
@@ -356,8 +366,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("replaceLogForwardingConfig() result:");
       // begin-replace_log_forwarding_config
       ReplaceLogForwardingConfigOptions replaceLogForwardingConfigOptions = new ReplaceLogForwardingConfigOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
-        .enabled(true)
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
       Response<LogForwardingConfigResponse> response = ibmAnalyticsEngineApiService.replaceLogForwardingConfig(replaceLogForwardingConfigOptions).execute();
@@ -374,7 +383,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("getLogForwardingConfig() result:");
       // begin-get_log_forwarding_config
       GetLogForwardingConfigOptions getLogForwardingConfigOptions = new GetLogForwardingConfigOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
       Response<LogForwardingConfigResponse> response = ibmAnalyticsEngineApiService.getLogForwardingConfig(getLogForwardingConfigOptions).execute();
@@ -391,8 +400,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("configurePlatformLogging() result:");
       // begin-configure_platform_logging
       ConfigurePlatformLoggingOptions configurePlatformLoggingOptions = new ConfigurePlatformLoggingOptions.Builder()
-        .instanceGuid("dc0e9889-eab2-4t9e-9441-566209499546")
-        .enable(true)
+        .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
       Response<LoggingConfigurationResponse> response = ibmAnalyticsEngineApiService.configurePlatformLogging(configurePlatformLoggingOptions).execute();
@@ -409,7 +417,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("getLoggingConfiguration() result:");
       // begin-get_logging_configuration
       GetLoggingConfigurationOptions getLoggingConfigurationOptions = new GetLoggingConfigurationOptions.Builder()
-        .instanceGuid("dc0e9889-eab2-4t9e-9441-566209499546")
+        .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
       Response<LoggingConfigurationResponse> response = ibmAnalyticsEngineApiService.getLoggingConfiguration(getLoggingConfigurationOptions).execute();
@@ -426,7 +434,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("startSparkHistoryServer() result:");
       // begin-start_spark_history_server
       StartSparkHistoryServerOptions startSparkHistoryServerOptions = new StartSparkHistoryServerOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
       Response<SparkHistoryServerResponse> response = ibmAnalyticsEngineApiService.startSparkHistoryServer(startSparkHistoryServerOptions).execute();
@@ -443,7 +451,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("getSparkHistoryServer() result:");
       // begin-get_spark_history_server
       GetSparkHistoryServerOptions getSparkHistoryServerOptions = new GetSparkHistoryServerOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
       Response<SparkHistoryServerResponse> response = ibmAnalyticsEngineApiService.getSparkHistoryServer(getSparkHistoryServerOptions).execute();
@@ -457,29 +465,29 @@ public class IbmAnalyticsEngineApiExamples {
     }
 
     try {
-      // begin-stop_spark_history_server
-      StopSparkHistoryServerOptions stopSparkHistoryServerOptions = new StopSparkHistoryServerOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
+      // begin-delete_application
+      DeleteApplicationOptions deleteApplicationOptions = new DeleteApplicationOptions.Builder()
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .applicationId("ff48cc19-0e7e-4627-aac6-0b4ad080397b")
         .build();
 
-      Response<Void> response = ibmAnalyticsEngineApiService.stopSparkHistoryServer(stopSparkHistoryServerOptions).execute();
-      // end-stop_spark_history_server
-      System.out.printf("stopSparkHistoryServer() response status code: %d%n", response.getStatusCode());
+      Response<Void> response = ibmAnalyticsEngineApiService.deleteApplication(deleteApplicationOptions).execute();
+      // end-delete_application
+      System.out.printf("deleteApplication() response status code: %d%n", response.getStatusCode());
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);
     }
 
     try {
-      // begin-delete_application
-      DeleteApplicationOptions deleteApplicationOptions = new DeleteApplicationOptions.Builder()
-        .instanceId("dc0e9889-eab2-4t9e-9441-566209499546")
-        .applicationId("db933645-0b68-4dcb-80d8-7b71a6c8e542")
+      // begin-stop_spark_history_server
+      StopSparkHistoryServerOptions stopSparkHistoryServerOptions = new StopSparkHistoryServerOptions.Builder()
+        .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
         .build();
 
-      Response<Void> response = ibmAnalyticsEngineApiService.deleteApplication(deleteApplicationOptions).execute();
-      // end-delete_application
-      System.out.printf("deleteApplication() response status code: %d%n", response.getStatusCode());
+      Response<Void> response = ibmAnalyticsEngineApiService.stopSparkHistoryServer(stopSparkHistoryServerOptions).execute();
+      // end-stop_spark_history_server
+      System.out.printf("stopSparkHistoryServer() response status code: %d%n", response.getStatusCode());
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
           e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()), e);

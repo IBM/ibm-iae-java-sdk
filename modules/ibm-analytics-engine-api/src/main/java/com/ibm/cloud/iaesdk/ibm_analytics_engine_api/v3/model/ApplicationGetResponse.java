@@ -66,6 +66,8 @@ public class ApplicationGetResponse extends GenericModel {
   @SerializedName("auto_termination_time")
   protected Date autoTerminationTime;
 
+  protected ApplicationGetResponse() { }
+
   /**
    * Gets the applicationDetails.
    *
@@ -182,7 +184,9 @@ public class ApplicationGetResponse extends GenericModel {
    * (deprecated) Time when the application completed successfully, in the format YYYY-MM-DDTHH:mm:ssZ.
    *
    * @return the finishTime
+   * @deprecated this method is deprecated and may be removed in a future release
    */
+  @Deprecated
   public Date getFinishTime() {
     return finishTime;
   }

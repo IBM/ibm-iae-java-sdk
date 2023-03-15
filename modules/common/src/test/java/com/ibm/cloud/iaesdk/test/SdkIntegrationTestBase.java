@@ -15,10 +15,7 @@ package com.ibm.cloud.iaesdk.test;
 
 import java.io.File;
 
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.testng.PowerMockTestCase;
+
 import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -28,9 +25,8 @@ import com.ibm.cloud.sdk.core.util.EnvironmentUtils;
 /**
  * This class provides common functionality used by integration tests.
  */
-@PrepareForTest({ EnvironmentUtils.class })
-@PowerMockIgnore({"javax.net.ssl.*", "okhttp3.*"})
-public abstract class SdkIntegrationTestBase extends PowerMockTestCase {
+
+public abstract class SdkIntegrationTestBase {
 
     // Default behavior is to skip tests, unless we have a valid config file.
     protected boolean skipTests = true;
@@ -66,8 +62,7 @@ public abstract class SdkIntegrationTestBase extends PowerMockTestCase {
     @BeforeClass
     public void setUpConfig() throws Exception, InterruptedException {
         // Allow the java core to "see" the config file if/when the testcase asks the core to load it.
-        PowerMockito.spy(EnvironmentUtils.class);
-        PowerMockito.when(EnvironmentUtils.getenv("IBM_CREDENTIALS_FILE")).thenReturn(getConfigFilename());
+
 
         // Next, determine if the tests within the subclass should be skipped,
         // based on whether or not the config file exists.

@@ -102,7 +102,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
    */
 
   public String getConfigFilename() {
-    return "../../ibmanalyticsengine-service.env";
+    return "../../ibm_analytics_engine_api_v3.env";
   }
 
   @BeforeClass

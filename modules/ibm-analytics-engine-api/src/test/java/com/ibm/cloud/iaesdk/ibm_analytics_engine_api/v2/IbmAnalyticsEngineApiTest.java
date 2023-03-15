@@ -77,9 +77,8 @@ import static org.testng.Assert.*;
 /**
  * Unit test class for the IbmAnalyticsEngineApi service.
  */
-@PrepareForTest({ EnvironmentUtils.class })
-@PowerMockIgnore({"javax.net.ssl.*", "org.mockito.*"})
-public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
+
+public class IbmAnalyticsEngineApiTest {
 
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
@@ -95,8 +94,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
   }
 
   public void constructClientService() throws Throwable {
-    PowerMockito.spy(EnvironmentUtils.class);
-    PowerMockito.when(EnvironmentUtils.getenv()).thenReturn(getTestProcessEnvironment());
+	System.setProperty("TESTSERVICE_AUTH_TYPE", "noAuth");  
     final String serviceName = "testService";
 
     ibmAnalyticsEngineApiService = IbmAnalyticsEngineApi.newInstance(serviceName);

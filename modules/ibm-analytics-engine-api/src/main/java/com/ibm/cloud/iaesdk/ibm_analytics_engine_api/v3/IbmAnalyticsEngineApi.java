@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -12,7 +12,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 3.54.1-1d9808a7-20220817-143039
+ * IBM OpenAPI SDK Code Generator Version: 3.66.0-d6c2d7e0-20230215-221247
  */
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
@@ -54,6 +54,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServer
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StartSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StopSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceDefaultConfigsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceHomeCredentialsOptions;
 import com.ibm.cloud.sdk.core.http.RequestBuilder;
 import com.ibm.cloud.sdk.core.http.ResponseConverter;
 import com.ibm.cloud.sdk.core.http.ServiceCall;
@@ -66,6 +67,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 /**
  * Manage serverless Spark instances and run applications.
@@ -73,15 +75,23 @@ import java.util.Map.Entry;
  * API Version: 3.0.0
  */
 public class IbmAnalyticsEngineApi extends BaseService {
+  private static final Logger LOGGER = Logger.getLogger(IbmAnalyticsEngineApi.class.getName());
 
+  /**
+   * Default service name used when configuring the `IbmAnalyticsEngineApi` client.
+   */
   public static final String DEFAULT_SERVICE_NAME = "ibm_analytics_engine_api";
 
+  /**
+   * Default service endpoint URL.
+   */
   public static final String DEFAULT_SERVICE_URL = "https://api.us-south.ae.cloud.ibm.com";
 
   private static final Map<String, String> _regionalEndpoints;
   static {
     Map<String, String> m = new HashMap<>();
     m.put("us-south", "https://api.us-south.ae.cloud.ibm.com");
+
     m.put("eu-de", "https://api.eu-de.ae.cloud.ibm.com");
     _regionalEndpoints = Collections.unmodifiableMap(m);
   }
@@ -114,7 +124,9 @@ public class IbmAnalyticsEngineApi extends BaseService {
    * @return an instance of the `IbmAnalyticsEngineApi` client using external configuration
    */
   public static IbmAnalyticsEngineApi newInstance(String serviceName) {
+	  System.out.println("==========newInstance serviceName=========="+serviceName);
     Authenticator authenticator = ConfigBasedAuthenticatorFactory.getAuthenticator(serviceName);
+    System.out.println("==========newInstance serviceName=========="+authenticator);
     IbmAnalyticsEngineApi service = new IbmAnalyticsEngineApi(serviceName, authenticator);
     service.configureService(serviceName);
     return service;
@@ -224,6 +236,39 @@ public class IbmAnalyticsEngineApi extends BaseService {
     if (setInstanceHomeOptions.newHmacSecretKey() != null) {
       contentJson.addProperty("hmac_secret_key", setInstanceHomeOptions.newHmacSecretKey());
     }
+    builder.bodyJson(contentJson);
+    ResponseConverter<InstanceHomeResponse> responseConverter =
+      ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<InstanceHomeResponse>() { }.getType());
+    return createServiceCall(builder.build(), responseConverter);
+  }
+
+  /**
+   * Update instance home credentials.
+   *
+   * Update the HMAC credentials used to access the instance home, if the instance home was set earlier. Credentials
+   * must have write access to the object storage used as instance home.
+   *
+   * **Note**: Your running applications and the Spark history server would continue to use the old credentials after
+   * updating the HMAC credentials. Before revoking the old credentials, you must either wait for them to finish running
+   * or stop them.
+   *
+   * @param updateInstanceHomeCredentialsOptions the {@link UpdateInstanceHomeCredentialsOptions} containing the options for the call
+   * @return a {@link ServiceCall} with a result of type {@link InstanceHomeResponse}
+   */
+  public ServiceCall<InstanceHomeResponse> updateInstanceHomeCredentials(UpdateInstanceHomeCredentialsOptions updateInstanceHomeCredentialsOptions) {
+    com.ibm.cloud.sdk.core.util.Validator.notNull(updateInstanceHomeCredentialsOptions,
+      "updateInstanceHomeCredentialsOptions cannot be null");
+    Map<String, String> pathParamsMap = new HashMap<String, String>();
+    pathParamsMap.put("instance_id", updateInstanceHomeCredentialsOptions.instanceId());
+    RequestBuilder builder = RequestBuilder.patch(RequestBuilder.resolveRequestUrl(getServiceUrl(), "/v3/analytics_engines/{instance_id}/instance_home", pathParamsMap));
+    Map<String, String> sdkHeaders = SdkCommon.getSdkHeaders("ibm_analytics_engine_api", "v3", "updateInstanceHomeCredentials");
+    for (Entry<String, String> header : sdkHeaders.entrySet()) {
+      builder.header(header.getKey(), header.getValue());
+    }
+    builder.header("Accept", "application/json");
+    final JsonObject contentJson = new JsonObject();
+    contentJson.addProperty("hmac_access_key", updateInstanceHomeCredentialsOptions.hmacAccessKey());
+    contentJson.addProperty("hmac_secret_key", updateInstanceHomeCredentialsOptions.hmacSecretKey());
     builder.bodyJson(contentJson);
     ResponseConverter<InstanceHomeResponse> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<InstanceHomeResponse>() { }.getType());
@@ -609,8 +654,11 @@ public class IbmAnalyticsEngineApi extends BaseService {
    *
    * @param configurePlatformLoggingOptions the {@link ConfigurePlatformLoggingOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link LoggingConfigurationResponse}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
+   @Deprecated
   public ServiceCall<LoggingConfigurationResponse> configurePlatformLogging(ConfigurePlatformLoggingOptions configurePlatformLoggingOptions) {
+    LOGGER.warning("A deprecated operation has been invoked: configurePlatformLogging");
     com.ibm.cloud.sdk.core.util.Validator.notNull(configurePlatformLoggingOptions,
       "configurePlatformLoggingOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();
@@ -639,8 +687,11 @@ public class IbmAnalyticsEngineApi extends BaseService {
    *
    * @param getLoggingConfigurationOptions the {@link GetLoggingConfigurationOptions} containing the options for the call
    * @return a {@link ServiceCall} with a result of type {@link LoggingConfigurationResponse}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
+   @Deprecated
   public ServiceCall<LoggingConfigurationResponse> getLoggingConfiguration(GetLoggingConfigurationOptions getLoggingConfigurationOptions) {
+    LOGGER.warning("A deprecated operation has been invoked: getLoggingConfiguration");
     com.ibm.cloud.sdk.core.util.Validator.notNull(getLoggingConfigurationOptions,
       "getLoggingConfigurationOptions cannot be null");
     Map<String, String> pathParamsMap = new HashMap<String, String>();

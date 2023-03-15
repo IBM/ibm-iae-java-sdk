@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -29,6 +29,11 @@ public class ConfigurePlatformLoggingOptions extends GenericModel {
     private String instanceGuid;
     private Boolean enable;
 
+    /**
+     * Instantiates a new Builder from an existing ConfigurePlatformLoggingOptions instance.
+     *
+     * @param configurePlatformLoggingOptions the instance to initialize the Builder with
+     */
     private Builder(ConfigurePlatformLoggingOptions configurePlatformLoggingOptions) {
       this.instanceGuid = configurePlatformLoggingOptions.instanceGuid;
       this.enable = configurePlatformLoggingOptions.enable;

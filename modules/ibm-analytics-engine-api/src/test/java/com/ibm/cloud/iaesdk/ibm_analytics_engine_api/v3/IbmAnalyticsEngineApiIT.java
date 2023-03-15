@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -56,6 +56,7 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServer
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StartSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StopSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceDefaultConfigsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceHomeCredentialsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.iaesdk.test.SdkIntegrationTestBase;
 import com.ibm.cloud.sdk.core.http.Response;
@@ -86,6 +87,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public String hmacAccessKey = null;
   public String hmacSecretKey = null;
   public String applicationId = null;
+  public String alternateHmacAccessKey = null;
+  public String alternateHmacSecretKey = null;
 
   /**
    * This method provides our config filename to the base class.
@@ -101,7 +104,8 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     if (skipTests()) {
       return;
     }
-
+ 
+    System.out.println("==========IbmAnalyticsEngineApi==========");
     service = IbmAnalyticsEngineApi.newInstance();
     assertNotNull(service);
     assertNotNull(service.getServiceUrl());
@@ -115,9 +119,9 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     instanceIdWithoutInstanceHome = config.get("INSTANCE_GUID_WO_INSTANCE_HOME");
     hmacAccessKey = config.get("HMAC_ACCESS_KEY");
     hmacSecretKey = config.get("HMAC_SECRET_KEY");
-
     service.enableRetries(4, 30);
-
+    alternateHmacAccessKey = config.get("ALTERNATE_HMAC_ACCESS_KEY");
+    alternateHmacSecretKey = config.get("ALTERNATE_HMAC_SECRET_KEY");
     System.out.println("Setup complete.");
   }
 
@@ -143,7 +147,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testGetInstance" })
   public void testGetInstanceState() throws Exception {
     try {
       GetInstanceStateOptions getInstanceStateOptions = new GetInstanceStateOptions.Builder()
@@ -165,7 +169,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testGetInstanceState" })
   public void testSetInstanceHome() throws Exception {
     try {
       SetInstanceHomeOptions setInstanceHomeOptions = new SetInstanceHomeOptions.Builder()
@@ -194,7 +198,31 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testSetInstanceHome" })
+  public void testUpdateInstanceHomeCredentials() throws Exception {
+    try {
+      UpdateInstanceHomeCredentialsOptions updateInstanceHomeCredentialsOptions = new UpdateInstanceHomeCredentialsOptions.Builder()
+        .instanceId(instanceId)
+        .hmacAccessKey(alternateHmacAccessKey)
+        .hmacSecretKey(alternateHmacSecretKey)
+        .build();
+
+      // Invoke operation
+      Response<InstanceHomeResponse> response = service.updateInstanceHomeCredentials(updateInstanceHomeCredentialsOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 200);
+
+      InstanceHomeResponse instanceHomeResponseResult = response.getResult();
+
+      assertNotNull(instanceHomeResponseResult);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testUpdateInstanceHomeCredentials" })
   public void testGetInstanceDefaultConfigs() throws Exception {
     try {
       GetInstanceDefaultConfigsOptions getInstanceDefaultConfigsOptions = new GetInstanceDefaultConfigsOptions.Builder()
@@ -216,7 +244,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testGetInstanceDefaultConfigs" })
   public void testReplaceInstanceDefaultConfigs() throws Exception {
     try {
       Map<String, String> newDefaultConfigs = new HashMap<String, String>();
@@ -242,7 +270,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testReplaceInstanceDefaultConfigs" })
   public void testUpdateInstanceDefaultConfigs() throws Exception {
     try {
       Map<String, Object> updatedDefaultConfigs = new HashMap<String, Object>();
@@ -268,7 +296,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testUpdateInstanceDefaultConfigs" })
   public void testGetInstanceDefaultRuntime() throws Exception {
     try {
       GetInstanceDefaultRuntimeOptions getInstanceDefaultRuntimeOptions = new GetInstanceDefaultRuntimeOptions.Builder()
@@ -290,7 +318,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testGetInstanceDefaultRuntime" })
   public void testReplaceInstanceDefaultRuntime() throws Exception {
     try {
       ReplaceInstanceDefaultRuntimeOptions replaceInstanceDefaultRuntimeOptions = new ReplaceInstanceDefaultRuntimeOptions.Builder()
@@ -313,11 +341,11 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testReplaceInstanceDefaultRuntime" })
   public void testCreateApplication() throws Exception {
     try {
       Runtime runtimeModel = new Runtime.Builder()
-        .sparkVersion("3.1")
+        .sparkVersion("3.3")
         .build();
 
       ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
@@ -348,7 +376,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testCreateApplication" })
   public void testListApplications() throws Exception {
     try {
       ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
@@ -371,7 +399,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testListApplications" })
   public void testGetApplication() throws Exception {
     try {
       GetApplicationOptions getApplicationOptions = new GetApplicationOptions.Builder()
@@ -394,7 +422,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testGetApplication" })
   public void testGetApplicationState() throws Exception {
     try {
       GetApplicationStateOptions getApplicationStateOptions = new GetApplicationStateOptions.Builder()
@@ -417,7 +445,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testGetApplicationState" })
   public void testGetCurrentResourceConsumption() throws Exception {
     try {
       GetCurrentResourceConsumptionOptions getCurrentResourceConsumptionOptions = new GetCurrentResourceConsumptionOptions.Builder()
@@ -439,7 +467,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testGetCurrentResourceConsumption" })
   public void testGetResourceConsumptionLimits() throws Exception {
     try {
       GetResourceConsumptionLimitsOptions getResourceConsumptionLimitsOptions = new GetResourceConsumptionLimitsOptions.Builder()
@@ -461,7 +489,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testGetResourceConsumptionLimits" })
   public void testReplaceLogForwardingConfig() throws Exception {
     try {
       ReplaceLogForwardingConfigOptions replaceLogForwardingConfigOptions = new ReplaceLogForwardingConfigOptions.Builder()
@@ -486,7 +514,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testReplaceLogForwardingConfig" })
   public void testGetLogForwardingConfig() throws Exception {
     try {
       GetLogForwardingConfigOptions getLogForwardingConfigOptions = new GetLogForwardingConfigOptions.Builder()
@@ -508,7 +536,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testGetLogForwardingConfig" })
   public void testConfigurePlatformLogging() throws Exception {
     try {
       ConfigurePlatformLoggingOptions configurePlatformLoggingOptions = new ConfigurePlatformLoggingOptions.Builder()
@@ -531,7 +559,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testConfigurePlatformLogging" })
   public void testGetLoggingConfiguration() throws Exception {
     try {
       GetLoggingConfigurationOptions getLoggingConfigurationOptions = new GetLoggingConfigurationOptions.Builder()
@@ -553,7 +581,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testGetLoggingConfiguration" })
   public void testStartSparkHistoryServer() throws Exception {
     try {
       StartSparkHistoryServerOptions startSparkHistoryServerOptions = new StartSparkHistoryServerOptions.Builder()
@@ -575,7 +603,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testStartSparkHistoryServer" })
   public void testGetSparkHistoryServer() throws Exception {
     try {
       GetSparkHistoryServerOptions getSparkHistoryServerOptions = new GetSparkHistoryServerOptions.Builder()
@@ -597,25 +625,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
-  public void testStopSparkHistoryServer() throws Exception {
-    try {
-      StopSparkHistoryServerOptions stopSparkHistoryServerOptions = new StopSparkHistoryServerOptions.Builder()
-        .instanceId(instanceId)
-        .build();
-
-      // Invoke operation
-      Response<Void> response = service.stopSparkHistoryServer(stopSparkHistoryServerOptions).execute();
-      // Validate response
-      assertNotNull(response);
-      assertEquals(response.getStatusCode(), 204);
-    } catch (ServiceResponseException e) {
-        fail(String.format("Service returned status code %d: %s%nError details: %s",
-          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
-    }
-  }
-
-  @Test
+  @Test(dependsOnMethods = { "testGetSparkHistoryServer" })
   public void testDeleteApplication() throws Exception {
     try {
       DeleteApplicationOptions deleteApplicationOptions = new DeleteApplicationOptions.Builder()
@@ -625,6 +635,24 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
 
       // Invoke operation
       Response<Void> response = service.deleteApplication(deleteApplicationOptions).execute();
+      // Validate response
+      assertNotNull(response);
+      assertEquals(response.getStatusCode(), 204);
+    } catch (ServiceResponseException e) {
+        fail(String.format("Service returned status code %d: %s%nError details: %s",
+          e.getStatusCode(), e.getMessage(), e.getDebuggingInfo()));
+    }
+  }
+
+  @Test(dependsOnMethods = { "testDeleteApplication" })
+  public void testStopSparkHistoryServer() throws Exception {
+    try {
+      StopSparkHistoryServerOptions stopSparkHistoryServerOptions = new StopSparkHistoryServerOptions.Builder()
+        .instanceId(instanceId)
+        .build();
+
+      // Invoke operation
+      Response<Void> response = service.stopSparkHistoryServer(stopSparkHistoryServerOptions).execute();
       // Validate response
       assertNotNull(response);
       assertEquals(response.getStatusCode(), 204);

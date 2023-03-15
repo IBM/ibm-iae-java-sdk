@@ -73,6 +73,10 @@ public abstract class SdkIntegrationTestBase {
                     String.format(">>> Configuration file %s not found, skipping tests.", configFile.getCanonicalPath()));
         } else {
             skipTests = false;
+
+
+            // Set the system property to point to the config file.
+            System.setProperty("IBM_CREDENTIALS_FILE", getConfigFilename());            
         }
     }
 

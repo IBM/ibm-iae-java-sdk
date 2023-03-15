@@ -105,7 +105,6 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
       return;
     }
  
-    System.out.println("==========IbmAnalyticsEngineApi==========");
     service = IbmAnalyticsEngineApi.newInstance();
     assertNotNull(service);
     assertNotNull(service.getServiceUrl());

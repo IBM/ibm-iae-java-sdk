@@ -124,9 +124,7 @@ public class IbmAnalyticsEngineApi extends BaseService {
    * @return an instance of the `IbmAnalyticsEngineApi` client using external configuration
    */
   public static IbmAnalyticsEngineApi newInstance(String serviceName) {
-	  System.out.println("==========newInstance serviceName=========="+serviceName);
     Authenticator authenticator = ConfigBasedAuthenticatorFactory.getAuthenticator(serviceName);
-    System.out.println("==========newInstance serviceName=========="+authenticator);
     IbmAnalyticsEngineApi service = new IbmAnalyticsEngineApi(serviceName, authenticator);
     service.configureService(serviceName);
     return service;

@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/IBM/ibm-iae-java-sdk/compare/1.1.0...1.1.1) (2023-03-23)
+
+
+### Bug Fixes
+
+* fix build configuration ([c479dab](https://github.com/IBM/ibm-iae-java-sdk/commit/c479dab821a797e7b87fdef7692ae39ed4d10e67))
+
 # [1.1.0](https://github.com/IBM/ibm-iae-java-sdk/compare/1.0.0...1.1.0) (2023-03-23)
 
 

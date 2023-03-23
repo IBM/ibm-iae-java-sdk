@@ -13,7 +13,7 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ReplaceLogForwardingConfigOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceHomeCredentialsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import java.io.InputStream;
@@ -23,29 +23,27 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the ReplaceLogForwardingConfigOptions model.
+ * Unit test class for the UpdateInstanceHomeCredentialsOptions model.
  */
-public class ReplaceLogForwardingConfigOptionsTest {
+public class UpdateInstanceHomeCredentialsOptionsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testReplaceLogForwardingConfigOptions() throws Throwable {
-    ReplaceLogForwardingConfigOptions replaceLogForwardingConfigOptionsModel = new ReplaceLogForwardingConfigOptions.Builder()
+  public void testUpdateInstanceHomeCredentialsOptions() throws Throwable {
+    UpdateInstanceHomeCredentialsOptions updateInstanceHomeCredentialsOptionsModel = new UpdateInstanceHomeCredentialsOptions.Builder()
       .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-      .enabled(true)
-      .sources(java.util.Arrays.asList("spark-driver", "spark-executor"))
-      .tags(java.util.Arrays.asList("<tag_1>", "<tag_2>", "<tag_n"))
+      .hmacAccessKey("821**********0ae")
+      .hmacSecretKey("03e****************4fc3")
       .build();
-    assertEquals(replaceLogForwardingConfigOptionsModel.instanceId(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
-    assertEquals(replaceLogForwardingConfigOptionsModel.enabled(), Boolean.valueOf(true));
-    assertEquals(replaceLogForwardingConfigOptionsModel.sources(), java.util.Arrays.asList("spark-driver", "spark-executor"));
-    assertEquals(replaceLogForwardingConfigOptionsModel.tags(), java.util.Arrays.asList("<tag_1>", "<tag_2>", "<tag_n"));
+    assertEquals(updateInstanceHomeCredentialsOptionsModel.instanceId(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
+    assertEquals(updateInstanceHomeCredentialsOptionsModel.hmacAccessKey(), "821**********0ae");
+    assertEquals(updateInstanceHomeCredentialsOptionsModel.hmacSecretKey(), "03e****************4fc3");
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testReplaceLogForwardingConfigOptionsError() throws Throwable {
-    new ReplaceLogForwardingConfigOptions.Builder().build();
+  public void testUpdateInstanceHomeCredentialsOptionsError() throws Throwable {
+    new UpdateInstanceHomeCredentialsOptions.Builder().build();
   }
 
 }

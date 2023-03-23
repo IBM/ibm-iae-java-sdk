@@ -56,13 +56,13 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.SparkHistoryServer
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StartSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.StopSparkHistoryServerOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceDefaultConfigsOptions;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceHomeCredentialsOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.security.Authenticator;
 import com.ibm.cloud.sdk.core.security.NoAuthAuthenticator;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
 import com.ibm.cloud.sdk.core.util.DateUtils;
-import com.ibm.cloud.sdk.core.util.EnvironmentUtils;
 import com.ibm.cloud.sdk.core.util.RequestUtils;
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,10 +72,6 @@ import java.util.Map;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.testng.PowerMockTestCase;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -84,9 +80,7 @@ import static org.testng.Assert.*;
 /**
  * Unit test class for the IbmAnalyticsEngineApi service.
  */
-@PrepareForTest({ EnvironmentUtils.class })
-@PowerMockIgnore({"javax.net.ssl.*", "org.mockito.*"})
-public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
+public class IbmAnalyticsEngineApiTest {
 
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
@@ -269,6 +263,59 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     ibmAnalyticsEngineApiService.setInstanceHome(null).execute();
   }
 
+  // Test the updateInstanceHomeCredentials operation with a valid options model parameter
+  @Test
+  public void testUpdateInstanceHomeCredentialsWOptions() throws Throwable {
+    // Register a mock response
+    String mockResponseBody = "{\"instance_id\": \"instanceId\", \"provider\": \"provider\", \"type\": \"type\", \"region\": \"region\", \"endpoint\": \"endpoint\", \"hmac_access_key\": \"hmacAccessKey\", \"hmac_secret_key\": \"hmacSecretKey\"}";
+    String updateInstanceHomeCredentialsPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/instance_home";
+    server.enqueue(new MockResponse()
+      .setHeader("Content-type", "application/json")
+      .setResponseCode(200)
+      .setBody(mockResponseBody));
+
+    // Construct an instance of the UpdateInstanceHomeCredentialsOptions model
+    UpdateInstanceHomeCredentialsOptions updateInstanceHomeCredentialsOptionsModel = new UpdateInstanceHomeCredentialsOptions.Builder()
+      .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+      .hmacAccessKey("b9****************************4b")
+      .hmacSecretKey("fa********************************************8a")
+      .build();
+
+    // Invoke updateInstanceHomeCredentials() with a valid options model and verify the result
+    Response<InstanceHomeResponse> response = ibmAnalyticsEngineApiService.updateInstanceHomeCredentials(updateInstanceHomeCredentialsOptionsModel).execute();
+    assertNotNull(response);
+    InstanceHomeResponse responseObj = response.getResult();
+    assertNotNull(responseObj);
+
+    // Verify the contents of the request sent to the mock server
+    RecordedRequest request = server.takeRequest();
+    assertNotNull(request);
+    assertEquals(request.getMethod(), "PATCH");
+    // Verify request path
+    String parsedPath = TestUtilities.parseReqPath(request);
+    assertEquals(parsedPath, updateInstanceHomeCredentialsPath);
+    // Verify that there is no query string
+    Map<String, String> query = TestUtilities.parseQueryString(request);
+    assertNull(query);
+  }
+
+  // Test the updateInstanceHomeCredentials operation with and without retries enabled
+  @Test
+  public void testUpdateInstanceHomeCredentialsWRetries() throws Throwable {
+    ibmAnalyticsEngineApiService.enableRetries(4, 30);
+    testUpdateInstanceHomeCredentialsWOptions();
+
+    ibmAnalyticsEngineApiService.disableRetries();
+    testUpdateInstanceHomeCredentialsWOptions();
+  }
+
+  // Test the updateInstanceHomeCredentials operation with a null options model (negative test)
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testUpdateInstanceHomeCredentialsNoOptions() throws Throwable {
+    server.enqueue(new MockResponse());
+    ibmAnalyticsEngineApiService.updateInstanceHomeCredentials(null).execute();
+  }
+
   // Test the getInstanceDefaultConfigs operation with a valid options model parameter
   @Test
   public void testGetInstanceDefaultConfigsWOptions() throws Throwable {
@@ -334,7 +381,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     // Construct an instance of the ReplaceInstanceDefaultConfigsOptions model
     ReplaceInstanceDefaultConfigsOptions replaceInstanceDefaultConfigsOptionsModel = new ReplaceInstanceDefaultConfigsOptions.Builder()
       .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-      .body(new java.util.HashMap<String, String>() { { put("foo", "testString"); } })
+      .body(java.util.Collections.singletonMap("foo", "testString"))
       .build();
 
     // Invoke replaceInstanceDefaultConfigs() with a valid options model and verify the result
@@ -386,7 +433,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     // Construct an instance of the UpdateInstanceDefaultConfigsOptions model
     UpdateInstanceDefaultConfigsOptions updateInstanceDefaultConfigsOptionsModel = new UpdateInstanceDefaultConfigsOptions.Builder()
       .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-      .body(new java.util.HashMap<String, Object>() { { put("foo", TestUtilities.createMockMap()); } })
+      .body(java.util.Collections.singletonMap("anyKey", "anyValue"))
       .build();
 
     // Invoke updateInstanceDefaultConfigs() with a valid options model and verify the result
@@ -540,7 +587,7 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
 
     // Construct an instance of the Runtime model
     Runtime runtimeModel = new Runtime.Builder()
-      .sparkVersion("3.1")
+      .sparkVersion("3.3")
       .build();
 
     // Construct an instance of the ApplicationRequestApplicationDetails model
@@ -555,8 +602,8 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
       .name("spark-app")
       .xClass("com.company.path.ClassName")
       .arguments(java.util.Arrays.asList("/opt/ibm/spark/examples/src/main/resources/people.txt"))
-      .conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-      .env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      .conf(java.util.Collections.singletonMap("anyKey", "anyValue"))
+      .env(java.util.Collections.singletonMap("anyKey", "anyValue"))
       .build();
 
     // Construct an instance of the CreateApplicationOptions model
@@ -1292,17 +1339,9 @@ public class IbmAnalyticsEngineApiTest extends PowerMockTestCase {
     ibmAnalyticsEngineApiService = null;
   }
 
-  // Creates a mock set of environment variables that are returned by EnvironmentUtils.getenv()
-  private Map<String, String> getTestProcessEnvironment() {
-    Map<String, String> env = new HashMap<>();
-    env.put("TESTSERVICE_AUTH_TYPE", "noAuth");
-    return env;
-  }
-
   // Constructs an instance of the service to be used by the tests
   public void constructClientService() {
-    PowerMockito.spy(EnvironmentUtils.class);
-    PowerMockito.when(EnvironmentUtils.getenv()).thenReturn(getTestProcessEnvironment());
+    System.setProperty("TESTSERVICE_AUTH_TYPE", "noAuth");
     final String serviceName = "testService";
 
     ibmAnalyticsEngineApiService = IbmAnalyticsEngineApi.newInstance(serviceName);

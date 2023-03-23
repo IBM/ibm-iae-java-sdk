@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -27,6 +27,11 @@ public class StartSparkHistoryServerOptions extends GenericModel {
   public static class Builder {
     private String instanceId;
 
+    /**
+     * Instantiates a new Builder from an existing StartSparkHistoryServerOptions instance.
+     *
+     * @param startSparkHistoryServerOptions the instance to initialize the Builder with
+     */
     private Builder(StartSparkHistoryServerOptions startSparkHistoryServerOptions) {
       this.instanceId = startSparkHistoryServerOptions.instanceId;
     }

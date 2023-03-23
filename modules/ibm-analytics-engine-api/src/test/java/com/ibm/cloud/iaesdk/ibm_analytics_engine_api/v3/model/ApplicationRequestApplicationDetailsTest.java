@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -48,8 +48,8 @@ public class ApplicationRequestApplicationDetailsTest {
       .name("spark-app")
       .xClass("com.company.path.ClassName")
       .arguments(java.util.Arrays.asList("[arg1, arg2, arg3]"))
-      .conf(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
-      .env(new java.util.HashMap<String, Object>() { { put("foo", "testString"); } })
+      .conf(java.util.Collections.singletonMap("anyKey", "anyValue"))
+      .env(java.util.Collections.singletonMap("anyKey", "anyValue"))
       .build();
     assertEquals(applicationRequestApplicationDetailsModel.application(), "cos://bucket_name.my_cos/my_spark_app.py");
     assertEquals(applicationRequestApplicationDetailsModel.runtime(), runtimeModel);
@@ -61,8 +61,8 @@ public class ApplicationRequestApplicationDetailsTest {
     assertEquals(applicationRequestApplicationDetailsModel.name(), "spark-app");
     assertEquals(applicationRequestApplicationDetailsModel.xClass(), "com.company.path.ClassName");
     assertEquals(applicationRequestApplicationDetailsModel.arguments(), java.util.Arrays.asList("[arg1, arg2, arg3]"));
-    assertEquals(applicationRequestApplicationDetailsModel.conf(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } });
-    assertEquals(applicationRequestApplicationDetailsModel.env(), new java.util.HashMap<String, Object>() { { put("foo", "testString"); } });
+    assertEquals(applicationRequestApplicationDetailsModel.conf(), java.util.Collections.singletonMap("anyKey", "anyValue"));
+    assertEquals(applicationRequestApplicationDetailsModel.env(), java.util.Collections.singletonMap("anyKey", "anyValue"));
 
     String json = TestUtilities.serialize(applicationRequestApplicationDetailsModel);
 
@@ -77,5 +77,7 @@ public class ApplicationRequestApplicationDetailsTest {
     assertEquals(applicationRequestApplicationDetailsModelNew.archives(), "testString");
     assertEquals(applicationRequestApplicationDetailsModelNew.name(), "spark-app");
     assertEquals(applicationRequestApplicationDetailsModelNew.xClass(), "com.company.path.ClassName");
+    assertEquals(applicationRequestApplicationDetailsModelNew.conf().toString(), java.util.Collections.singletonMap("anyKey", "anyValue").toString());
+    assertEquals(applicationRequestApplicationDetailsModelNew.env().toString(), java.util.Collections.singletonMap("anyKey", "anyValue").toString());
   }
 }

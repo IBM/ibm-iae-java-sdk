@@ -1,3 +1,16 @@
+# [1.1.0](https://github.com/IBM/ibm-iae-java-sdk/compare/1.0.0...1.1.0) (2023-03-23)
+
+
+### Bug Fixes
+
+* fix configuration error ([296109d](https://github.com/IBM/ibm-iae-java-sdk/commit/296109de087e598753e1dfc0d6d61543ea9f87d4))
+
+
+### Features
+
+* add new sdk method to update instance home credentials ([4bb7ecc](https://github.com/IBM/ibm-iae-java-sdk/commit/4bb7eccaf9f533fce03039632ec905967df050dd))
+* add new sdk method to update instance home credentials ([ab9d73c](https://github.com/IBM/ibm-iae-java-sdk/commit/ab9d73c81516d145519168c8edd6e2e2782382e7))
+
 # [1.0.0](https://github.com/IBM/ibm-iae-java-sdk/compare/0.6.0...1.0.0) (2023-01-05)
 
 

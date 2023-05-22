@@ -186,9 +186,13 @@ public class IbmAnalyticsEngineApiExamples {
     try {
       System.out.println("replaceInstanceDefaultConfigs() result:");
       // begin-replace_instance_default_configs
+      Map<String, String> newDefaultConfigs = new java.util.HashMap<String, String>();
+      newDefaultConfigs.put("spark.driver.memory", "8G");
+      newDefaultConfigs.put("spark.driver.cores", "2");
+
       ReplaceInstanceDefaultConfigsOptions replaceInstanceDefaultConfigsOptions = new ReplaceInstanceDefaultConfigsOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-        .body(java.util.Collections.singletonMap("foo", "testString"))
+        .body(newDefaultConfigs)
         .build();
 
       Response<Map<String, String>> response = ibmAnalyticsEngineApiService.replaceInstanceDefaultConfigs(replaceInstanceDefaultConfigsOptions).execute();
@@ -204,9 +208,13 @@ public class IbmAnalyticsEngineApiExamples {
     try {
       System.out.println("updateInstanceDefaultConfigs() result:");
       // begin-update_instance_default_configs
+      Map<String, Object> defaultConfigsUpdate = new java.util.HashMap<String, Object>();
+      defaultConfigsUpdate.put("ae.spark.history-server.cores", "1");
+      defaultConfigsUpdate.put("ae.spark.history-server.memory", "4G");
+
       UpdateInstanceDefaultConfigsOptions updateInstanceDefaultConfigsOptions = new UpdateInstanceDefaultConfigsOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-        .body(new java.util.HashMap<String, Object>())
+        .body(defaultConfigsUpdate)
         .build();
 
       Response<Map<String, String>> response = ibmAnalyticsEngineApiService.updateInstanceDefaultConfigs(updateInstanceDefaultConfigsOptions).execute();

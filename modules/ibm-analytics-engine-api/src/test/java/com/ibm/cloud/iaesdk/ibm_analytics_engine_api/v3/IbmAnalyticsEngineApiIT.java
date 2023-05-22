@@ -107,7 +107,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     if (skipTests()) {
       return;
     }
- 
+
     service = IbmAnalyticsEngineApi.newInstance();
     assertNotNull(service);
     assertNotNull(service.getServiceUrl());
@@ -438,7 +438,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     }
   }
 
-  @Test
+  @Test(dependsOnMethods = { "testListApplications" })
   public void testGetApplication() throws Exception {
     try {
       GetApplicationOptions getApplicationOptions = new GetApplicationOptions.Builder()

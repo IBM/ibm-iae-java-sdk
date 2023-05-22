@@ -22,6 +22,8 @@ public class PageLink extends GenericModel {
   protected String href;
   protected String start;
 
+  protected PageLink() { }
+
   /**
    * Gets the href.
    *

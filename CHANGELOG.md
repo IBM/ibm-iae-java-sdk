@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/IBM/ibm-iae-java-sdk/compare/1.1.1...1.2.0) (2023-05-24)
+
+
+### Features
+
+* add support for application list pagination ([4c3d2bf](https://github.com/IBM/ibm-iae-java-sdk/commit/4c3d2bfbad13e274351de64a7e08f771ac35a028))
+
 ## [1.1.1](https://github.com/IBM/ibm-iae-java-sdk/compare/1.1.0...1.1.1) (2023-03-23)
 
 

@@ -13,11 +13,12 @@
 
 package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3;
 
-import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollection;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Application;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationGetStateResponse;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationRequestApplicationDetails;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationResponse;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationsPager;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ConfigurePlatformLoggingOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CreateApplicationOptions;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.CurrentResourceConsumptionResponse;
@@ -53,6 +54,9 @@ import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.UpdateInstanceHome
 import com.ibm.cloud.sdk.core.http.Response;
 import com.ibm.cloud.sdk.core.service.exception.ServiceResponseException;
 import com.ibm.cloud.sdk.core.util.CredentialUtils;
+import com.ibm.cloud.sdk.core.util.GsonSingleton;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -182,9 +186,13 @@ public class IbmAnalyticsEngineApiExamples {
     try {
       System.out.println("replaceInstanceDefaultConfigs() result:");
       // begin-replace_instance_default_configs
+      Map<String, String> newDefaultConfigs = new java.util.HashMap<String, String>();
+      newDefaultConfigs.put("spark.driver.memory", "8G");
+      newDefaultConfigs.put("spark.driver.cores", "2");
+
       ReplaceInstanceDefaultConfigsOptions replaceInstanceDefaultConfigsOptions = new ReplaceInstanceDefaultConfigsOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-        .body(java.util.Collections.singletonMap("foo", "testString"))
+        .body(newDefaultConfigs)
         .build();
 
       Response<Map<String, String>> response = ibmAnalyticsEngineApiService.replaceInstanceDefaultConfigs(replaceInstanceDefaultConfigsOptions).execute();
@@ -200,9 +208,13 @@ public class IbmAnalyticsEngineApiExamples {
     try {
       System.out.println("updateInstanceDefaultConfigs() result:");
       // begin-update_instance_default_configs
+      Map<String, Object> defaultConfigsUpdate = new java.util.HashMap<String, Object>();
+      defaultConfigsUpdate.put("ae.spark.history-server.cores", "1");
+      defaultConfigsUpdate.put("ae.spark.history-server.memory", "4G");
+
       UpdateInstanceDefaultConfigsOptions updateInstanceDefaultConfigsOptions = new UpdateInstanceDefaultConfigsOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-        .body(new java.util.HashMap<String, Object>())
+        .body(defaultConfigsUpdate)
         .build();
 
       Response<Map<String, String>> response = ibmAnalyticsEngineApiService.updateInstanceDefaultConfigs(updateInstanceDefaultConfigsOptions).execute();
@@ -237,6 +249,7 @@ public class IbmAnalyticsEngineApiExamples {
       // begin-replace_instance_default_runtime
       ReplaceInstanceDefaultRuntimeOptions replaceInstanceDefaultRuntimeOptions = new ReplaceInstanceDefaultRuntimeOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .sparkVersion("3.3")
         .build();
 
       Response<Runtime> response = ibmAnalyticsEngineApiService.replaceInstanceDefaultRuntime(replaceInstanceDefaultRuntimeOptions).execute();
@@ -280,12 +293,21 @@ public class IbmAnalyticsEngineApiExamples {
       // begin-list_applications
       ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .addState("accepted")
+        .addState("running")
+        .addState("finished")
+        .addState("failed")
+        .limit(Long.valueOf("10"))
         .build();
 
-      Response<ApplicationCollection> response = ibmAnalyticsEngineApiService.listApplications(listApplicationsOptions).execute();
-      ApplicationCollection applicationCollection = response.getResult();
+      ApplicationsPager pager = new ApplicationsPager(ibmAnalyticsEngineApiService, listApplicationsOptions);
+      List<Application> allResults = new ArrayList<>();
+      while (pager.hasNext()) {
+        List<Application> nextPage = pager.getNext();
+        allResults.addAll(nextPage);
+      }
 
-      System.out.println(applicationCollection);
+      System.out.println(GsonSingleton.getGson().toJson(allResults));
       // end-list_applications
     } catch (ServiceResponseException e) {
         logger.error(String.format("Service returned status code %s: %s%nError details: %s",
@@ -367,6 +389,7 @@ public class IbmAnalyticsEngineApiExamples {
       // begin-replace_log_forwarding_config
       ReplaceLogForwardingConfigOptions replaceLogForwardingConfigOptions = new ReplaceLogForwardingConfigOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .enabled(true)
         .build();
 
       Response<LogForwardingConfigResponse> response = ibmAnalyticsEngineApiService.replaceLogForwardingConfig(replaceLogForwardingConfigOptions).execute();
@@ -401,6 +424,7 @@ public class IbmAnalyticsEngineApiExamples {
       // begin-configure_platform_logging
       ConfigurePlatformLoggingOptions configurePlatformLoggingOptions = new ConfigurePlatformLoggingOptions.Builder()
         .instanceGuid("e64c907a-e82f-46fd-addc-ccfafbd28b09")
+        .enable(true)
         .build();
 
       Response<LoggingConfigurationResponse> response = ibmAnalyticsEngineApiService.configurePlatformLogging(configurePlatformLoggingOptions).execute();

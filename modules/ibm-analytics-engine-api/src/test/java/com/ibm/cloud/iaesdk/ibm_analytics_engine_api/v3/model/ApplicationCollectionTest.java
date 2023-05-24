@@ -15,6 +15,7 @@ package com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model;
 
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Application;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.ApplicationCollection;
+import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.PageLink;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.model.Runtime;
 import com.ibm.cloud.iaesdk.ibm_analytics_engine_api.v3.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
@@ -36,5 +37,9 @@ public class ApplicationCollectionTest {
   public void testApplicationCollection() throws Throwable {
     ApplicationCollection applicationCollectionModel = new ApplicationCollection();
     assertNull(applicationCollectionModel.getApplications());
+    assertNull(applicationCollectionModel.getFirst());
+    assertNull(applicationCollectionModel.getNext());
+    assertNull(applicationCollectionModel.getPrevious());
+    assertNull(applicationCollectionModel.getLimit());
   }
 }

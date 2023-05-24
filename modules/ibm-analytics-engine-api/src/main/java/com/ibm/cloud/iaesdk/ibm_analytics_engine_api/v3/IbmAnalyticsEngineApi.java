@@ -452,6 +452,12 @@ public class IbmAnalyticsEngineApi extends BaseService {
     if (listApplicationsOptions.state() != null) {
       builder.query("state", RequestUtils.join(listApplicationsOptions.state(), ","));
     }
+    if (listApplicationsOptions.limit() != null) {
+      builder.query("limit", String.valueOf(listApplicationsOptions.limit()));
+    }
+    if (listApplicationsOptions.start() != null) {
+      builder.query("start", String.valueOf(listApplicationsOptions.start()));
+    }
     ResponseConverter<ApplicationCollection> responseConverter =
       ResponseConverterUtils.getValue(new com.google.gson.reflect.TypeToken<ApplicationCollection>() { }.getType());
     return createServiceCall(builder.build(), responseConverter);

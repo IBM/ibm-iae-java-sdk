@@ -44,6 +44,9 @@ public class ListApplicationsOptions extends GenericModel {
 
   protected String instanceId;
   protected List<String> state;
+  protected String startTimeInterval;
+  protected String submissionTimeInterval;
+  protected String endTimeInterval;
   protected Long limit;
   protected String start;
 
@@ -53,6 +56,9 @@ public class ListApplicationsOptions extends GenericModel {
   public static class Builder {
     private String instanceId;
     private List<String> state;
+    private String startTimeInterval;
+    private String submissionTimeInterval;
+    private String endTimeInterval;
     private Long limit;
     private String start;
 
@@ -64,6 +70,9 @@ public class ListApplicationsOptions extends GenericModel {
     private Builder(ListApplicationsOptions listApplicationsOptions) {
       this.instanceId = listApplicationsOptions.instanceId;
       this.state = listApplicationsOptions.state;
+      this.startTimeInterval = listApplicationsOptions.startTimeInterval;
+      this.submissionTimeInterval = listApplicationsOptions.submissionTimeInterval;
+      this.endTimeInterval = listApplicationsOptions.endTimeInterval;
       this.limit = listApplicationsOptions.limit;
       this.start = listApplicationsOptions.start;
     }
@@ -132,6 +141,39 @@ public class ListApplicationsOptions extends GenericModel {
     }
 
     /**
+     * Set the startTimeInterval.
+     *
+     * @param startTimeInterval the startTimeInterval
+     * @return the ListApplicationsOptions builder
+     */
+    public Builder startTimeInterval(String startTimeInterval) {
+      this.startTimeInterval = startTimeInterval;
+      return this;
+    }
+
+    /**
+     * Set the submissionTimeInterval.
+     *
+     * @param submissionTimeInterval the submissionTimeInterval
+     * @return the ListApplicationsOptions builder
+     */
+    public Builder submissionTimeInterval(String submissionTimeInterval) {
+      this.submissionTimeInterval = submissionTimeInterval;
+      return this;
+    }
+
+    /**
+     * Set the endTimeInterval.
+     *
+     * @param endTimeInterval the endTimeInterval
+     * @return the ListApplicationsOptions builder
+     */
+    public Builder endTimeInterval(String endTimeInterval) {
+      this.endTimeInterval = endTimeInterval;
+      return this;
+    }
+
+    /**
      * Set the limit.
      *
      * @param limit the limit
@@ -161,6 +203,9 @@ public class ListApplicationsOptions extends GenericModel {
       "instanceId cannot be empty");
     instanceId = builder.instanceId;
     state = builder.state;
+    startTimeInterval = builder.startTimeInterval;
+    submissionTimeInterval = builder.submissionTimeInterval;
+    endTimeInterval = builder.endTimeInterval;
     limit = builder.limit;
     start = builder.start;
   }
@@ -194,6 +239,51 @@ public class ListApplicationsOptions extends GenericModel {
    */
   public List<String> state() {
     return state;
+  }
+
+  /**
+   * Gets the startTimeInterval.
+   *
+   * Time interval to use for filtering applications by their start time. Interval is specified in the format `&lt;lower
+   * timestamp limit&gt;,&lt;upper timestamp limit&gt;`. Each timestamp value must be ISO 8601 compliant. You may also
+   * use keywords `BEGINNING` as a placeholder value for lower timestamp limit and `CURRENT` as a placeholder value for
+   * upper timestamp limit. Note: The lower timestamp limit is inclusive, whereas the upper timestamp limit is
+   * exclusive.
+   *
+   * @return the startTimeInterval
+   */
+  public String startTimeInterval() {
+    return startTimeInterval;
+  }
+
+  /**
+   * Gets the submissionTimeInterval.
+   *
+   * Time interval to use for filtering applications by their submission time. Interval is specified in the format
+   * `&lt;lower timestamp limit&gt;,&lt;upper timestamp limit&gt;`. Each timestamp value must be ISO 8601 compliant. You
+   * may also use keywords `BEGINNING` as a placeholder value for lower timestamp limit and `CURRENT` as a placeholder
+   * value for upper timestamp limit. Note: The lower timestamp limit is inclusive, whereas the upper timestamp limit is
+   * exclusive.
+   *
+   * @return the submissionTimeInterval
+   */
+  public String submissionTimeInterval() {
+    return submissionTimeInterval;
+  }
+
+  /**
+   * Gets the endTimeInterval.
+   *
+   * Time interval to use for filtering applications by their end time. Interval is specified in the format `&lt;lower
+   * timestamp limit&gt;,&lt;upper timestamp limit&gt;`. Each timestamp value must be ISO 8601 compliant. You may also
+   * use keywords `BEGINNING` as a placeholder value for lower timestamp limit and `CURRENT` as a placeholder value for
+   * upper timestamp limit. Note: The lower timestamp limit is inclusive, whereas the upper timestamp limit is
+   * exclusive.
+   *
+   * @return the endTimeInterval
+   */
+  public String endTimeInterval() {
+    return endTimeInterval;
   }
 
   /**

@@ -32,14 +32,14 @@ public class RuntimeTest {
   @Test
   public void testRuntime() throws Throwable {
     Runtime runtimeModel = new Runtime.Builder()
-      .sparkVersion("3.1")
+      .sparkVersion("testString")
       .build();
-    assertEquals(runtimeModel.sparkVersion(), "3.1");
+    assertEquals(runtimeModel.sparkVersion(), "testString");
 
     String json = TestUtilities.serialize(runtimeModel);
 
     Runtime runtimeModelNew = TestUtilities.deserialize(json, Runtime.class);
     assertTrue(runtimeModelNew instanceof Runtime);
-    assertEquals(runtimeModelNew.sparkVersion(), "3.1");
+    assertEquals(runtimeModelNew.sparkVersion(), "testString");
   }
 }

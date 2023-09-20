@@ -33,10 +33,10 @@ public class ReplaceInstanceDefaultRuntimeOptionsTest {
   public void testReplaceInstanceDefaultRuntimeOptions() throws Throwable {
     ReplaceInstanceDefaultRuntimeOptions replaceInstanceDefaultRuntimeOptionsModel = new ReplaceInstanceDefaultRuntimeOptions.Builder()
       .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-      .sparkVersion("3.1")
+      .sparkVersion("testString")
       .build();
     assertEquals(replaceInstanceDefaultRuntimeOptionsModel.instanceId(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
-    assertEquals(replaceInstanceDefaultRuntimeOptionsModel.sparkVersion(), "3.1");
+    assertEquals(replaceInstanceDefaultRuntimeOptionsModel.sparkVersion(), "testString");
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)

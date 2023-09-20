@@ -110,7 +110,7 @@ public class IbmAnalyticsEngineApiTest {
   @Test
   public void testGetInstanceWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"id\": \"id\", \"href\": \"href\", \"state\": \"creation_accepted\", \"state_change_time\": \"2021-01-30T08:30:00.000Z\", \"default_runtime\": {\"spark_version\": \"3.1\"}, \"instance_home\": {\"id\": \"id\", \"provider\": \"provider\", \"type\": \"type\", \"region\": \"region\", \"endpoint\": \"endpoint\", \"bucket\": \"bucket\", \"hmac_access_key\": \"hmacAccessKey\", \"hmac_secret_key\": \"hmacSecretKey\"}, \"default_config\": {\"key\": \"key\"}}";
+    String mockResponseBody = "{\"id\": \"id\", \"href\": \"href\", \"state\": \"creation_accepted\", \"state_change_time\": \"2021-01-30T08:30:00.000Z\", \"default_runtime\": {\"spark_version\": \"sparkVersion\"}, \"instance_home\": {\"id\": \"id\", \"provider\": \"provider\", \"type\": \"type\", \"region\": \"region\", \"endpoint\": \"endpoint\", \"bucket\": \"bucket\", \"hmac_access_key\": \"hmacAccessKey\", \"hmac_secret_key\": \"hmacSecretKey\"}, \"default_config\": {\"key\": \"key\"}}";
     String getInstancePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -478,7 +478,7 @@ public class IbmAnalyticsEngineApiTest {
   @Test
   public void testGetInstanceDefaultRuntimeWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"spark_version\": \"3.1\"}";
+    String mockResponseBody = "{\"spark_version\": \"sparkVersion\"}";
     String getInstanceDefaultRuntimePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/default_runtime";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -529,7 +529,7 @@ public class IbmAnalyticsEngineApiTest {
   @Test
   public void testReplaceInstanceDefaultRuntimeWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"spark_version\": \"3.1\"}";
+    String mockResponseBody = "{\"spark_version\": \"sparkVersion\"}";
     String replaceInstanceDefaultRuntimePath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/default_runtime";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -539,7 +539,7 @@ public class IbmAnalyticsEngineApiTest {
     // Construct an instance of the ReplaceInstanceDefaultRuntimeOptions model
     ReplaceInstanceDefaultRuntimeOptions replaceInstanceDefaultRuntimeOptionsModel = new ReplaceInstanceDefaultRuntimeOptions.Builder()
       .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-      .sparkVersion("3.1")
+      .sparkVersion("3.4")
       .build();
 
     // Invoke replaceInstanceDefaultRuntime() with a valid options model and verify the result
@@ -590,7 +590,7 @@ public class IbmAnalyticsEngineApiTest {
 
     // Construct an instance of the Runtime model
     Runtime runtimeModel = new Runtime.Builder()
-      .sparkVersion("3.3")
+      .sparkVersion("3.4")
       .build();
 
     // Construct an instance of the ApplicationRequestApplicationDetails model
@@ -654,7 +654,7 @@ public class IbmAnalyticsEngineApiTest {
   @Test
   public void testListApplicationsWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"applications\": [{\"id\": \"id\", \"href\": \"href\", \"runtime\": {\"spark_version\": \"3.1\"}, \"spark_application_id\": \"sparkApplicationId\", \"spark_application_name\": \"sparkApplicationName\", \"state\": \"finished\", \"spark_ui\": \"sparkUi\", \"submission_time\": \"2021-01-30T08:30:00.000Z\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"end_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\", \"auto_termination_time\": \"2021-01-30T08:30:00.000Z\"}], \"first\": {\"href\": \"href\", \"start\": \"start\"}, \"next\": {\"href\": \"href\", \"start\": \"start\"}, \"previous\": {\"href\": \"href\", \"start\": \"start\"}, \"limit\": 1}";
+    String mockResponseBody = "{\"applications\": [{\"id\": \"id\", \"href\": \"href\", \"runtime\": {\"spark_version\": \"sparkVersion\"}, \"spark_application_id\": \"sparkApplicationId\", \"spark_application_name\": \"sparkApplicationName\", \"state\": \"finished\", \"spark_ui\": \"sparkUi\", \"submission_time\": \"2021-01-30T08:30:00.000Z\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"end_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\", \"auto_termination_time\": \"2021-01-30T08:30:00.000Z\"}], \"first\": {\"href\": \"href\", \"start\": \"start\"}, \"next\": {\"href\": \"href\", \"start\": \"start\"}, \"previous\": {\"href\": \"href\", \"start\": \"start\"}, \"limit\": 1}";
     String listApplicationsPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
@@ -665,6 +665,9 @@ public class IbmAnalyticsEngineApiTest {
     ListApplicationsOptions listApplicationsOptionsModel = new ListApplicationsOptions.Builder()
       .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
       .state(java.util.Arrays.asList("finished"))
+      .startTimeInterval("testString")
+      .submissionTimeInterval("testString")
+      .endTimeInterval("testString")
       .limit(Long.valueOf("10"))
       .start("testString")
       .build();
@@ -686,6 +689,9 @@ public class IbmAnalyticsEngineApiTest {
     Map<String, String> query = TestUtilities.parseQueryString(request);
     assertNotNull(query);
     assertEquals(query.get("state"), RequestUtils.join(java.util.Arrays.asList("finished"), ","));
+    assertEquals(query.get("start_time_interval"), "testString");
+    assertEquals(query.get("submission_time_interval"), "testString");
+    assertEquals(query.get("end_time_interval"), "testString");
     assertEquals(Long.valueOf(query.get("limit")), Long.valueOf("10"));
     assertEquals(query.get("start"), "testString");
   }
@@ -711,8 +717,8 @@ public class IbmAnalyticsEngineApiTest {
   @Test
   public void testListApplicationsWithPagerGetNext() throws Throwable {
     // Set up the two-page mock response.
-    String mockResponsePage1 = "{\"next\":{\"start\":\"1\"},\"total_count\":2,\"limit\":1,\"applications\":[{\"id\":\"id\",\"href\":\"href\",\"runtime\":{\"spark_version\":\"3.1\"},\"spark_application_id\":\"sparkApplicationId\",\"spark_application_name\":\"sparkApplicationName\",\"state\":\"finished\",\"spark_ui\":\"sparkUi\",\"submission_time\":\"2021-01-30T08:30:00.000Z\",\"start_time\":\"2021-01-30T08:30:00.000Z\",\"end_time\":\"2021-01-30T08:30:00.000Z\",\"finish_time\":\"2021-01-30T08:30:00.000Z\",\"auto_termination_time\":\"2021-01-30T08:30:00.000Z\"}]}";
-    String mockResponsePage2 = "{\"total_count\":2,\"limit\":1,\"applications\":[{\"id\":\"id\",\"href\":\"href\",\"runtime\":{\"spark_version\":\"3.1\"},\"spark_application_id\":\"sparkApplicationId\",\"spark_application_name\":\"sparkApplicationName\",\"state\":\"finished\",\"spark_ui\":\"sparkUi\",\"submission_time\":\"2021-01-30T08:30:00.000Z\",\"start_time\":\"2021-01-30T08:30:00.000Z\",\"end_time\":\"2021-01-30T08:30:00.000Z\",\"finish_time\":\"2021-01-30T08:30:00.000Z\",\"auto_termination_time\":\"2021-01-30T08:30:00.000Z\"}]}";
+    String mockResponsePage1 = "{\"next\":{\"start\":\"1\"},\"total_count\":2,\"limit\":1,\"applications\":[{\"id\":\"id\",\"href\":\"href\",\"runtime\":{\"spark_version\":\"sparkVersion\"},\"spark_application_id\":\"sparkApplicationId\",\"spark_application_name\":\"sparkApplicationName\",\"state\":\"finished\",\"spark_ui\":\"sparkUi\",\"submission_time\":\"2021-01-30T08:30:00.000Z\",\"start_time\":\"2021-01-30T08:30:00.000Z\",\"end_time\":\"2021-01-30T08:30:00.000Z\",\"finish_time\":\"2021-01-30T08:30:00.000Z\",\"auto_termination_time\":\"2021-01-30T08:30:00.000Z\"}]}";
+    String mockResponsePage2 = "{\"total_count\":2,\"limit\":1,\"applications\":[{\"id\":\"id\",\"href\":\"href\",\"runtime\":{\"spark_version\":\"sparkVersion\"},\"spark_application_id\":\"sparkApplicationId\",\"spark_application_name\":\"sparkApplicationName\",\"state\":\"finished\",\"spark_ui\":\"sparkUi\",\"submission_time\":\"2021-01-30T08:30:00.000Z\",\"start_time\":\"2021-01-30T08:30:00.000Z\",\"end_time\":\"2021-01-30T08:30:00.000Z\",\"finish_time\":\"2021-01-30T08:30:00.000Z\",\"auto_termination_time\":\"2021-01-30T08:30:00.000Z\"}]}";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
       .setResponseCode(200)
@@ -729,6 +735,9 @@ public class IbmAnalyticsEngineApiTest {
     ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
       .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
       .state(java.util.Arrays.asList("finished"))
+      .startTimeInterval("testString")
+      .submissionTimeInterval("testString")
+      .endTimeInterval("testString")
       .limit(Long.valueOf("10"))
       .build();
 
@@ -746,8 +755,8 @@ public class IbmAnalyticsEngineApiTest {
   @Test
   public void testListApplicationsWithPagerGetAll() throws Throwable {
     // Set up the two-page mock response.
-    String mockResponsePage1 = "{\"next\":{\"start\":\"1\"},\"total_count\":2,\"limit\":1,\"applications\":[{\"id\":\"id\",\"href\":\"href\",\"runtime\":{\"spark_version\":\"3.1\"},\"spark_application_id\":\"sparkApplicationId\",\"spark_application_name\":\"sparkApplicationName\",\"state\":\"finished\",\"spark_ui\":\"sparkUi\",\"submission_time\":\"2021-01-30T08:30:00.000Z\",\"start_time\":\"2021-01-30T08:30:00.000Z\",\"end_time\":\"2021-01-30T08:30:00.000Z\",\"finish_time\":\"2021-01-30T08:30:00.000Z\",\"auto_termination_time\":\"2021-01-30T08:30:00.000Z\"}]}";
-    String mockResponsePage2 = "{\"total_count\":2,\"limit\":1,\"applications\":[{\"id\":\"id\",\"href\":\"href\",\"runtime\":{\"spark_version\":\"3.1\"},\"spark_application_id\":\"sparkApplicationId\",\"spark_application_name\":\"sparkApplicationName\",\"state\":\"finished\",\"spark_ui\":\"sparkUi\",\"submission_time\":\"2021-01-30T08:30:00.000Z\",\"start_time\":\"2021-01-30T08:30:00.000Z\",\"end_time\":\"2021-01-30T08:30:00.000Z\",\"finish_time\":\"2021-01-30T08:30:00.000Z\",\"auto_termination_time\":\"2021-01-30T08:30:00.000Z\"}]}";
+    String mockResponsePage1 = "{\"next\":{\"start\":\"1\"},\"total_count\":2,\"limit\":1,\"applications\":[{\"id\":\"id\",\"href\":\"href\",\"runtime\":{\"spark_version\":\"sparkVersion\"},\"spark_application_id\":\"sparkApplicationId\",\"spark_application_name\":\"sparkApplicationName\",\"state\":\"finished\",\"spark_ui\":\"sparkUi\",\"submission_time\":\"2021-01-30T08:30:00.000Z\",\"start_time\":\"2021-01-30T08:30:00.000Z\",\"end_time\":\"2021-01-30T08:30:00.000Z\",\"finish_time\":\"2021-01-30T08:30:00.000Z\",\"auto_termination_time\":\"2021-01-30T08:30:00.000Z\"}]}";
+    String mockResponsePage2 = "{\"total_count\":2,\"limit\":1,\"applications\":[{\"id\":\"id\",\"href\":\"href\",\"runtime\":{\"spark_version\":\"sparkVersion\"},\"spark_application_id\":\"sparkApplicationId\",\"spark_application_name\":\"sparkApplicationName\",\"state\":\"finished\",\"spark_ui\":\"sparkUi\",\"submission_time\":\"2021-01-30T08:30:00.000Z\",\"start_time\":\"2021-01-30T08:30:00.000Z\",\"end_time\":\"2021-01-30T08:30:00.000Z\",\"finish_time\":\"2021-01-30T08:30:00.000Z\",\"auto_termination_time\":\"2021-01-30T08:30:00.000Z\"}]}";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")
       .setResponseCode(200)
@@ -764,6 +773,9 @@ public class IbmAnalyticsEngineApiTest {
     ListApplicationsOptions listApplicationsOptions = new ListApplicationsOptions.Builder()
       .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
       .state(java.util.Arrays.asList("finished"))
+      .startTimeInterval("testString")
+      .submissionTimeInterval("testString")
+      .endTimeInterval("testString")
       .limit(Long.valueOf("10"))
       .build();
 
@@ -777,7 +789,7 @@ public class IbmAnalyticsEngineApiTest {
   @Test
   public void testGetApplicationWOptions() throws Throwable {
     // Register a mock response
-    String mockResponseBody = "{\"application_details\": {\"application\": \"cos://bucket_name.my_cos/my_spark_app.py\", \"runtime\": {\"spark_version\": \"3.1\"}, \"jars\": \"cos://cloud-object-storage/jars/tests.jar\", \"packages\": \"packages\", \"repositories\": \"repositories\", \"files\": \"files\", \"archives\": \"archives\", \"name\": \"spark-app\", \"class\": \"com.company.path.ClassName\", \"arguments\": [\"[arg1, arg2, arg3]\"], \"conf\": {\"anyKey\": \"anyValue\"}, \"env\": {\"anyKey\": \"anyValue\"}}, \"id\": \"2b83d31c-397b-48ad-ad76-b83347c982db\", \"spark_application_id\": \"sparkApplicationId\", \"spark_application_name\": \"sparkApplicationName\", \"state\": \"finished\", \"spark_ui\": \"sparkUi\", \"state_details\": [{\"type\": \"server_error\", \"code\": \"server_error\", \"message\": \"message\"}], \"submission_time\": \"2021-01-30T08:30:00.000Z\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"end_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\", \"auto_termination_time\": \"2021-01-30T08:30:00.000Z\"}";
+    String mockResponseBody = "{\"application_details\": {\"application\": \"cos://bucket_name.my_cos/my_spark_app.py\", \"runtime\": {\"spark_version\": \"sparkVersion\"}, \"jars\": \"cos://cloud-object-storage/jars/tests.jar\", \"packages\": \"packages\", \"repositories\": \"repositories\", \"files\": \"files\", \"archives\": \"archives\", \"name\": \"spark-app\", \"class\": \"com.company.path.ClassName\", \"arguments\": [\"arguments\"], \"conf\": {\"anyKey\": \"anyValue\"}, \"env\": {\"anyKey\": \"anyValue\"}}, \"id\": \"2b83d31c-397b-48ad-ad76-b83347c982db\", \"spark_application_id\": \"sparkApplicationId\", \"spark_application_name\": \"sparkApplicationName\", \"state\": \"finished\", \"spark_ui\": \"sparkUi\", \"state_details\": [{\"type\": \"server_error\", \"code\": \"server_error\", \"message\": \"message\"}], \"submission_time\": \"2021-01-30T08:30:00.000Z\", \"start_time\": \"2021-01-30T08:30:00.000Z\", \"end_time\": \"2021-01-30T08:30:00.000Z\", \"finish_time\": \"2021-01-30T08:30:00.000Z\", \"auto_termination_time\": \"2021-01-30T08:30:00.000Z\"}";
     String getApplicationPath = "/v3/analytics_engines/e64c907a-e82f-46fd-addc-ccfafbd28b09/spark_applications/ff48cc19-0e7e-4627-aac6-0b4ad080397b";
     server.enqueue(new MockResponse()
       .setHeader("Content-type", "application/json")

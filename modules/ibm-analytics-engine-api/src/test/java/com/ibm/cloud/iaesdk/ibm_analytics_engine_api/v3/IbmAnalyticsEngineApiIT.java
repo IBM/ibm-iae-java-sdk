@@ -327,7 +327,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
     try {
       ReplaceInstanceDefaultRuntimeOptions replaceInstanceDefaultRuntimeOptions = new ReplaceInstanceDefaultRuntimeOptions.Builder()
         .instanceId(instanceId)
-        .sparkVersion("3.1")
+        .sparkVersion("3.3")
         .build();
 
       // Invoke operation
@@ -349,7 +349,7 @@ public class IbmAnalyticsEngineApiIT extends SdkIntegrationTestBase {
   public void testCreateApplication() throws Exception {
     try {
       Runtime runtimeModel = new Runtime.Builder()
-        .sparkVersion("3.3")
+        .sparkVersion("3.4")
         .build();
 
       ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()

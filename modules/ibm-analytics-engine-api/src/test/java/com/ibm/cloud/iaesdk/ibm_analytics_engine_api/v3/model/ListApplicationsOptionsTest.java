@@ -34,11 +34,17 @@ public class ListApplicationsOptionsTest {
     ListApplicationsOptions listApplicationsOptionsModel = new ListApplicationsOptions.Builder()
       .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
       .state(java.util.Arrays.asList("finished"))
+      .startTimeInterval("testString")
+      .submissionTimeInterval("testString")
+      .endTimeInterval("testString")
       .limit(Long.valueOf("1"))
       .start("testString")
       .build();
     assertEquals(listApplicationsOptionsModel.instanceId(), "e64c907a-e82f-46fd-addc-ccfafbd28b09");
     assertEquals(listApplicationsOptionsModel.state(), java.util.Arrays.asList("finished"));
+    assertEquals(listApplicationsOptionsModel.startTimeInterval(), "testString");
+    assertEquals(listApplicationsOptionsModel.submissionTimeInterval(), "testString");
+    assertEquals(listApplicationsOptionsModel.endTimeInterval(), "testString");
     assertEquals(listApplicationsOptionsModel.limit(), Long.valueOf("1"));
     assertEquals(listApplicationsOptionsModel.start(), "testString");
   }

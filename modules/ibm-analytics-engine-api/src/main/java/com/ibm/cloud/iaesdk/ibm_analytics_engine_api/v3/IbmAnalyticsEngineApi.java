@@ -452,6 +452,15 @@ public class IbmAnalyticsEngineApi extends BaseService {
     if (listApplicationsOptions.state() != null) {
       builder.query("state", RequestUtils.join(listApplicationsOptions.state(), ","));
     }
+    if (listApplicationsOptions.startTimeInterval() != null) {
+      builder.query("start_time_interval", String.valueOf(listApplicationsOptions.startTimeInterval()));
+    }
+    if (listApplicationsOptions.submissionTimeInterval() != null) {
+      builder.query("submission_time_interval", String.valueOf(listApplicationsOptions.submissionTimeInterval()));
+    }
+    if (listApplicationsOptions.endTimeInterval() != null) {
+      builder.query("end_time_interval", String.valueOf(listApplicationsOptions.endTimeInterval()));
+    }
     if (listApplicationsOptions.limit() != null) {
       builder.query("limit", String.valueOf(listApplicationsOptions.limit()));
     }

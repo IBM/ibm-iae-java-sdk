@@ -34,9 +34,9 @@ public class CreateApplicationOptionsTest {
   @Test
   public void testCreateApplicationOptions() throws Throwable {
     Runtime runtimeModel = new Runtime.Builder()
-      .sparkVersion("3.1")
+      .sparkVersion("testString")
       .build();
-    assertEquals(runtimeModel.sparkVersion(), "3.1");
+    assertEquals(runtimeModel.sparkVersion(), "testString");
 
     ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
       .application("cos://bucket_name.my_cos/my_spark_app.py")
@@ -48,7 +48,7 @@ public class CreateApplicationOptionsTest {
       .archives("testString")
       .name("spark-app")
       .xClass("com.company.path.ClassName")
-      .arguments(java.util.Arrays.asList("[arg1, arg2, arg3]"))
+      .arguments(java.util.Arrays.asList("arg1", "arg2", "arg3"))
       .conf(java.util.Collections.singletonMap("anyKey", "anyValue"))
       .env(java.util.Collections.singletonMap("anyKey", "anyValue"))
       .build();
@@ -61,7 +61,7 @@ public class CreateApplicationOptionsTest {
     assertEquals(applicationRequestApplicationDetailsModel.archives(), "testString");
     assertEquals(applicationRequestApplicationDetailsModel.name(), "spark-app");
     assertEquals(applicationRequestApplicationDetailsModel.xClass(), "com.company.path.ClassName");
-    assertEquals(applicationRequestApplicationDetailsModel.arguments(), java.util.Arrays.asList("[arg1, arg2, arg3]"));
+    assertEquals(applicationRequestApplicationDetailsModel.arguments(), java.util.Arrays.asList("arg1", "arg2", "arg3"));
     assertEquals(applicationRequestApplicationDetailsModel.conf(), java.util.Collections.singletonMap("anyKey", "anyValue"));
     assertEquals(applicationRequestApplicationDetailsModel.env(), java.util.Collections.singletonMap("anyKey", "anyValue"));
 

@@ -249,7 +249,7 @@ public class IbmAnalyticsEngineApiExamples {
       // begin-replace_instance_default_runtime
       ReplaceInstanceDefaultRuntimeOptions replaceInstanceDefaultRuntimeOptions = new ReplaceInstanceDefaultRuntimeOptions.Builder()
         .instanceId("e64c907a-e82f-46fd-addc-ccfafbd28b09")
-        .sparkVersion("3.3")
+        .sparkVersion("3.4")
         .build();
 
       Response<Runtime> response = ibmAnalyticsEngineApiService.replaceInstanceDefaultRuntime(replaceInstanceDefaultRuntimeOptions).execute();
@@ -266,7 +266,7 @@ public class IbmAnalyticsEngineApiExamples {
       System.out.println("createApplication() result:");
       // begin-create_application
       Runtime runtimeModel = new Runtime.Builder()
-        .sparkVersion("3.3")
+        .sparkVersion("3.4")
         .build();
       ApplicationRequestApplicationDetails applicationRequestApplicationDetailsModel = new ApplicationRequestApplicationDetails.Builder()
         .application("/opt/ibm/spark/examples/src/main/python/wordcount.py")

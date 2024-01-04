@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/IBM/ibm-iae-java-sdk/compare/1.3.0...1.3.1) (2024-01-04)
+
+
+### Bug Fixes
+
+* update dependencies ([f4b97b6](https://github.com/IBM/ibm-iae-java-sdk/commit/f4b97b63b36e4a0392103302bbf39e215a881254))
+
 # [1.3.0](https://github.com/IBM/ibm-iae-java-sdk/compare/1.2.0...1.3.0) (2024-01-04)
 
 

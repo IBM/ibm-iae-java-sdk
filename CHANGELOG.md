@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/IBM/ibm-iae-java-sdk/compare/1.2.0...1.3.0) (2024-01-04)
+
+
+### Features
+
+* add support for application list filters ([66d864b](https://github.com/IBM/ibm-iae-java-sdk/commit/66d864ba21cbb865b7c0ceb2d27e73ece274d56b))
+
 # [1.2.0](https://github.com/IBM/ibm-iae-java-sdk/compare/1.1.1...1.2.0) (2023-05-24)
 
 

@@ -28,6 +28,10 @@ stages:
     if: tag IS present
 
 before_install:
+  # Need to install this key to avoid GPG errors during `apt update`
+  # because the perforce key pre-installed in the travis build image expired on 8/14/2023.
+  # Reference: https://www.perforce.com/manuals/p4sag/Content/P4SAG/install.linux.packages.install.html
+  - wget -qO - https://package.perforce.com/perforce.pubkey | sudo apt-key add -
   - sudo apt-get update
   - echo -e "machine github.ibm.com\n  login $GITHUB_ACCESS_TOKEN" > ~/.netrc
 

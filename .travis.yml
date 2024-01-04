@@ -29,8 +29,7 @@ stages:
 
 before_install:
   - sudo apt-get update
-  - env | grep TRAVIS
-  - pyenv global 3.8
+  - echo -e "machine github.ibm.com\n  login $GITHUB_ACCESS_TOKEN" > ~/.netrc
 
 jobs:
   include:
